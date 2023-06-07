@@ -1,3 +1,4 @@
+
 const fs = require('fs');
 
 class ProductManager {
@@ -11,12 +12,17 @@ class ProductManager {
       const data = fs.readFileSync(this.path, 'utf8');
       return JSON.parse(data);
     } catch (error) {
-      return [];
+      console.log(`Se devuelve un array Vacio`)
+      return []
     }
   }
   
   guardarProductos(productos) {
-    fs.writeFileSync(this.path, JSON.stringify(productos, null, 2));
+    fs.writeFileSync(this.path, JSON.stringify(productos),(error)=>{
+      if(error){
+        console.log(`Error: ${error}`)
+      }
+    });
   }
 
   crearProducto(title, description, price, thumbnail, code, stock) {
@@ -37,6 +43,26 @@ class ProductManager {
 
   agregarProducto(producto) {
     const productos = this.cargarProductos();
+
+    const productoRepetido = productos.find((p)=>{
+
+      return (
+        p.title === producto.title &&
+        p.description === producto.description &&
+        p.price === producto.price &&
+        p.thumbnail === producto.thumbnail &&
+        p.code === producto.code &&
+        p.stock === producto.stock
+      );
+
+    })
+
+    if(productoRepetido){
+      console.log(`El producto llamado ${producto.title} ya es existente dentro del archivo`)
+      return
+    }
+
+
 
     if (productos.length === 0) {
       producto.id = 1;
