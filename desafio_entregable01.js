@@ -1,23 +1,21 @@
-//desafio 1 productManager
 class ProductManager {
   constructor() {
     this.products = [];
-    this.nextId = 1; 
+    this.nextId = 1;
   }
 
-  addProduct = (title, description, price, thumbnail, code, stock) => {
+  addProduct(title, description, price, thumbnail, code, stock) {
     if (!title || !description || !price || !thumbnail || !code || !stock) {
       console.log("Los campos son obligatorios");
       return;
     }
-  
-  
-  const existingProduct = this.products.find((product) => product.code === code);
-  if (existingProduct) {
-    console.log(` El producto con el código ${code} ya es existente`);
-    return;
-  }
-  
+
+    const existingProduct = this.products.some((product) => product.code === code);
+    if (existingProduct) {
+      console.log(`El producto con el código ${code} ya existe`);
+      return;
+    }
+
     const product = {
       id: this.nextId,
       title,
@@ -30,22 +28,21 @@ class ProductManager {
 
     this.products.push(product);
     this.nextId++;
-  };
+  }
 
-  getProducts = () => {
+  getProducts() {
     return this.products;
-  };
+  }
 
-  getProductById = (id) => {
+  getProductById(id) {
     const product = this.products.find((product) => product.id === id);
     if (product) {
       return product;
     } else {
-      console.log("no lo encontramos");
+      console.log("No se encontró el producto");
     }
-  };
+  }
 }
-
 
 const productManager = new ProductManager();
 
