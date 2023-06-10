@@ -76,6 +76,33 @@ class ProductManager {
   }
 
 
+
+
+  actualizarProducto (id, productoActualizado) {
+    const productos= this.cargarProductos()
+    const index= productos.findIndex((p)=>p,id=== id)
+ 
+
+    if ( index !== -1){
+      productos[index]={id, ...productoActualizado}
+      this.guardarProductos(productos);
+      
+    }else {
+    console.log("no tiene id ese p")
+  
+
+
+  }
+
+  
+
+
+
+
+
+
+
+
   obtenerProductos() {
     return this.cargarProductos();
   }
