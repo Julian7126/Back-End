@@ -78,29 +78,37 @@ class ProductManager {
 
 
 
-  actualizarProducto (id, productoActualizado) {
-    const productos= this.cargarProductos()
-    const index= productos.findIndex((p)=>p,id=== id)
+  // actualizarProducto (id, productoActualizado) {
+  //   const productos= this.cargarProductos()
+  //   const index= productos.findIndex((p)=>p,id=== id)
  
 
-    if ( index !== -1){
-      productos[index]={id, ...productoActualizado}
-      this.guardarProductos(productos);
+  //   if ( index !== -1){
+  //     productos[index].price ={id, ...productoActualizado}
+  //     this.guardarProductos(productos);
       
-    }else {
-    console.log("no tiene id ese p")
+  //   }else {
+  //   console.log("no tiene id ese p")
   
 
 
-  }
+  // }
+ 
 
   
+  // }
 
+  // // eliminarProducto (id) {
+  //   const productos= this.cargarProductos()
+  //   const index = productos.findIndex((p) => p.id === id);
+ 
+  //   if(index !== -1){
 
+    
 
+  //   }
 
-
-
+  // }
 
 
   obtenerProductos() {
@@ -121,3 +129,5 @@ manager.agregarProducto(Samsung);
 
 const listaProductos = manager.obtenerProductos();
 console.log(listaProductos);
+
+//  manager.actualizarProducto(1,1300)
