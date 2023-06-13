@@ -77,39 +77,32 @@ class ProductManager {
 
 
 
-
-  // actualizarProducto (id, productoActualizado) {
-  //   const productos= this.cargarProductos()
-  //   const index= productos.findIndex((p)=>p,id=== id)
- 
-
-  //   if ( index !== -1){
-  //     productos[index].price ={id, ...productoActualizado}
-  //     this.guardarProductos(productos);
-      
-  //   }else {
-  //   console.log("no tiene id ese p")
+  actualizarProducto(id, productoActualizado) {
+    const productos = this.cargarProductos();
+    const index = productos.findIndex((p) => p.id === id);
   
-
-
-  // }
- 
-
+    if (index !== -1) {
+      productos[index] = { id, ...productoActualizado };
+      this.guardarProductos(productos);
+      console.log(`Producto Actualizado`);
+    } else {
+      console.log(`No se encontró ningún producto`);
+    }
+  }
   
-  // }
-
-  // // eliminarProducto (id) {
-  //   const productos= this.cargarProductos()
-  //   const index = productos.findIndex((p) => p.id === id);
- 
-  //   if(index !== -1){
-
-    
-
-  //   }
-
-  // }
-
+  eliminarProducto(id) {
+    const productos = this.cargarProductos();
+    const index = productos.findIndex((p) => p.id === id);
+  
+    if (index !== -1) {
+      productos.splice(index, 1);
+      this.guardarProductos(productos);
+      console.log(`El producto  ${id} fue borrado`);
+    } else {
+      console.log(`No se encontró ningún producto`);
+    }
+  }
+  
 
   obtenerProductos() {
     return this.cargarProductos();
