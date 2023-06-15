@@ -10,21 +10,21 @@ import fs from 'fs';
         
         cargarProductos() {
             try {
-                const data = fs.readFileSync(this.path, 'utf8');
-                return JSON.parse(data);
+              const data = fs.readFileSync(this.path, 'utf8');
+              return JSON.parse(data);
             } catch (error) {
-                console.log(`Se devuelve un array Vacio`)
-                return []
+              console.log(`Se devuelve un array Vacio`);
+              return [];
             }
-        }
+          }
         
-        guardarProductos(productos) {
-            fs.writeFileSync(this.path, JSON.stringify(productos),(error)=>{
-                if(error){
-                    console.log(`Error: ${error}`)
-                }
-            });
-        }
+          guardarProductos(productos) {
+            try {
+              fs.writeFileSync(this.path, JSON.stringify(productos));
+            } catch (error) {
+              console.log(`Error: ${error}`);
+            }
+          }
 
         crearProducto(title, description, price, thumbnail, code, stock) {
             const product = {
@@ -114,27 +114,34 @@ export default ProductManager;
 
 const manager = new ProductManager('productos.json');
 
-// let Apple = manager.crearProducto('Iphone 13', "Nueva tecnología en cuanto a móviles", 950, "IMAGEN", "code", 10);
-// manager.agregarProducto(Apple);
+let Apple = manager.crearProducto('Iphone 13', "Nueva tecnología en cuanto a móviles", 950, "IMAGEN", "code", 10);
+manager.agregarProducto(Apple);
 
 
-// let Samsung = manager.crearProducto("Samsung Galaxy S21", "La competencia del iphone xD", 800, "IMAGEN(url)", "code", 5);
-// manager.agregarProducto(Samsung);
+let Samsung = manager.crearProducto("Samsung Galaxy S21", "La competencia del iphone xD", 800, "IMAGEN(url)", "code", 5);
+manager.agregarProducto(Samsung);
 
-// let Lenovo = manager.crearProducto("Lenovo Phab 2 Pro", "Una cagada la verdad", 150, "IMAGEN(url)", "code", 3);
-// manager.agregarProducto(Lenovo);
+let Lenovo = manager.crearProducto("Lenovo Phab 2 Pro", "Una cagada la verdad", 150, "IMAGEN(url)", "code", 3);
+manager.agregarProducto(Lenovo);
 
-// let Huawei = manager.crearProducto("Huawei P20 Pro", " Lindo para que exista en las manos de otra persona", 250, "IMAGEN(url)", "code", 15);
-// manager.agregarProducto(Huawei);
+let Huawei = manager.crearProducto("Huawei P20 Pro", " Lindo para que exista en las manos de otra persona", 250, "IMAGEN(url)", "code", 15);
+manager.agregarProducto(Huawei);
 
-// let BlackBerry = manager.crearProducto("BlackBerry", "Esto sigue existiendo?", 50, "IMAGEN(url)", "code", 2);
-// manager.agregarProducto(BlackBerry);
+let BlackBerry = manager.crearProducto("BlackBerry", "Esto sigue existiendo?", 50, "IMAGEN(url)", "code", 2);
+manager.agregarProducto(BlackBerry);
 
-// let Motorola = manager.crearProducto("Motorola G72", "y mira la verdad me copa , sera porque tenia motorola de pendejo", 230, "IMAGEN(url)", "code", 7);
-// manager.agregarProducto(Motorola);
+let Motorola = manager.crearProducto("Motorola G72", "y mira la verdad me copa , sera porque tenia motorola de pendejo", 230, "IMAGEN(url)", "code", 7);
+manager.agregarProducto(Motorola);
 
-// let Xiaomi = manager.crearProducto("Xiaomi Redmin Note 7", "QUE PEDAZO DE CELULAR PAPA ", 300, "IMAGEN(url)", "code", 35);
-// manager.agregarProducto(Xiaomi);
+let LG = manager.crearProducto("LG k62", "arranca para no aflojar ", 200, "IMAGEN(url)", "code", 35);
+manager.agregarProducto(LG);
+let Nokia = manager.crearProducto("Nokia 1100", "reliquia ", 20, "IMAGEN(url)", "code", 6);
+manager.agregarProducto(Nokia);
+let Oppo = manager.crearProducto("Oppo v2", "La verdad desconozco pero la encontre en google", 150, "IMAGEN(url)", "code", 20);
+manager.agregarProducto(Oppo);
+let Firulais = manager.crearProducto("Firulais 2021", "Celulares para perros", 75, "IMAGEN(url)", "code", 20);
+manager.agregarProducto(Firulais);
+
 
 
 
