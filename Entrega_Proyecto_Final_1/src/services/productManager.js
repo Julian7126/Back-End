@@ -101,8 +101,8 @@ export default ProductManager;
 
 const manager = new ProductManager('productos.json');
 
-let Apple = manager.crearProducto({ title: 'Iphone 13', description: 'Nueva tecnología en cuanto a móviles', price: 950, thumbnail: 'IMAGEN', code: 'code', stock: 10 });
-// manager.agregarProducto(Apple);
+// let Apple = manager.crearProducto({ title: 'Iphone 13', description: 'Nueva tecnología en cuanto a móviles', price: 950, thumbnail: 'IMAGEN', code: 'code', stock: 10 });
+// // manager.agregarProducto(Apple);
 
 // let Samsung = manager.crearProducto({ title: 'Samsung Galaxy S21', description: 'La competencia del iphone xD', price: 800, thumbnail: 'IMAGEN(url)', code: 'code', stock: 5 });
 // manager.agregarProducto(Samsung);

@@ -6,8 +6,8 @@ const app = express();
 app.use(express.json());
 
 // config
-app.use('/api/products', productRouter);
-app.use('/api/carts', cartRouter);
+app.use('/api/products/', productRouter);
+app.use('/api/carts/', cartRouter);
 
 app.listen(8080, () => {
   console.log('activado 8080');

@@ -3,8 +3,13 @@ import fs from 'fs';
 class CartManager {
   constructor(path) {
     this.path = path;
+    this.verificarArchivo();
   }
-
+   verificarArchivo() {
+     if (!fs.existsSync(this.path)) {
+        fs.writeFileSync(this.path, '[]');
+      }
+    }
   cargarCarritos() {
     try {
       const data = fs.readFileSync(this.path, 'utf8');
@@ -37,6 +42,18 @@ class CartManager {
     } else {
       throw new Error('Carrito no encontrado');
     }
+  }
+
+
+  agregarCarrito(cart) {
+    const carritos = this.cargarCarritos();
+    carritos.push(cart);
+    this.guardarCarritos(carritos);
+  }
+
+  getNextCartId() {
+    const carritos = this.cargarCarritos();
+    return carritos.length + 1;
   }
 }
 
