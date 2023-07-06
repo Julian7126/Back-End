@@ -14,34 +14,34 @@ cartRouter.post("/", (request, response) => {
     manager.agregarCarrito(cart);
     response.status(201).json(cart);
   } catch (e) {
-    response.status(404).json({ e: "pifiamo y no la creo" });
+    response.status(404).json({ e: "pifiamos y no lo creamos" });
   }
 });
 
 cartRouter.get("/:cid", (request, response) => {
   try {
-    const cid = request.params.cid;
+    const cid = +request.params.cid;
     const cart = manager.obtenerCarrito(cid);
 
     if (cart) {
       response.json(cart.products);
     } else {
-      response.status(404).json({ e: "no econtro carrito" });
+      response.status(404).json({ e: "no encontró carrito" });
     }
   } catch (e) {
-    response.status(404).json({ e: "e obetener carrito" });
+    response.status(404).json({ e: "error al obtener carrito" });
   }
 });
 
 cartRouter.post("/:cid/product/:pid", (request, response) => {
   try {
-    const cid = request.params.cid;
+    const cid = +request.params.cid;
     const pid = request.params.pid;
     const quantity = 1;
 
     const cart = manager.obtenerCarrito(cid);
     if (!cart) {
-      response.status(404).json({ e: "no encontrado carrito " });
+      response.status(404).json({ e: "carrito no encontrado" });
       return;
     }
 

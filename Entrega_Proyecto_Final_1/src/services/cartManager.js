@@ -5,11 +5,13 @@ class CartManager {
     this.path = path;
     this.verificarArchivo();
   }
-   verificarArchivo() {
-     if (!fs.existsSync(this.path)) {
-        fs.writeFileSync(this.path, '[]');
-      }
+  
+  verificarArchivo() {
+    if (!fs.existsSync(this.path)) {
+      fs.writeFileSync(this.path, '[]');
     }
+  }
+  
   cargarCarritos() {
     try {
       const data = fs.readFileSync(this.path, 'utf8');
@@ -29,12 +31,12 @@ class CartManager {
 
   obtenerCarrito(cid) {
     const carritos = this.cargarCarritos();
-    return carritos.find((c) => c.cid === cid);
+    return carritos.find((c) => c.id === cid);
   }
 
   actualizarCarrito(cid, carritoActualizado) {
     const carritos = this.cargarCarritos();
-    const index = carritos.findIndex((c) => c.cid === cid);
+    const index = carritos.findIndex((c) => c.id === cid);
 
     if (index !== -1) {
       carritos[index] = carritoActualizado;
@@ -43,7 +45,6 @@ class CartManager {
       throw new Error('Carrito no encontrado');
     }
   }
-
 
   agregarCarrito(cart) {
     const carritos = this.cargarCarritos();
@@ -56,11 +57,5 @@ class CartManager {
     return carritos.length + 1;
   }
 }
-
-const manager = new CartManager('carrito.json');
-
-
-const listaCarrito = manager.obtenerCarrito();
-console.log(listaCarrito);
 
 export default CartManager;
