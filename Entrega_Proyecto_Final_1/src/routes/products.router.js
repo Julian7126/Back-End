@@ -1,12 +1,12 @@
-import express from "express";
-import ProductManager from "../services/productManager.js";
-
+import express from 'express';
+import ProductManager from '../services/productManager.js';
 
 const productosRouter = express.Router();
 const manager = new ProductManager("productos.json");
 
 
-productosRouter.get("/", (request , response) => { //obetener todos 
+// Obtener todos los productos
+productosRouter.get("/", (request , response) => {
   try {
     const limit = request.query.limit;
     const productos = manager.obtenerProductos();
@@ -18,12 +18,12 @@ productosRouter.get("/", (request , response) => { //obetener todos
       response.json(productos);
     }
   } catch (e) {
-    response.status(404).json({ e: "Fallamo loco" });
+    response.status(404).json({ e: "Falló al obtener los productos" });
   }
 });
 
-
-productosRouter.get("/:pid", (request, response) => { //obetener /id
+// Obtener un producto por ID
+productosRouter.get("/:pid", (request, response) => {
   try {
     const pid = request.params.pid;
     const productos = manager.obtenerProductos();
@@ -32,60 +32,65 @@ productosRouter.get("/:pid", (request, response) => { //obetener /id
     if (producto) {
       response.json(producto);
     } else {
-      response.status(404).json({ error: "fallamo loco" });
+      response.status(404).json({ error: "Producto no encontrado" });
     }
   } catch (e) {
-    response.status(404).json({ e: "fallamo en encontrar el producto" });
+    response.status(404).json({ e: "Falló al encontrar el producto" });
   }
 });
 
-
-productosRouter.post("/", (request, response) => { // Agregar 
+// Agregar un nuevo producto
+productosRouter.post("/", (request, response) => {
   try {
     const { id, title, description, price, thumbnails, code, stock } = request.body;
-//tengo un problemita con esto 
-    // if (!id || !title || !description || !price || !thumbnails || !code || !stock) {
-    //   response.status(404).json({ error: "fallamo faltan campos" });
-    //   return;
-    // }
 
-    const nuevoProducto = manager.crearProducto({id, title, description, price, thumbnails, code, stock});
+    const nuevoProducto = manager.crearProducto({ id, title, description, price, thumbnails, code, stock });
     manager.agregarProducto(nuevoProducto);
+
+    // Enviar lista a través de WebSocket
+    const productos = manager.obtenerProductos();
+    io.emit('productosActualizados', productos);
+
     response.status(201).json(nuevoProducto);
   } catch (e) {
-    response.status(404).json({ e: "fallamo en agregar el celu" });
+    response.status(404).json({ e: "Error al agregar el celular" });
   }
 });
 
-
-productosRouter.put("/:pid", (request, response) => {  // Actualizar
+// Actualizar un producto
+productosRouter.put("/:pid", (request, response) => {
   try {
     const pid = request.params.pid;
     const updatedFields = request.body;
 
     manager.actualizarProducto(pid, updatedFields);
-    response.json({ message: "celu actualizado" });
+
+    // Enviar lista a través de WebSocket
+    const productos = manager.obtenerProductos();
+    io.emit('productosActualizados', productos);
+
+    response.json({ message: "Producto actualizado" });
   } catch (e) {
-    response.status(404).json({ e: "fallamo en actualizar el celu" });
+    response.status(404).json({ e: "Falló al actualizar el producto" });
   }
 });
 
-
-productosRouter.delete("/:pid", (request,response) => { //eliminar
+// Eliminar un producto
+productosRouter.delete("/:pid", (request,response) => {
   try {
     const pid = request.params.pid;
 
     manager.eliminarProducto(pid);
-    response.json({ message: "celu eliminado" });
+
+    // Enviar lista a través de WebSocket
+    const productos = manager.obtenerProductos();
+    io.emit('productosActualizados', productos);
+
+    response.json({ message: "Producto eliminado" });
   } catch (e) {
-    response.status(404).json({ e: "fallamo en eliminar el celu" });
+    response.status(404).json({ e: "Falló al eliminar el producto" });
   }
 });
 
-export default productosRouter
 
-
-
-
-
-
+export default productosRouter;

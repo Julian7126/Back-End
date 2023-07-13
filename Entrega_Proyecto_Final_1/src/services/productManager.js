@@ -76,7 +76,7 @@ class ProductManager {
       productos[index] = { id: parseInt(id), ...productoActualizado };
       this.guardarProductos(productos);
     } else {
-      throw new Error('No se encontro ninguno');
+      throw new Error('No se encontró ninguno');
     }
   }
 
@@ -88,7 +88,7 @@ class ProductManager {
       productos.splice(index, 1);
       this.guardarProductos(productos);
     } else {
-      throw new Error('No se encontro ninguno');
+      throw new Error('No se encontró ninguno');
     }
   }
 
@@ -98,38 +98,3 @@ class ProductManager {
 }
 
 export default ProductManager;
-
-const manager = new ProductManager('productos.json');
-
-// let Apple = manager.crearProducto({ title: 'Iphone 13', description: 'Nueva tecnología en cuanto a móviles', price: 950, thumbnail: 'IMAGEN', code: 'code', stock: 10 });
-// // manager.agregarProducto(Apple);
-
-// let Samsung = manager.crearProducto({ title: 'Samsung Galaxy S21', description: 'La competencia del iphone xD', price: 800, thumbnail: 'IMAGEN(url)', code: 'code', stock: 5 });
-// manager.agregarProducto(Samsung);
-
-// let Lenovo = manager.crearProducto({ title: 'Lenovo Phab 2 Pro', description: 'Una cagada la verdad', price: 150, thumbnail: 'IMAGEN(url)', code: 'code', stock: 3 });
-// manager.agregarProducto(Lenovo);
-
-// let Huawei = manager.crearProducto({ title: 'Huawei P20 Pro', description: 'Lindo para que exista en las manos de otra persona', price: 250, thumbnail: 'IMAGEN(url)', code: 'code', stock: 15 });
-// manager.agregarProducto(Huawei);
-
-// let BlackBerry = manager.crearProducto({ title: 'BlackBerry', description: 'Esto sigue existiendo?', price: 50, thumbnail: 'IMAGEN(url)', code: 'code', stock: 2 });
-// manager.agregarProducto(BlackBerry);
-
-// let Motorola = manager.crearProducto({ title: 'Motorola G72', description: 'y mira la verdad me copa , sera porque tenia motorola de pendejo', price: 230, thumbnail: 'IMAGEN(url)', code: 'code', stock: 7 });
-// manager.agregarProducto(Motorola);
-
-// let LG = manager.crearProducto({ title: 'LG k62', description: 'arranca para no aflojar', price: 200, thumbnail: 'IMAGEN(url)', code: 'code', stock: 35 });
-// manager.agregarProducto(LG);
-
-// let Nokia = manager.crearProducto({ title: 'Nokia 1100', description: 'reliquia', price: 20, thumbnail: 'IMAGEN(url)', code: 'code', stock: 6 });
-// manager.agregarProducto(Nokia);
-
-// let Oppo = manager.crearProducto({ title: 'Oppo v2', description: 'La verdad desconozco pero la encontre en google', price: 150, thumbnail: 'IMAGEN(url)', code: 'code', stock: 20 });
-// manager.agregarProducto(Oppo);
-
-// let Firulais = manager.crearProducto({ title: 'Firulais 2021', description: 'Celulares para perros', price: 75, thumbnail: 'IMAGEN(url)', code: 'code', stock: 20 });
-// manager.agregarProducto(Firulais);
-
-const listaProductos = manager.obtenerProductos();
-console.log(listaProductos);

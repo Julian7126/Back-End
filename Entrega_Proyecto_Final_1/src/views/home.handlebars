@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Productos Celular</title>
+</head>
+<body>
+  <h1>Celulares</h1>
+  <ul>
+    {{#each productos}}
+    <li>
+      <h2>{{title}}</h2>
+      <p>{{description}}</p>
+      <p>Precio: ${{price}}</p>
+      <img src="{{thumbnail}}" alt="Imagen del producto">
+      <p>Código: {{code}}</p>
+      <p>Stock: {{stock}}</p>
+    </li>
+    {{/each}}
+  </ul>
+</body>
+</html>

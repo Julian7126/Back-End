@@ -4,6 +4,7 @@ import CartManager from '../services/cartManager.js';
 const cartRouter = express.Router();
 const manager = new CartManager("carrito.json");
 
+// Crear un nuevo carrito
 cartRouter.post("/", (request, response) => {
   try {
     const cart = {
@@ -18,6 +19,7 @@ cartRouter.post("/", (request, response) => {
   }
 });
 
+// Obtener productos de un carrito
 cartRouter.get("/:cid", (request, response) => {
   try {
     const cid = +request.params.cid;
@@ -33,6 +35,7 @@ cartRouter.get("/:cid", (request, response) => {
   }
 });
 
+// Agregar un producto al carrito
 cartRouter.post("/:cid/product/:pid", (request, response) => {
   try {
     const cid = +request.params.cid;
