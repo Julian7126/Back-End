@@ -33,7 +33,7 @@
   <script>
     const socket = io();
 
-    // Escuchar actualizaciones de productos
+    // actualizacion de product
     socket.on('productosActualizados', (productos) => {
       const productList = document.getElementById('productList');
       productList.innerHTML = '';
@@ -66,7 +66,7 @@
       });
     });
 
-    // Enviar formulario de producto
+    // formulario
     const productForm = document.getElementById('productForm');
     productForm.addEventListener('submit', (event) => {
       event.preventDefault();

@@ -5,7 +5,7 @@ const productosRouter = express.Router();
 const manager = new ProductManager("productos.json");
 
 
-// Obtener todos los productos
+// todos productos
 productosRouter.get("/", (request , response) => {
   try {
     const limit = request.query.limit;
@@ -22,7 +22,7 @@ productosRouter.get("/", (request , response) => {
   }
 });
 
-// Obtener un producto por ID
+// id
 productosRouter.get("/:pid", (request, response) => {
   try {
     const pid = request.params.pid;
@@ -39,7 +39,7 @@ productosRouter.get("/:pid", (request, response) => {
   }
 });
 
-// Agregar un nuevo producto
+// Agre un nuevo producto
 productosRouter.post("/", (request, response) => {
   try {
     const { id, title, description, price, thumbnails, code, stock } = request.body;
@@ -47,7 +47,7 @@ productosRouter.post("/", (request, response) => {
     const nuevoProducto = manager.crearProducto({ id, title, description, price, thumbnails, code, stock });
     manager.agregarProducto(nuevoProducto);
 
-    // Enviar lista a través de WebSocket
+    //lista a traves de WebSocket
     const productos = manager.obtenerProductos();
     io.emit('productosActualizados', productos);
 
