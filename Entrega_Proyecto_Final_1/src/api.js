@@ -13,8 +13,9 @@ const io = new Server(server);
 const manager = new ProductManager("productos.json");
 
 // handlebars
-app.engine('handlebars', handlebars());
-app.set('view engine', 'handlebars');
+app.engine('handlebars', handlebars.engine());
+app.set('views', __dirname + '/views');
+app.set('view engine','handlebars')
 app.use(express.json());
 
 //  socket.io
@@ -29,10 +30,6 @@ io.on('connection', (socket) => {
     console.log('Cliente desconectado');
   });
 });
-
-// rutas
-app.use('/api/products/', productosRouter);
-app.use('/api/carts/', cartRouter);
 
 // ruta para la vista home.handlebars
 app.get('/', (req, res) => {
