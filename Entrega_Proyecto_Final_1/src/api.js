@@ -18,6 +18,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine','handlebars')
 app.use(express.json());
 
+
 //  socket.io
 io.on('connection', (socket) => {
   console.log('Cliente conectado');
