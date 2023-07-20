@@ -44,6 +44,9 @@ app.get('/realtimeproducts', (req, res) => {
   res.render('realTimeProducts', { productos });
 });
 
+
+app.use('/api/productos', productosRouter);
+
 server.listen(8080, () => {
   console.log('Activando servidor en el puerto 8080');
 });
