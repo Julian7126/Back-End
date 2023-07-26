@@ -1,16 +1,15 @@
 import express from 'express';
 import productosRouter from './routes/products.router.js';
-import cartRouter from './routes/cart.router.js';
 import handlebars from 'express-handlebars';
 import http from 'http';
 import { Server } from 'socket.io';
-import ProductManager from './services/productManager.js';
 import __dirname from './utils.js';
+import mongoose, { mongo } from 'mongoose';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const manager = new ProductManager("productos.json");
+
 
 // handlebars
 app.engine('handlebars', handlebars.engine());
@@ -32,23 +31,28 @@ io.on('connection', (socket) => {
   });
 });
 
-// ruta para la vista home.handlebars
-app.get('/', (req, res) => {
-  const productos = manager.obtenerProductos();
-  res.render('home', { productos });
-});
 
-// ruta para la vista realTimeProducts.handlebars
-app.get('/realtimeproducts', (req, res) => {
-  const productos = manager.obtenerProductos();
-  res.render('realTimeProducts', { productos });
-});
+app.use("/api/productos", productosRouter);
+app.get("/", (require, response)=> response.send("esta funcionando bien"))
+
+mongoose.set(`strictQuery`,false)
+const URL =  "mongodb+srv://julibischoff:julibischoff@cluster0.5dy77sq.mongodb.net/?retryWrites=true&w=majority";
+//corremos el servidor 
+mongoose.connect(URL,{
+  dbName: "DataBaseEccomerce"
+})
+  .then(()=>{
+     console.log("DB conectada")
+     server.listen(8080);
+     
+  })
+  .catch(()=>{
+    console.log("no se conecto a la base de datos")
+  })
 
 
-app.use('/api/productos', productosRouter);
 
-server.listen(8080, () => {
-  console.log('Activando servidor en el puerto 8080');
-});
+
+
 
 export { io };
