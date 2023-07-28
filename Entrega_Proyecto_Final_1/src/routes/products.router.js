@@ -28,7 +28,7 @@ productosRouter.post("/", async (request, response) => {
   const ProductNew = request.body
   console.log({ ProductNew })
   
-  const productGenerated = new productsModel(ProductNew)
+  const productGenerated = new productsModel.create(ProductNew)
   await productGenerated.save()
   
   console.log({ productGenerated });
