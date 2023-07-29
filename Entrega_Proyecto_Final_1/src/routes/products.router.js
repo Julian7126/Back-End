@@ -1,11 +1,7 @@
 import express from 'express';
 import productsModel from "../dao/models/products.models.js"
-import cartsModel from "../dao/models/carts.models.js"
-import messagesModel from "../dao/models/messages.model.js"
+
 const productosRouter = express.Router();
-
-
-
 
 
 // // todos productos
@@ -24,18 +20,16 @@ productosRouter.get("/:pid", async (request, response) => {
 
 // // Agrege un nuevo producto
 productosRouter.post("/", async (request, response) => {
-  
-  const ProductNew = request.body
-  console.log({ ProductNew })
-  
-  const productGenerated = new productsModel.create(ProductNew)
-  await productGenerated.save()
-  
+  const ProductNew = request.body;
+  console.log({ ProductNew });
+
+  const productGenerated = await productsModel.create(ProductNew);
+
   console.log({ productGenerated });
 
-  response.redirect('/api/productos/' ) // aca se puede agregar que redireccione a donde uno quiere ejemplo res.redirect('/ap/productos/' + ProductGenerated.id)
-  
+  response.redirect('/api/productos/'); // Puedes redireccionar a la lista de productos o cualquier otra ruta después de agregar uno nuevo
 });
+
 
 // // Eliminar un producto
 productosRouter.delete("/:pid", async (request,response) => {

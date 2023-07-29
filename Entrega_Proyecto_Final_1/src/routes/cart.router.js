@@ -23,8 +23,6 @@ cartRouter.post('/', async (require, response) => {
 
 
 
-
-
 // agrega producto al carrito
 cartRouter.post("/:cid/product/:pid", async (request, response) => {
   try {

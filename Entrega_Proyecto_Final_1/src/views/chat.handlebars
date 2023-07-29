@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat</title>
+</head>
+<body>
+  <h1>Chat</h1>
+  <ul id="chat">
+    {{#each messages}}
+      <li><strong>{{this.email}}</strong> (<em>{{this.user}}</em>): {{this.message}}</li>
+    {{/each}}
+  </ul>
+
+  <form id="chatForm">
+    <input type="text" name="email" placeholder="Tu correo electrónico">
+    <input type="text" name="user" placeholder="Tu nombre de usuario">
+    <input type="text" name="message" placeholder="Mensaje">
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    document.getElementById('chatForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const email = formData.get('email');
+      const user = formData.get('user');
+      const message = formData.get('message');
+      socket.emit('nuevo_mensaje', { email, user, message });
+      event.target.reset();
+    });
+
+    socket.on('nuevo_mensaje', (data) => {
+      const chatList = document.getElementById('chat');
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${data.email}</strong> (<em>${data.user}</em>): ${data.message}`;
+      chatList.appendChild(li);
+    });
+  </script>
+</body>
+</html>

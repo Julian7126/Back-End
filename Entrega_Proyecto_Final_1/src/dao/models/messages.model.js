@@ -1,15 +1,18 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-
-const messagesCollection = `messages`
+const messagesCollection = 'messages';
 
 const messagesSchema = new mongoose.Schema({
-})
+  email: {
+    type: String,
+   
+  },
+  message: {
+    type: String,
+    
+  },
+});
 
+const messagesModel = mongoose.model(messagesCollection, messagesSchema);
 
-mongoose.set(`strictQuery`,false)
-
-const messagesModel = mongoose.model(messagesCollection,messagesSchema)
-
-
-export default messagesModel
+export default messagesModel;

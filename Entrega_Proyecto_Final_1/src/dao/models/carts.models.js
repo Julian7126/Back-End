@@ -13,8 +13,6 @@ const productsSchema = new mongoose.Schema({
     
 const cartsSchema = new mongoose.Schema({
     
-    cartsId: { type: String, required: true },
-    
     products: [productsSchema]
     
     });
