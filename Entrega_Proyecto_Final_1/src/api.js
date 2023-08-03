@@ -8,8 +8,8 @@ import http from 'http';
 import { Server } from 'socket.io';
 import __dirname from './utils.js';
 import messagesModel from './dao/models/messages.model.js';
-
-
+import productsModel from './dao/models/products.models.js'; 
+import viewsRouter from './routes/views.router.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -59,8 +59,9 @@ const runServer = () => {
 app.use("/api/productos", productosRouter);
 app.use('/api/carts', cartRouter)
 app.use("/chat",chatRouter )
-///incorporar el cart
-app.get("/", (require, response)=> response.send("esta funcionando bien"))
+app.use("/", viewsRouter)
+
+app.get("/", (request, response)=> response.send("esta funcionando bien"))
 
 mongoose.set(`strictQuery`,false)
 const URL =  "mongodb+srv://julibischoff:julibischoff@cluster0.5dy77sq.mongodb.net/?retryWrites=true&w=majority";
