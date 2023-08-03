@@ -22,12 +22,12 @@ viewsRouter.get('/list', async (request, response) => {
 
 viewsRouter.get('/productos/:pid', async (request, response) => {
   try {
-    const id = request.params.pid;
-    const product = await productsModel.findById(id);
-    if (!product) {
+    const id =+request.params.pid;
+    const products = await productsModel.findById(id);
+    if (!products) {
       return response.status(404).send(`no se encuentra el id `);
     }
-    response.render('one', { product });
+    response.render('one', { products });
   } catch (error) {
     response.status(404).send('Error');
   }
