@@ -4,24 +4,31 @@ const viewsRouter = express.Router();
 
 
 
-viewsRouter.get('/productos', async (req, res) => {
+// viewsRouter.get('/productos', async (request, response) => {
+//   const products = await productsModel.find().lean().exec();
+//   response.render('home', { products });
+// });
+
+
+viewsRouter.get('/productos', async (request, response) => {
   const products = await productsModel.find().lean().exec();
-  res.render('home', { products });
+  response.render('home', { products });
 });
 
-viewsRouter.get('/productos/:pid', async (req, res) => {
-  const id = req.params.pid;
+
+viewsRouter.get('/productos/:pid', async (request, response) => {
+  const id = request.params.pid;
   const product = await productsModel.findById(id);
-  res.render('one', product);
+  response.render('one', product);
 });
 
-viewsRouter.get('/chat', async (req, res) => {
+viewsRouter.get('/chat', async (request, response) => {
   try {
     const messages = await messagesModel.find().lean();
-    res.render('chat', { messages });
+    response.render('chat', { messages });
   } catch (error) {
-    console.error('Error al obtener los mensajes:', error);
-    res.status(500).send('Error interno del servidor');
+    console.error('Error datos:', error);
+    response.status(404).send('Error  del servidor');
   }
 });
 
