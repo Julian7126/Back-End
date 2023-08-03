@@ -69,13 +69,13 @@ cartRouter.put("/:cid", async (request, response) => {
     cart.products = products;
     await cart.save();
 
-    response.json({ message: "Carrito actualizado exitosamente" });
+    response.json({ message: "carts actualizado" });
   } catch (error) {
-    response.status(404).json({ error: "Error al actualizar el carrito" });
+    response.status(404).json({ error: "Error al actualizar el carts" });
   }
 });
 
-// Actualizar la cantidad de ejemplares de un producto en el carrito
+//actualizar products
 cartRouter.put("/:cid/product/:pid", async (request, response) => {
   try {
     const cid = +request.params.cid;
@@ -85,7 +85,7 @@ cartRouter.put("/:cid/product/:pid", async (request, response) => {
     const cart = await cartsModel.findById(cid);
 
     if (!cart) {
-      return response.status(404).json({ error: "Carrito not found" });
+      return response.status(404).json({ error: "carts not found" });
     }
 
     const productIndex = cart.products.findIndex(item => item.products.toString() === pid);
@@ -108,15 +108,15 @@ cartRouter.delete("/:cid/all", async (request, response) => {
     const cart = await cartsModel.findById(cid);
 
     if (!cart) {
-      return response.status(404).json({ error: "Carrito not found" });
+      return response.status(404).json({ error: "carts not found" });
     }
 
     cart.products = [];
     await cart.save();
 
-    response.json({ message: "Todos los productos del carrito han sido eliminados" });
+    response.json({ message: "eliminamos todos los productos" });
   } catch (error) {
-    response.status(404).json({ error: "Error al eliminar todos los productos del carrito" });
+    response.status(404).json({ error: "Error" });
   }
 });
 
