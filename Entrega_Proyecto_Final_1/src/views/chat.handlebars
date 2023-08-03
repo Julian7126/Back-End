@@ -2,6 +2,76 @@
 <html>
 <head>
   <title>Chat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #222222;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #ff9900; /* Color oxidado */
+    }
+
+    ul#chat {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-width: 400px;
+      width: 100%;
+      overflow-y: auto;
+      border: 2px solid #ff9900; /* Color oxidado */
+      border-radius: 5px;
+      background-color: #333333;
+      padding: 10px;
+    }
+
+    ul#chat li {
+      margin-bottom: 10px;
+    }
+
+    strong {
+      color: #ff9900; /* Color oxidado */
+    }
+
+    em {
+      color: #666666; /* Color gris */
+    }
+
+    #chatForm {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 400px;
+      margin-top: 20px;
+    }
+
+    #chatForm input[type="text"],
+    #chatForm button {
+      margin-bottom: 10px;
+    }
+
+    #chatForm button {
+      background-color: #ff9900; /* Color oxidado */
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #chatForm button:hover {
+      background-color: #dd7700; /* Color oxidado más claro en hover */
+    }
+  </style>
 </head>
 <body>
   <h1>Chat</h1>
@@ -37,6 +107,7 @@
       const li = document.createElement('li');
       li.innerHTML = `<strong>${data.email}</strong> (<em>${data.user}</em>): ${data.message}`;
       chatList.appendChild(li);
+      chatList.scrollTop = chatList.scrollHeight;
     });
   </script>
 </body>

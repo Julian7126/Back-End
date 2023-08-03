@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Celular</title>
+  <title>Productos Celular</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -58,15 +59,14 @@
   </style>
 </head>
 <body>
-  <h1>Celular</h1>
-  <p>Se está mostrando el celular con el ID buscado en el navegador</p>
+  <h1>Celulares</h1>
   <ul>
     {{#each products}}
     <li>
+      <img src="{{thumbnail}}" alt="Imagen del producto">
       <h2>{{title}}</h2>
       <p>{{description}}</p>
       <p class="price">Precio: ${{price}}</p>
-      <img src="{{thumbnail}}" alt="Imagen del producto">
       <p>Código: {{code}}</p>
       <p>Stock: {{stock}}</p>
     </li>
