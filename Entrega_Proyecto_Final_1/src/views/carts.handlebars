@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carritos de Compras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #444;
+            padding: 1rem;
+        }
+        h1 {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .cart-container {
+            margin: 2rem;
+        }
+        .cart {
+            background-color: #555;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .cart h2 {
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            font-size: 1.5rem;
+        }
+        .cart .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+        .product .product-name {
+            flex: 1;
+        }
+        .product .product-quantity {
+            flex: 0;
+            padding: 0.5rem;
+            background-color: #777;
+            border-radius: 5px;
+        }
+        .product .product-delete {
+            color: #ff5555;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Carritos de Compras</h1>
+    </header>
+    <div class="cart-container">
+        {{#each result}}
+        <div class="cart">
+            <h2>Carrito {{_id}}</h2>
+            {{#each products}}
+            <div class="product">
+                <h4>Productos</h4>
+                <div class="product-name">{{this.products.name}}</div>
+                <div class="product-quantity">{{this.quantity}}</div>
+                <div class="product-delete" onclick="deleteProduct('{{_id}}', '{{this._id}}')">Eliminar</div>
+            </div>
+            {{/each}}
+        </div>
+        {{/each}}
+    </div>
+    <script>
+   function deleteProduct(cartId, productId) {
+            fetch(`/api/carts/${cartId}/products/${productId}`, {
+                method: 'DELETE'
+            }).then(() => {
+                window.location.reload();
+            }).catch((error) => {
+                console.error('Error al eliminar el producto:', error);
+            });
+        }
+    </script>
+</body>
+</html>

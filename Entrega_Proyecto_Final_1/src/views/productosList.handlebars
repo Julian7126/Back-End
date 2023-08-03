@@ -60,6 +60,11 @@
 </head>
 <body>
   <h1>Celulares</h1>
+   <div>
+    <a href="/list?sort=asc" class="sort-button">Ordenar ascendente</a>
+    <a href="/list?sort=desc" class="sort-button">Ordenar descendente</a>
+  </div>
+  
   <ul>
     {{#each docs}}
     <li>
@@ -72,5 +77,29 @@
     </li>
     {{/each}}
   </ul>
+  <div>
+    <form action="/list" method="get">
+      <label for="page">Página:</label>
+      <input type="number" id="page" name="page" min="1" value="{{page}}">
+      <label for="limit">Límite:</label>
+      <input type="number" id="limit" name="limit" min="1" value="{{limit}}">
+      <button type="submit">Actualizar</button>
+    </form>
+  </div>
+
+
+
 </body>
+ <script>
+    document.getElementById(`form`).onsubmit = (e) =>{
+      e.preventDefault();
+      const limit =document.getElementById(`limit`).value
+      const page = document.getElementById(`page`).value
+      
+      const url = `/list?limit=${limit}&page=${page}`
+
+      window.location.href = url
+
+    }
+  </script>
 </html>

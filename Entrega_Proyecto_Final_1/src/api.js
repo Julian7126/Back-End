@@ -37,6 +37,7 @@ const runServer = () => {
   io.on('connection', (socket) => {
     console.log('Cliente conectado');
   
+    
     // chat
     socket.on('nuevo_mensaje', async (data) => {
       try {
