@@ -4,11 +4,11 @@ import messagesModel from "../dao/models/messages.model.js";
 
 const chatRouter = express.Router()
 
-chatRouter.get('/', async (require, response) => {
+chatRouter.get('/', async (request, response) => {
     try {
-      // Obtener todos los mensajes de la colección "messages" en MongoDB
+      // mensajes de mongo
       const messages = await messagesModel.find().lean();
-      response.render('chat', { messages }); // Renderiza la vista "chat.handlebars" y pasa mensajes
+      response.render('chat', { messages }); 
     } catch (error) {
       console.error('Error al guardar el mensaje:', error);
       response.status(404).send('Error interno del servidor');

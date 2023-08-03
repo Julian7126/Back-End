@@ -43,8 +43,8 @@ const runServer = () => {
        //guardar mensaje en mongo
         await messagesModel.create(data);
   
-        // Emitir el mensaje a todos los demás clientes conectados, excluyendo al remitente
-        socket.broadcast.emit('nuevo_mensaje', data);
+        // ahora esta incluido el remitentente 
+        socket.emit('nuevo_mensaje', data);//
       } catch (error) {
         console.error('Error al guardar el mensaje:', error);
       }

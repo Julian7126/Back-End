@@ -39,9 +39,6 @@ cartRouter.post('/', async (request, response) => {
 
 
 // agrega producto al carrito
-//...
-
-// Agrega producto al carrito
 cartRouter.post("/:cid/product/:pid", async (request, response) => {
   try {
     const cid = +request.params.cid;
@@ -58,10 +55,11 @@ cartRouter.post("/:cid/product/:pid", async (request, response) => {
     const result = await cart.save();
 
     response.send(result);
-  } catch (e) {
+  } catch (error) {
     response.status(404).json({ error: "Error" });
   }
 });
+
 
 
 
