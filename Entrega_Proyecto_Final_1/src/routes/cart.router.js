@@ -12,9 +12,9 @@ cartRouter.post('/', async (request, response) => {
 });
 
 // Agregar un producto al carrito
-cartRouter.post("/:cid/product/:pid", async (request, response) => {
+cartRouter.post("/:cid/productos/:pid", async (request, response) => {
   try {
-    const cid = +request.params.cid;
+    const cid = request.params.cid;
     const pid = request.params.pid;
     const { quantity } = request.body;
 
@@ -34,9 +34,9 @@ cartRouter.post("/:cid/product/:pid", async (request, response) => {
 });
 
 //eliminar 
-cartRouter.delete("/:cid/products/:pid", async (request, response) => {
+cartRouter.delete("/:cid/productos/:pid", async (request, response) => {
   try {
-    const cid = +request.params.cid;
+    const cid = request.params.cid;
     const pid = request.params.pid;
 
     const cart = await cartsModel.findById(cid);
@@ -57,7 +57,7 @@ cartRouter.delete("/:cid/products/:pid", async (request, response) => {
 //actualizar
 cartRouter.put("/:cid", async (request, response) => {
   try {
-    const cid = +request.params.cid;
+    const cid = request.params.cid;
     const { products } = request.body;
 
     const cart = await cartsModel.findById(cid);
@@ -76,9 +76,9 @@ cartRouter.put("/:cid", async (request, response) => {
 });
 
 //actualizar products
-cartRouter.put("/:cid/product/:pid", async (request, response) => {
+cartRouter.put("/:cid/productos/:pid", async (request, response) => {
   try {
-    const cid = +request.params.cid;
+    const cid = request.params.cid;
     const pid = request.params.pid;
     const { quantity } = request.body;
 
@@ -103,7 +103,7 @@ cartRouter.put("/:cid/product/:pid", async (request, response) => {
 // delete de carrito entero - puse all porque me generaba problemas con el delete de productos 
 cartRouter.delete("/:cid/all", async (request, response) => {
   try {
-    const cid = +request.params.cid;
+    const cid = request.params.cid;
 
     const cart = await cartsModel.findById(cid);
 

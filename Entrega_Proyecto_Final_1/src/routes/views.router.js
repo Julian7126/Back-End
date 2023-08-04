@@ -45,6 +45,26 @@ viewsRouter.get('/list', async (request, response) => {
     sort,
   });
 
+   const hasPrevPage = page > 1;
+   const hasNextPage = page < totalPages;
+   const prevLink = hasPrevPage ? `/list?limit=${limit}&page=${page - 1}` : null;
+  
+   const nextLink = hasNextPage ? `/list?limit=${limit}&page=${page + 1}` : null;
+
+  const Objects = {
+    status: 'success',
+    payload: result.docs,
+    totalPages,
+    prevPage: page - 1,
+    nextPage: page + 1,
+    page,
+    hasPrevPage,
+    hasNextPage,
+    prevLink,
+    nextLink,
+  };
+  console.log('Objects:', Objects);
+
   // datos adicionales
   result.page = page;
   result.limit = limit;
@@ -104,7 +124,7 @@ viewsRouter.get("/carts", async (request, response) => {
 // Obtener un carrito por su ID
 viewsRouter.get("/carts/:cid", async (request, response) => {
   try {
-    const cid = +request.params.cid;
+    const cid = request.params.cid;
     const cart = await cartsModel.findById(cid);
     
     if (!cart) {
@@ -113,8 +133,8 @@ viewsRouter.get("/carts/:cid", async (request, response) => {
     
     response.render('carts', { cart });
   } catch (e) {
-    response.status(404).json({ error: "Error al obtener el carrito" });
-  }
+    console.error("Error al obtener el carrito:", e);
+    response.status(500).json({ error: "Error al obtener el carrito" });  }
 });
 
 export default viewsRouter;
