@@ -82,10 +82,16 @@ viewsRouter.get('/list', async (request, response) => {
 
 
 
-//aca arreglarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+
 viewsRouter.get('/productos/:pid', async (request, response) => {
   try {
+    const ObjectId = mongoose.Types.ObjectId;
     const id =request.params.pid;
+
+
+    if (!ObjectId.isValid(id)) {
+      return response.status(404).send("Id invalido");
+    }
     const products = await productsModel.findById(id);
     if (!products) {
       return response.status(404).send(`no se encuentra el id `);
@@ -108,13 +114,10 @@ viewsRouter.get('/chat', async (request, response) => {
 
 
 
-
-
-
 // Obtener todos los carritos de compras
 viewsRouter.get("/carts", async (request, response) => {
   try {
-    const result = await cartsModel.find().lean().exec();
+    const result = await cartsModel.find().populate('products.products').exec();
     response.render('carts', { result });
   } catch (e) {
     response.status(404).json({ error: "No se pudo obtener la lista de carritos" });
@@ -124,8 +127,8 @@ viewsRouter.get("/carts", async (request, response) => {
 // Obtener un carrito por su ID
 viewsRouter.get("/carts/:cid", async (request, response) => {
   try {
-    const cid = request.params.cid;
-    const cart = await cartsModel.findById(cid);
+    const cid =request.params.cid;
+    const cart= await cartsModel.findById(cid).populate('products.products').exec();
     
     if (!cart) {
       return response.status(404).json({ error: "Carrito not found" });
@@ -134,7 +137,11 @@ viewsRouter.get("/carts/:cid", async (request, response) => {
     response.render('carts', { cart });
   } catch (e) {
     console.error("Error al obtener el carrito:", e);
-    response.status(500).json({ error: "Error al obtener el carrito" });  }
+    response.status(404).json({ error: "Error al obtener el carrito" });
+  }
 });
 
 export default viewsRouter;
+
+
+

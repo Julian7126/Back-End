@@ -31,7 +31,7 @@ app.use(express.static(__dirname + '/public'))
 
 
 const runServer = () => {
-  const httpServer = app.listen(8045, () => console.log('Escuchando...'))
+  const httpServer = app.listen(8080, () => console.log('Escuchando...'))
   const io = new Server(httpServer)
 
   io.on('connection', (socket) => {
