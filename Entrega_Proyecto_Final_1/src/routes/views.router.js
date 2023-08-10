@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import productsModel from '../dao/models/products.models.js';
 import cartsModel from '../dao/models/carts.models.js';
 const viewsRouter = express.Router();
@@ -85,25 +86,59 @@ viewsRouter.get('/list', async (request, response) => {
 
 
 
+// viewsRouter.get('/productos/:pid', async (request, response) => {
+//   try {
+//     const ObjectId = mongoose.Types.ObjectId;
+//     const id = request.params.pid;
+
+//     if (!ObjectId.isValid(id)) {
+//       return response.status(404).send("Id inválido");
+//     }
+//     const product = await productsModel.findById(id);
+//     if (!product) {
+//       return response.status(404).send(`No se encuentra el producto`);
+//     }
+//     response.render('one', { product });
+//   } catch (error) {
+//     response.status(404).send('Error');
+//   }
+// });
+
 
 viewsRouter.get('/productos/:pid', async (request, response) => {
   try {
     const ObjectId = mongoose.Types.ObjectId;
-    const id =request.params.pid;
+    const id = request.params.pid;
 
+    console.log('ID del producto:', id);
 
     if (!ObjectId.isValid(id)) {
-      return response.status(404).send("Id invalido");
+      console.log('ID inválido:', id);
+      return response.status(404).send("Id inválido");
     }
-    const products = await productsModel.findById(id);
-    if (!products) {
-      return response.status(404).send(`no se encuentra el id `);
+
+    const product = await productsModel.findById(id);
+    
+    if (!product) {
+      console.log('Producto no encontrado para el ID:', id);
+      return response.status(404).send(`No se encuentra el producto`);
     }
-    response.render('one', { products });
+
+    console.log('Producto encontrado:', product);
+
+    response.render('one', { product });
   } catch (error) {
-    response.status(404).send('Error');
+    console.error('Error en la ruta de productos:', error);
+    response.status(500).send('Error interno del servidor');
   }
 });
+
+
+
+
+
+
+
 
 viewsRouter.get('/chat', async (request, response) => {
   try {

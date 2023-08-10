@@ -59,18 +59,16 @@
 </head>
 <body>
   <h1>Celular</h1>
-  <p>Se está mostrando el celular con el ID buscado en el navegador</p>
   <ul>
-    {{#each products}}
     <li>
-      <h2>{{title}}</h2>
-      <p>{{description}}</p>
-      <p class="price">Precio: ${{price}}</p>
-      <img src="{{thumbnail}}" alt="Imagen del producto">
-      <p>Código: {{code}}</p>
-      <p>Stock: {{stock}}</p>
+      <h2>{{product.title}}</h2>
+      <p>{{product.description}}</p>
+      <p class="price">Precio: ${{product.price}}</p>
+      <img src="{{product.thumbnail}}" alt="Imagen del producto">
+      <p>Código: {{product.code}}</p>
+      <p>Stock: {{product.stock}}</p>
     </li>
-    {{/each}}
   </ul>
 </body>
+
 </html>

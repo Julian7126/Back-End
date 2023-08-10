@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Carritos de Compras</title>
-  <style>
+ <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #222222;
@@ -72,14 +72,12 @@
   <div class="cart-container">
     {{#each result}}
     <div class="cart">
-      <h2>Carrito {{this._id}}</h2>
-      {{#each products}}
+      <h2>Carrito de mongo {{this._id}}</h2>
+      {{#each this.products}}
       <div class="product">
-        <h4>Productos</h4>
-        <div class="product-name">{{this.name}}</div>
-        <div class="product-name">{{this.product}}</div>
-        <div class="product-quantity">{{this.quantity}}</div>
-        <div class="product-delete" onclick="deleteProduct('{{../_id}}', '{{this.product}}')">Eliminar</div>
+        <h4>Producto</h4>
+        <p>Nombre: {{this.title}}</p>
+        <p>Cantidad: {{this.quantity}}</p>
       </div>
       {{/each}}
     </div>

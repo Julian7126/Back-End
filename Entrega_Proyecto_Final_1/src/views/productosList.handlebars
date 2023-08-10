@@ -159,10 +159,15 @@
         <p class="price">Precio: ${{price}}</p>
         <p>Código: {{code}}</p>
         <p>Stock: {{stock}}</p>
+        <a href="/productos/{{this._id}}">Ver detalles</a>
+        <form id="addToCartForm" method="post"> 
+          <input type="hidden" name="productId" value="{{_id}}">
+          <button type="submit">Agregar al Carrito</button>
+        </form>
       </li>
       {{/each}}
     </ul>
-    <form action="/list" method="get">
+    <form id="form" action="/list" method="get">
       <label for="page">Página:</label>
       <input type="number" id="page" name="page" min="1" value="{{page}}">
       <label for="limit">Límite:</label>
@@ -172,12 +177,35 @@
   </div>
 </body>
 <script>
-  document.getElementById(`form`).onsubmit = (e) =>{
+  document.getElementById('form').onsubmit = (e) => {
     e.preventDefault();
-    const limit = document.getElementById(`limit`).value;
-    const page = document.getElementById(`page`).value;
+    const limit = document.getElementById('limit').value;
+    const page = document.getElementById('page').value;
     const url = `/list?limit=${limit}&page=${page}`;
     window.location.href = url;
   };
+  
+  document.getElementById('addToCartForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    try {
+      const response = await fetch('/api/carts', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (response.ok) {
+   
+        window.location.href = '/carts';
+      } else {
+        console.error('Error al agregar al carrito');
+      }
+    } catch (error) {
+      console.error('Error al comunicarse con el servidor:', error);
+    }
+  });
 </script>
 </html>
