@@ -141,6 +141,49 @@ viewsRouter.get("/carts/:cid", async (request, response) => {
   }
 });
 
+
+
+
+
+viewsRouter.get("/login", async(request, response) => {
+if(request.session?.user) {
+  response.redirect("/list")
+}
+
+  response.render("login",{})
+  
+})
+
+viewsRouter.get("/register", async(request, response) => {
+  
+  if(request.session?.user) {
+    response.redirect("/list")
+  }
+  
+    response.render("register",{})
+    
+ })
+
+ function auth(request , response, next) {
+  if(request.session?.user) return next()
+  response.redirect("/login")
+ }
+
+ 
+viewsRouter.get("/profile", auth , async (request, response) => {
+  const user = request.session.user
+  response.render("profile", user)
+ 
+ })
+
+ 
+
+
+
+
+
+
+
 export default viewsRouter;
 
 

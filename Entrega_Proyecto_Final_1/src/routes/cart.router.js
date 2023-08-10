@@ -39,49 +39,6 @@ cartRouter.post('/', async (request, response) => {
 //     response.status(404).json({ error: "Error al agregar" });
 //   }
 // });
-cartRouter.post("/:cid/products/:pid", async (request, response) => {
-  try {
-    const cid = request.params.cid;
-    const pid = request.params.pid;
-    const { quantity } = request.body;
-
-    console.log("CID:", cid);
-    console.log("PID:", pid);
-    console.log("Quantity:", quantity);
-
-    const cart = await cartsModel.findById(cid);
-
-    console.log("Cart:", cart);
-
-    if (!cart) {
-      console.log("Cart not found!");
-      return response.status(404).json({ error: "Carrito not found" });
-    }
-
-    // Verifica que cart.products sea un array válido antes de acceder a su contenido
-    const productIndex = cart.products && cart.products.findIndex(item => item.products.toString() === pid);
-
-    console.log("Product Index:", productIndex);
-
-    if (productIndex !== -1) {
-      //mas cantidad
-      console.log("Incrementing quantity for existing product.");
-      cart.products[productIndex].quantity += quantity;
-    } else {
-      console.log("Adding new product to the cart.");
-      cart.products.push({ products: pid, quantity });
-    }
-
-    const result = await cart.save();
-
-    console.log("Result:", result);
-
-    response.send(result);
-  } catch (error) {
-    console.error("Error al agregar:", error);
-    response.status(404).json({ error: "Error al agregar" });
-  }
-});
 
 
 
