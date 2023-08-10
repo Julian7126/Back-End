@@ -36,7 +36,7 @@ viewsRouter.get('/list', async (request, response) => {
 
   if (page > totalPages) {
     page = totalPages;
-  }//correcion de paginas totales
+  }
 
   const result = await productsModel.paginate(query, {
     page,
@@ -45,11 +45,12 @@ viewsRouter.get('/list', async (request, response) => {
     sort,
   });
 
-   const hasPrevPage = page > 1;
-   const hasNextPage = page < totalPages;
-   const prevLink = hasPrevPage ? `/list?limit=${limit}&page=${page - 1}` : null;
-  
-   const nextLink = hasNextPage ? `/list?limit=${limit}&page=${page + 1}` : null;
+  const hasPrevPage = page > 1;
+  const hasNextPage = page < totalPages;
+  const prevLink = hasPrevPage ? `/list?limit=${limit}&page=${page - 1}` : null;
+  const nextLink = hasNextPage ? `/list?limit=${limit}&page=${page + 1}` : null;
+  const user = request.session.user;
+
 
   const Objects = {
     status: 'success',
@@ -62,16 +63,18 @@ viewsRouter.get('/list', async (request, response) => {
     hasNextPage,
     prevLink,
     nextLink,
+    user: user,
   };
-  console.log('Objects:', Objects);
 
   // datos adicionales
   result.page = page;
   result.limit = limit;
   result.totalPages = totalPages;
 
-  response.render('productosList', result);
+  
+  response.render('productosList', { ...Objects, ...result });
 });
+
 
 
 

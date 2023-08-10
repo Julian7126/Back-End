@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,11 +8,15 @@
       font-family: Arial, sans-serif;
       background-color: #222222;
       color: #ffffff;
+      margin: 0;
+      padding: 0;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 30px;
+      margin: 20px 0;
+      font-size: 24px;
+      color: #ff9900;
     }
 
     ul {
@@ -23,12 +26,13 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+      padding: 20px;
     }
 
     li {
       width: calc(33.33% - 20px); 
       background-color: #333333;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       border-radius: 10px;
       padding: 20px;
       margin-bottom: 20px;
@@ -43,41 +47,121 @@
     }
 
     h2 {
-      font-size: 1.2rem;
+      font-size: 18px;
       margin: 0;
-      color: #ff9900; 
+      color: #ffffff; 
     }
 
     p {
       margin: 5px 0;
+      font-size: 14px;
+      color: #cccccc;
     }
 
     .price {
       font-weight: bold;
       color: #ff9900; 
     }
+
+ 
+    .user-info {
+      position: fixed;
+      top: 0;
+      right: 0;
+      padding: 20px;
+      background-color: #333333;
+      color: #ffffff;
+      border-radius: 0 10px 10px 0;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .user-info p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .user-info a {
+      display: block;
+      margin-top: 10px;
+      color: #ff9900;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .user-info a:hover {
+      text-decoration: underline;
+    }
+
+    .sort-button {
+      margin-right: 10px;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .sort-button:hover {
+      text-decoration: underline;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      margin-right: 5px;
+      color: #cccccc;
+    }
+
+    input[type="number"] {
+      width: 40px;
+      font-size: 14px;
+      padding: 2px;
+    }
+
+    button[type="submit"] {
+      padding: 5px 10px;
+      background-color: #ff9900;
+      border: none;
+      color: #ffffff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+  
+    .page-container {
+      padding: 20px;
+    }
+
   </style>
 </head>
 <body>
-  <h1>Celulares</h1>
-   <div>
-    <a href="/list?sort=asc" class="sort-button">Ordenar ascendente</a>
-    <a href="/list?sort=desc" class="sort-button">Ordenar descendente</a>
+  <div class="user-info">
+    {{#if user}}
+    <p>Bienvenido, {{user.email}}!</p>
+    <p>Rol: {{user.role}}</p>
+    <a href="/api/session/logout">Cerrar sesión</a>
+    {{/if}}
   </div>
-  
-  <ul>
-    {{#each docs}}
-    <li>
-      <img src="{{thumbnail}}" alt="Imagen del producto">
-      <h2>{{title}}</h2>
-      <p>{{description}}</p>
-      <p class="price">Precio: ${{price}}</p>
-      <p>Código: {{code}}</p>
-      <p>Stock: {{stock}}</p>
-    </li>
-    {{/each}}
-  </ul>
-  <div>
+  <div class="page-container">
+    <h1>Celulares</h1>
+    <div>
+      <a href="/list?sort=asc" class="sort-button">Ordenar ascendente</a>
+      <a href="/list?sort=desc" class="sort-button">Ordenar descendente</a>
+    </div>
+    
+    <ul>
+      {{#each docs}}
+      <li>
+        <img src="{{thumbnail}}" alt="Imagen del producto">
+        <h2>{{title}}</h2>
+        <p>{{description}}</p>
+        <p class="price">Precio: ${{price}}</p>
+        <p>Código: {{code}}</p>
+        <p>Stock: {{stock}}</p>
+      </li>
+      {{/each}}
+    </ul>
     <form action="/list" method="get">
       <label for="page">Página:</label>
       <input type="number" id="page" name="page" min="1" value="{{page}}">
@@ -86,20 +170,14 @@
       <button type="submit">Actualizar</button>
     </form>
   </div>
-
-
-
 </body>
- <script>
-    document.getElementById(`form`).onsubmit = (e) =>{
-      e.preventDefault();
-      const limit =document.getElementById(`limit`).value
-      const page = document.getElementById(`page`).value
-      
-      const url = `/list?limit=${limit}&page=${page}`
-
-      window.location.href = url
-
-    }
-  </script>
+<script>
+  document.getElementById(`form`).onsubmit = (e) =>{
+    e.preventDefault();
+    const limit = document.getElementById(`limit`).value;
+    const page = document.getElementById(`page`).value;
+    const url = `/list?limit=${limit}&page=${page}`;
+    window.location.href = url;
+  };
+</script>
 </html>

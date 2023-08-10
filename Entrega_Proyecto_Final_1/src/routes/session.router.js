@@ -1,26 +1,43 @@
-import express from 'express';
-import UserModel from '../dao/models/user.models.js';
+import express from "express";
+import UserModel from "../dao/models/user.models.js";
 
-const sessionRouter = express.Router()
+const sessionRouter = express.Router();
 
-sessionRouter.post("/login", async( request ,response)=>{
-    
-    const { email , password} = req.body
-    const user = await UserModel.findOne({email, password})
-    if(!user) return response.redirect("login")
+sessionRouter.post("/login", async (request, response) => {
+  const { email, password } = request.body;
+  const user = await UserModel.findOne({ email, password });
+  if (!user) return response.redirect("login");
 
-    req.session.user= user 
-    
-    return response.redirect("/list")
-})
+  if (
+    user.email === "adminCoder@coder.com" &&
+    user.password === "adminCod3r123"
+  ) {
+    user.role = "admin";
+  } else {
+    user.role = "usuario";
+  }
 
-sessionRouter.post("/register", async( request ,response)=>{
-    const user = request.body
-    await UserModel.create(user)
-    
-    return response.redirect("/login")
-})
+  request.session.user = user;
+
+  return response.redirect("/list");
+});
+
+
+sessionRouter.post("/register", async (request, response) => {
+  const user = request.body;
+  await UserModel.create(user);
+
+  return response.redirect("/login");
+});
 
 
 
-export default sessionRouter
+sessionRouter.get("/logout", async (request, response) => {
+  request.session.destroy(() => {
+    response.redirect("/login");
+  });
+});
+
+
+  
+export default sessionRouter;
