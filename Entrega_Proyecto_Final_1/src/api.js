@@ -12,6 +12,8 @@ import __dirname from './utils.js';
 import messagesModel from './dao/models/messages.model.js';
 import viewsRouter from './routes/views.router.js';
 import sessionRouter from "./routes/session.router.js"
+import initializePassport from "./config/passport.config.js"
+import passport from 'passport';
 
 const app = express();
 const server = http.createServer(app);
@@ -29,6 +31,10 @@ app.use(express.static(__dirname + '/public'));
 const URL = "mongodb+srv://julibischoff:julibischoff@cluster0.5dy77sq.mongodb.net/?retryWrites=true&w=majority";
 const dbName = "DataBaseEccomerce";
 
+
+
+
+
 app.use(session({
   store: MongoStore.create({
     mongoUrl: URL,
@@ -43,6 +49,10 @@ app.use(session({
   saveUninitialized: true,
 }));
 
+//Passport 
+initializePassport()
+app.use(passport.initialize())
+app.use(passport,session())
 
 // Routes
 app.use("/api/productos", productosRouter);

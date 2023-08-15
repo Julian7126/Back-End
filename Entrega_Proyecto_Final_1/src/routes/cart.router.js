@@ -25,15 +25,15 @@ cartRouter.post("/:cid/products/:pid", async (request, response) => {
 
     const productIndex = cart.products.findIndex(item => item.products.toString() === pid);
     if (productIndex !== -1) {
-      // Incrementar cantidad si el producto ya existe
+     
       cart.products[productIndex].quantity += quantity;
     } else {
-      // Agregar nuevo producto al carrito
+    
       cart.products.push({ products: pid, quantity });
     }
 
     const result = await cart.save();
-    response.redirect("/carts"); // Redirigir a la vista de carritos
+    response.redirect("/carts"); 
 
   } catch (error) {
     response.status(404).json({ error: "Error al agregar" });

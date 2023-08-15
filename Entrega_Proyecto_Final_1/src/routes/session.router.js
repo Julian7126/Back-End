@@ -1,12 +1,17 @@
 import express from "express";
 import UserModel from "../dao/models/user.models.js";
+import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";
+
 
 const sessionRouter = express.Router();
 
-sessionRouter.post("/login", async (request, response) => {
+sessionRouter.post("/login", passport.authenticate(`login`,`/login`), async (request, response) => {
   const { email, password } = request.body;
-  const user = await UserModel.findOne({ email, password });
-  if (!user) return response.redirect("login");
+  const user = await UserModel.findOne({ email });
+
+
+  if(!request.user) return response.status(400).send(`Invalid Credentials`)
 
   if (
     user.email === "adminCoder@coder.com" &&
@@ -17,15 +22,15 @@ sessionRouter.post("/login", async (request, response) => {
     user.role = "usuario";
   }
 
-  request.session.user = user;
+  request.session.user = request.user;
 
   return response.redirect("/list");
 });
 
 
-sessionRouter.post("/register", async (request, response) => {
-  const user = request.body;
-  await UserModel.create(user);
+sessionRouter.post("/register",passport.authenticate(`register`, {
+  failureRedirect: `/register`,
+}), async (request, response) => {
 
   return response.redirect("/login");
 });
