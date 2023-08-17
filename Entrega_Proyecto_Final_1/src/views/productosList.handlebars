@@ -132,10 +132,60 @@
     .page-container {
       padding: 20px;
     }
+    
+  .navbar {
+    background-color: #333333;
+    color: white;
+    padding: 10px 0;
+ 
+  }
+
+  .navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .navbar-links {
+    display: flex;
+    gap: 20px;
+    text-decoration: none;
+
+  }
+
+  
+  .cart-link{
+     color: white;
+    text-decoration: none;
+    font-size: 14px;
+
+  }
+  .chat-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+
+  
+  
 
   </style>
 </head>
 <body>
+  <nav class="navbar">
+    <div class="navbar-content">
+      <div class="navbar-links">
+        <a href="/chat" class="chat-link">Chat</a>
+        {{#if user}}
+        <a href="/carts" class="cart-link">Carrito</a>
+        {{/if}}
+      </div>
+    </div>
+  </nav>
   <div class="user-info">
     {{#if user}}
     <p>Bienvenido, {{user.email}}!</p>
@@ -175,37 +225,36 @@
       <button type="submit">Actualizar</button>
     </form>
   </div>
-</body>
-<script>
-  document.getElementById('form').onsubmit = (e) => {
-    e.preventDefault();
-    const limit = document.getElementById('limit').value;
-    const page = document.getElementById('page').value;
-    const url = `/list?limit=${limit}&page=${page}`;
-    window.location.href = url;
-  };
+  <script>
+    document.getElementById('form').onsubmit = (e) => {
+      e.preventDefault();
+      const limit = document.getElementById('limit').value;
+      const page = document.getElementById('page').value;
+      const url = `/list?limit=${limit}&page=${page}`;
+      window.location.href = url;
+    };
   
-  document.getElementById('addToCartForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
+    document.getElementById('addToCartForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
     
-    const form = event.target;
-    const formData = new FormData(form);
+      const form = event.target;
+      const formData = new FormData(form);
     
-    try {
-      const response = await fetch('/api/carts', {
-        method: 'POST',
-        body: formData
-      });
+      try {
+        const response = await fetch('/api/carts', {
+          method: 'POST',
+          body: formData
+        });
       
-      if (response.ok) {
-   
-        window.location.href = '/carts';
-      } else {
-        console.error('Error al agregar al carrito');
+        if (response.ok) {
+          window.location.href = '/carts';
+        } else {
+          console.error('Error al agregar al carrito');
+        }
+      } catch (error) {
+        console.error('Error al comunicarse con el servidor:', error);
       }
-    } catch (error) {
-      console.error('Error al comunicarse con el servidor:', error);
-    }
-  });
-</script>
+    });
+  </script>
+</body>
 </html>

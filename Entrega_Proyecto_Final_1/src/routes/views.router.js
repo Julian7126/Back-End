@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import productsModel from '../dao/models/products.models.js';
 import cartsModel from '../dao/models/carts.models.js';
+import passport from "passport";
 const viewsRouter = express.Router();
 
 
@@ -183,7 +184,7 @@ viewsRouter.get("/carts/:cid", async (request, response) => {
 
 
 
-viewsRouter.get("/login", async(request, response) => {
+viewsRouter.get("/", async(request, response) => {
 if(request.session?.user) {
   response.redirect("/list")
 }
@@ -215,7 +216,27 @@ viewsRouter.get("/profile", auth , async (request, response) => {
  })
 
  
+//GITHUB
 
+viewsRouter.get(
+  `/login-github`,
+  passport.authenticate('github', { scope: ['user:email'] }),
+  async (request, response) =>{}
+)
+
+
+viewsRouter.get(
+  `/githubcallback`,
+  passport.authenticate(`github`, {failureFlash:`/`}),
+  async (request, response) =>{
+    console.log(`Callback:`, request.user)
+    request.session.user = request.user 
+    console.log(request.session)
+    response.redirect(`/list`)
+
+  }
+
+)
 
 
 

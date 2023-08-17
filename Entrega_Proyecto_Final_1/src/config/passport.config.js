@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from 'passport-local'
 import UserModel from "../dao/models/user.models.js";
-// import GitHubStrategy from 'passport-github2'
+import GitHubStrategy from 'passport-github2'
 import { createHash, isValidPassword } from "../utils.js";
 
 /**
@@ -9,7 +9,7 @@ import { createHash, isValidPassword } from "../utils.js";
  * 
  *App ID: 375542
 
-    Client ID: Iv1.34c8634720befa98 
+    Client ID: Iv1.34c8634720befa98
  *  Secret: 11127051ef8270bfe0ae417d56081dba44f1d19b
  */
 
@@ -17,34 +17,41 @@ const LocalStrategy = local.Strategy
 
 const initializePassport = () => {
 
-    // passport.use('github', new GitHubStrategy(
-    //     {
-    //         clientID: 'Iv1.34c8634720befa98 ',
-    //         clientSecret: '11127051ef8270bfe0ae417d56081dba44f1d19b',
-    //         callbackURL: 'http://127.0.0.1:8080/githubcallback'
-    //     },
-    //     async (accessToken, refreshToken, profile, done) => {
-    //         console.log(profile)
+    passport.use('github', new GitHubStrategy(
+        {
+            clientID: 'Iv1.34c8634720befa98',
+            clientSecret: '11127051ef8270bfe0ae417d56081dba44f1d19b',
+            callbackURL: 'http://localhost:8080/githubcallback'
+        },
+        async (accessToken, refreshToken, profile, done) => {
+            console.log(profile)
 
-    //         try  {
-    //             const user = await UserModel.findOne({ email: profile._json.email  })
-    //             if(user) {
-    //                 console.log('User already exits ' + email)
-    //                 return done(null, user)
-    //             }
+            try  {
+                const email = profile._json.email;
+                if (!email) {
+                    return done('Email not found in GitHub profile JSON');
+                }
 
-    //             const newUser = {
-    //                 name: profile._json.name,
-    //                 email:  profile._json.email,
-    //                 password: ''
-    //             }
-    //             const result = await UserModel.create(newUser)
-    //             return done(null, result)
-    //         } catch(e) {
-    //             return done('Error to login wuth github' + e)
-    //         }
-    //     }
-    // ))
+                const user = await UserModel.findOne({ email });
+                if(user) {
+                    console.log('User already exists ' + email);
+                    return done(null, user);
+                }
+
+                const newUser = {
+                    name: profile._json.name,
+                    email:  email,
+                    password: ''
+                };
+                const result = await UserModel.create(newUser);
+                return done(null, result);
+            } catch(e) {
+                return done('Error to login with GitHub: ' + e);
+            }
+        }
+    ));
+};
+
 
     // register Es el nomber para Registrar con Local
     passport.use('register', new LocalStrategy(
@@ -73,7 +80,6 @@ const initializePassport = () => {
             }
         }
     ))
-
     // login Es el nomber para IniciarSesion con Local
     passport.use('login', new LocalStrategy(
         { usernameField: 'email' },
@@ -106,6 +112,6 @@ const initializePassport = () => {
         done(null, user)
     })
 
-}
+
 
 export default initializePassport

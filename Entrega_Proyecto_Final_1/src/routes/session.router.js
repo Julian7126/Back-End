@@ -10,38 +10,41 @@ sessionRouter.post("/login", passport.authenticate(`login`,`/login`), async (req
   const { email, password } = request.body;
   const user = await UserModel.findOne({ email });
 
-
-  if(!request.user) return response.status(400).send(`Invalid Credentials`)
-
-  if (
-    user.email === "adminCoder@coder.com" &&
-    user.password === "adminCod3r123"
-  ) {
-    user.role = "admin";
-  } else {
-    user.role = "usuario";
+  if (!user) {
+    return response.status(400).send("Invalid Credentials");
   }
-
-  request.session.user = request.user;
-
-  return response.redirect("/list");
+//password adminCod3r123
+  if (isValidPassword(user, password)) {
+    if (user.email === "adminCoder@coder.com") {
+      user.role = "admin";
+    } else {
+      user.role = "usuario";
+    }
+    request.session.user = user;
+    return response.redirect("/list");
+  } else {
+    return response.status(400).send("Invalid Credentials");
+  }
 });
+
+
 
 
 sessionRouter.post("/register",passport.authenticate(`register`, {
   failureRedirect: `/register`,
 }), async (request, response) => {
 
-  return response.redirect("/login");
+  return response.redirect("/");
 });
 
 
 
 sessionRouter.get("/logout", async (request, response) => {
   request.session.destroy(() => {
-    response.redirect("/login");
+    response.redirect("/");
   });
 });
+
 
 
   

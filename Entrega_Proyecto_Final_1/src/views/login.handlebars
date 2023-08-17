@@ -18,8 +18,10 @@
 
     .login-form {
       background-color: #444;
-      padding: 20px;
+      padding: 40px; 
       border-radius: 10px;
+      width: 300px; 
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     }
 
     .login-form input {
@@ -47,6 +49,32 @@
     .login-form button:hover {
       background-color: #e6682c;
     }
+
+     .register-button {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .register-button-style {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #cc5500;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+
+  .register-button-style:hover {
+    background-color: #e6682c;
+    transform: scale(1.05);
+  }
+    .github-button-style:hover {
+    background-color: #e6682c;
+    transform: scale(1.05);
+  }
   </style>
 </head>
 <body>
@@ -57,6 +85,14 @@
       <input type="password" name="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
+    <a href="/register" class="register-button">
+    <button class="register-button-style">Register</button>
+    </a>
+    <hr>
+
+        <a href="/login-github" class="github-button">
+    <button class="github-button-style">Github</button>
+    </a>
   </div>
 </body>
 </html>

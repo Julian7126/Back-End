@@ -65,9 +65,56 @@
     .product-delete:hover {
       background-color: #dd7700;
     }
+
+       
+  .navbar {
+    background-color: #333333;
+    color: white;
+    padding: 10px 0;
+ 
+  }
+
+  .navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .navbar-links {
+    display: flex;
+    gap: 20px;
+    text-decoration: none;
+
+  }
+
+  
+  .cart-link{
+     color: white;
+    text-decoration: none;
+    font-size: 14px;
+
+  }
+  .chat-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+  }
   </style>
 </head>
 <body>
+   <nav class="navbar">
+    <div class="navbar-content">
+      <div class="navbar-links">
+        <a href="/chat" class="chat-link">Chat</a>
+        {{#if user}}
+        <a href="/carts" class="cart-link">Carrito</a>
+        {{/if}}
+      </div>
+    </div>
+  </nav>
   <h1>Carritos de Compras</h1>
   <div class="cart-container">
     {{#each result}}
