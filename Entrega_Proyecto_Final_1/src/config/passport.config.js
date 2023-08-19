@@ -3,7 +3,9 @@ import local from 'passport-local'
 import UserModel from "../dao/models/user.models.js";
 import GitHubStrategy from 'passport-github2'
 import { createHash, isValidPassword } from "../utils.js";
+import jwt from "passport-jwt"
 
+ 
 /**
  * 
  * 
@@ -13,9 +15,44 @@ import { createHash, isValidPassword } from "../utils.js";
  *  Secret: 11127051ef8270bfe0ae417d56081dba44f1d19b
  */
 
+    const JWTStrategy = jwt.Strategy // La estrategia de JWT
+    const ExtractJWT = jwt.ExtractJwt // La funcion de extraccion
+
+    const cookieExtractor = request => {
+    const token = (request?.cookies) ? request.cookies['coderCookie'] : null
+
+    console.log('COOKIE EXTRACTOR: ', token)
+    return token
+}
+
+
+
+
+
+
 const LocalStrategy = local.Strategy
 
 const initializePassport = () => {
+
+    passport.use(
+        'jwt',
+        new JWTStrategy(
+            {
+                jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+                secretOrKey: 'coderTokenForJWT'
+            },
+            async (jwt_payload, done) => {
+
+                try {
+                    return done(null, jwt_payload)
+                } catch (e) {
+                    return done(e)
+                }
+            })
+    )
+
+
+
 
     passport.use('github', new GitHubStrategy(
         {
@@ -25,14 +62,10 @@ const initializePassport = () => {
         },
         async (accessToken, refreshToken, profile, done) => {
             console.log(profile)
-
+            const email = profile._json.email;
+            
             try  {
-                const email = profile._json.email;
-                if (!email) {
-                    return done('Email not found in GitHub profile JSON');
-                }
-
-                const user = await UserModel.findOne({ email });
+                const user = await UserModel.findOne({email});
                 if(user) {
                     console.log('User already exists ' + email);
                     return done(null, user);
@@ -40,7 +73,7 @@ const initializePassport = () => {
 
                 const newUser = {
                     name: profile._json.name,
-                    email:  email,
+                    email,
                     password: ''
                 };
                 const result = await UserModel.create(newUser);
@@ -50,7 +83,6 @@ const initializePassport = () => {
             }
         }
     ));
-};
 
 
     // register Es el nomber para Registrar con Local
@@ -113,5 +145,5 @@ const initializePassport = () => {
     })
 
 
-
+}
 export default initializePassport

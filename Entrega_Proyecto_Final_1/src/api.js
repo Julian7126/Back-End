@@ -12,7 +12,7 @@ import __dirname from './utils.js';
 import messagesModel from './dao/models/messages.model.js';
 import viewsRouter from './routes/views.router.js';
 import sessionRouter from "./routes/session.router.js"
-import initializePassport from "./config/passport.config.js"
+import initializePassport from '../src/config/passport.config.js'
 import passport from 'passport';
 
 const app = express();
