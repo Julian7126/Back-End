@@ -94,5 +94,26 @@
     <button class="github-button-style">Github</button>
     </a>
   </div>
+
+
+  <script>
+   document.getElementById('form').onsubmit = (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      fetch('/api/session/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then((r) => r.json())
+      .then((data) => {
+        console.log(data);
+      });
+    };
+
+  </script>
 </body>
 </html>

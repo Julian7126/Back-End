@@ -184,7 +184,7 @@ viewsRouter.get("/carts/:cid", async (request, response) => {
 
 
 
-viewsRouter.get("/", async(request, response) => {
+viewsRouter.get("/",  async(request, response) => {
 if(request.session?.user) {
   response.redirect("/list")
 }

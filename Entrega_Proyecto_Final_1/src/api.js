@@ -14,6 +14,8 @@ import viewsRouter from './routes/views.router.js';
 import sessionRouter from "./routes/session.router.js"
 import initializePassport from '../src/config/passport.config.js'
 import passport from 'passport';
+import cookieParser from 'cookie-parser';
+
 
 const app = express();
 const server = http.createServer(app);
@@ -26,6 +28,7 @@ app.set('view engine', 'handlebars');
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser());
 
 //session
 const URL = "mongodb+srv://julibischoff:julibischoff@cluster0.5dy77sq.mongodb.net/?retryWrites=true&w=majority";
@@ -52,7 +55,7 @@ app.use(session({
 //Passport 
 initializePassport()
 app.use(passport.initialize())
-app.use(passport,session())
+app.use(passport.session());
 
 // Routes
 app.use("/api/productos", productosRouter);

@@ -19,7 +19,7 @@ import jwt from "passport-jwt"
     const ExtractJWT = jwt.ExtractJwt // La funcion de extraccion
 
     const cookieExtractor = request => {
-    const token = (request?.cookies) ? request.cookies['coderCookie'] : null
+    const token = (request?.cookies) ? request.cookies['CoderCookieJulian'] : null
 
     console.log('COOKIE EXTRACTOR: ', token)
     return token
@@ -38,8 +38,8 @@ const initializePassport = () => {
         'jwt',
         new JWTStrategy(
             {
-                jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-                secretOrKey: 'coderTokenForJWT'
+                jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), // aca se puede agregar mas extractores como el headear cookieExtractor : headear
+                secretOrKey: 'CoderKeyFromJulianForJWT'
             },
             async (jwt_payload, done) => {
 
@@ -143,6 +143,9 @@ const initializePassport = () => {
         const user = await UserModel.findById(id)
         done(null, user)
     })
+
+
+    
 
 
 }
