@@ -119,7 +119,7 @@ viewsRouter.get('/productos/:pid', async (request, response) => {
     }
 
     const product = await productsModel.findById(id);
-    
+
     if (!product) {
       console.log('Producto no encontrado para el ID:', id);
       return response.status(404).send(`No se encuentra el producto`);
@@ -127,6 +127,7 @@ viewsRouter.get('/productos/:pid', async (request, response) => {
 
     console.log('Producto encontrado:', product);
 
+    // Renderizar la vista con el producto
     response.render('one', { product });
   } catch (error) {
     console.error('Error en la ruta de productos:', error);
@@ -166,14 +167,24 @@ viewsRouter.get("/carts", async (request, response) => {
 // Obtener un carrito por su ID
 viewsRouter.get("/carts/:cid", async (request, response) => {
   try {
+
+    //correccion de santi
     const cid =request.params.cid;
-    const cart= await cartsModel.findById(cid).populate('products.products').exec();
-    
+
+    let cart= await cartsModel.findById(cid).populate('products.products').exec();
+   
+  
+   
     if (!cart) {
-      return response.status(404).json({ error: "Carrito not found" });
+   
+     return response.status(404).json({ error: "Carrito not found" });
+   
     }
-    
-    response.render('carts', { cart });
+   
+    cart = cart.toObject();
+   
+    response.render('carts', { cart: cart });
+
   } catch (e) {
     console.error("Error al obtener el carrito:", e);
     response.status(404).json({ error: "Error al obtener el carrito" });

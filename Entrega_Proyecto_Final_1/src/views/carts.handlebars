@@ -118,16 +118,15 @@
   <h1>Carritos de Compras</h1>
   <div class="cart-container">
     {{#each result}}
-    <div class="cart">
-      <h2>Carrito de mongo {{this._id}}</h2>
-      {{#each this.products}}
-      <div class="product">
-        <h4>Producto</h4>
-        <p>Nombre: {{this.title}}</p>
-        <p>Cantidad: {{this.quantity}}</p>
-      </div>
-      {{/each}}
-    </div>
+  <div class="cart">
+ <h2>Carrito de mongo </h2>
+ {{#each cart.products}}
+  <div class="product">
+  <h4>Producto</h4>
+  <p>Nombre: {{products.title}}</p>
+  </div>
+ {{/each}}
+ </div>
     {{/each}}
   </div>
 

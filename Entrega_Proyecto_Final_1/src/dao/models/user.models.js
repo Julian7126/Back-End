@@ -7,7 +7,11 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
         unique: true,
     },
     password: String,
-    role: String
+    role: {
+        type :String,
+        unique: true,
+        default: 'user',  
+      },
 }))
 
 export default UserModel

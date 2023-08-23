@@ -10,6 +10,8 @@ cartRouter.post('/', async (request, response) => {
   const result = await cartsModel.create({ products: [] });
   response.send(result);
 });
+
+
 //nuevo
 cartRouter.post("/:cid/products/:pid", async (request, response) => {
   try {

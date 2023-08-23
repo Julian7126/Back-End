@@ -58,11 +58,12 @@ const initializePassport = () => {
         {
             clientID: 'Iv1.34c8634720befa98',
             clientSecret: '11127051ef8270bfe0ae417d56081dba44f1d19b',
-            callbackURL: 'http://localhost:8080/githubcallback'
+            callbackURL: 'http://localhost:8080/githubcallback',
+            scope: ['user:email'] ,
         },
         async (accessToken, refreshToken, profile, done) => {
             console.log(profile)
-            const email = profile._json.email;
+            const email = profile._json.email || profile.emails[0].value
             
             try  {
                 const user = await UserModel.findOne({email});
