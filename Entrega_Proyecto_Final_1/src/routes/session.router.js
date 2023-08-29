@@ -71,7 +71,7 @@ sessionRouter.get("/logout", async (request, response) => {
 
 
 sessionRouter.get('/current', passport.authenticate(`jwt`) , authorization(`user`), (request, response) => {
-  response.send({ status: 'success', payload: request.user })
+  response.send({ status: 'success', payload: request.session.user })
 }) //aca nose si es request.session.user
 
   

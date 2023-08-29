@@ -71,12 +71,12 @@ export const passportCall = strategy => {
 
 
 export const authorization = role => {
-
+//aca tambien se cambio req.user --- por req.session.user --- 
     return async(req, res, next) => {
-        const user = req.user
+        const user = req.session.user
 
         if(!user) return res.status(401).send({error: 'Unauthorized'})
-        if(user.user.role != role) return res.status(403).send({error: 'No permission'})
+        if(user.role != role) return res.status(403).send({error: 'No permission'})
 
         return next()
     }
