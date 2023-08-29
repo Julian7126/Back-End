@@ -117,15 +117,17 @@
   </nav>
   <h1>Carritos de Compras</h1>
   <div class="cart-container">
-    {{#each result}}
+    {{#each cart}}
+
+    {{log this}}  
   <div class="cart">
- <h2>Carrito de mongo </h2>
- {{#each cart.products}}
+ <h2>Producto </h2>
+    {{#each products}}
   <div class="product">
   <h4>Producto</h4>
-  <p>Nombre: {{products.title}}</p>
+  <p>Nombre: {{this.title}}</p>
   </div>
- {{/each}}
+{{/each }}
  </div>
     {{/each}}
   </div>

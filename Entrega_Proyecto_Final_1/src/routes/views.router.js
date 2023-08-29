@@ -128,7 +128,9 @@ viewsRouter.get('/productos/:pid', async (request, response) => {
     console.log('Producto encontrado:', product);
 
     // Renderizar la vista con el producto
-    response.render('one', { product });
+    response.render("one", product.toObject() );
+
+
   } catch (error) {
     console.error('Error en la ruta de productos:', error);
     response.status(500).send('Error interno del servidor');
