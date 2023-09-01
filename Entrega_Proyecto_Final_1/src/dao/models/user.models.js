@@ -10,10 +10,7 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
         type :String,
         unique: true,
     },
-    cartId: {
-        type: String,
-        default: "64d18007537d2a26e7b6bb3f",
-      },
+    cartId: { type: mongoose.Schema.Types.ObjectId, ref: "carts" },
     password: String,
     role: {
         type :String,
@@ -23,3 +20,6 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
 }))
 
 export default UserModel
+
+
+

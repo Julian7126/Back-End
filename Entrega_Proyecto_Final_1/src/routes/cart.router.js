@@ -17,30 +17,32 @@ cartRouter.post("/:cid/products/:pid", async (request, response) => {
   try {
     const cid = request.params.cid;
     const pid = request.params.pid;
+    const userId = request.user._id;
     const { quantity } = request.body;
 
     const cart = await cartsModel.findById(cid);
 
-    if (!cart) {
+    if (!cart || cart.userId.toString() !== userId.toString()) {
       return response.status(404).json({ error: "Carrito not found" });
     }
 
+
     const productIndex = cart.products.findIndex(item => item.products.toString() === pid);
+    
     if (productIndex !== -1) {
-     
       cart.products[productIndex].quantity += quantity;
     } else {
-    
       cart.products.push({ products: pid, quantity });
     }
 
-    const result = await cart.save();
+    await cart.save();
     response.redirect("/carts"); 
 
   } catch (error) {
     response.status(404).json({ error: "Error al agregar" });
   }
 });
+
 
 
 

@@ -78,34 +78,6 @@ viewsRouter.get('/list', async (request, response) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-// viewsRouter.get('/productos/:pid', async (request, response) => {
-//   try {
-//     const ObjectId = mongoose.Types.ObjectId;
-//     const id = request.params.pid;
-
-//     if (!ObjectId.isValid(id)) {
-//       return response.status(404).send("Id inválido");
-//     }
-//     const product = await productsModel.findById(id);
-//     if (!product) {
-//       return response.status(404).send(`No se encuentra el producto`);
-//     }
-//     response.render('one', { product });
-//   } catch (error) {
-//     response.status(404).send('Error');
-//   }
-// });
-
-
 viewsRouter.get('/productos/:pid', async (request, response) => {
   try {
     const ObjectId = mongoose.Types.ObjectId;
@@ -138,11 +110,7 @@ viewsRouter.get('/productos/:pid', async (request, response) => {
 });
 
 
-
-
-
-
-
+//CHAT
 
 viewsRouter.get('/chat', async (request, response) => {
   try {
@@ -195,7 +163,7 @@ viewsRouter.get("/carts/:cid", async (request, response) => {
 
 
 
-
+//Sesiones -
 
 viewsRouter.get("/",  async(request, response) => {
 if(request.session?.user) {
