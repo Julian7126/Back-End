@@ -4,27 +4,32 @@ import UserModel from "../dao/models/user.models.js";
 import GitHubStrategy from 'passport-github2'
 import { createHash, isValidPassword } from "../utils.js";
 import jwt from "passport-jwt"
+import dotenv from 'dotenv';
+dotenv.config();
 
- 
 /**
  * 
  * 
- *App ID: 375542
+*App ID: 375542
 
-    Client ID: Iv1.34c8634720befa98
+Client ID: Iv1.34c8634720befa98
  *  Secret: 11127051ef8270bfe0ae417d56081dba44f1d19b
- */
+*/
 
-    const JWTStrategy = jwt.Strategy // La estrategia de JWT
-    const ExtractJWT = jwt.ExtractJwt // La funcion de extraccion
 
-    const cookieExtractor = request => {
+
+dotenv.config();
+const secretKeyTokenJwt = process.env.PRIVATE_KEY;
+const JWTStrategy = jwt.Strategy // La estrategia de JWT
+const ExtractJWT = jwt.ExtractJwt // La funcion de extraccion
+
+
+const cookieExtractor = request => {
     const token = (request?.cookies) ? request.cookies['CoderCookieJulian'] : null
-
+    
     console.log('COOKIE EXTRACTOR: ', token)
     return token
 }
-
 
 
 
@@ -39,12 +44,12 @@ const initializePassport = () => {
         new JWTStrategy(
             {
                 jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), // aca se puede agregar mas extractores como el headear cookieExtractor : headear
-                secretOrKey: 'CoderKeyFromJulianForJWT'
+                secretOrKey: secretKeyTokenJwt
             },
             async (jwt_payload, done) => {
 
                 try {
-                    return done(null, jwt_payload)
+                    return done(null, jwt_payload.user)
                 } catch (e) {
                     return done(e)
                 }
@@ -93,7 +98,7 @@ const initializePassport = () => {
             usernameField: 'email'
         },
         async (req, username, password, done) => {
-            const { name, email } = req.body
+            const { first_name , last_name, age , email } = req.body
             try {
                 const user = await UserModel.findOne({ email: username })
                 if (user) {
@@ -102,13 +107,14 @@ const initializePassport = () => {
                 }
 
                 const newUser = {
-                    name,
+                    first_name,
+                    last_name,
                     email,
                     password: createHash(password)
                 }
                 const result = await UserModel.create(newUser)
                 return done(null, result)
-            } catch (e) {
+            } catch (error) {
                 return done('Error to register ' + error)
             }
         }
