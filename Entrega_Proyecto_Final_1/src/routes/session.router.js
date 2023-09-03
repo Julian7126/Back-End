@@ -2,6 +2,7 @@ import express from "express";
 import UserModel from "../dao/models/user.models.js";
 import { createHash, generateToken, isValidPassword , passportCall , authToken, authorization } from "../utils.js";
 import passport from "passport";
+import config from "../config/config.js";
 
 
 const sessionRouter = express.Router();
@@ -24,7 +25,7 @@ sessionRouter.post("/login", passport.authenticate(`login`,`/login`), async (req
  //jwt
     const access_token = generateToken(user);
     console.log("Token generado:", access_token);
-    response.cookie('CoderCookieJulian', access_token, { maxAge: 24 * 60 * 60 * 1000 });
+    response.cookie(config.PRIVATE_KEY_COOKIE, access_token, { maxAge: 24 * 60 * 60 * 1000 });
 
 
 
@@ -44,6 +45,7 @@ sessionRouter.post("/login", passport.authenticate(`login`,`/login`), async (req
 
 sessionRouter.post("/register", passport.authenticate("register", {
   failureRedirect: "/register",
+  failureFlash: "FAIL" ,
 }) , async (request, response) => {
 //cuando el usuario se registro con exito
 const user = request.user; 
@@ -52,8 +54,8 @@ const user = request.user;
   }
 //jwt
   const access_token = generateToken(user);
-  response.cookie('CoderCookieJulian', access_token, { maxAge: 24 * 60 * 60 * 1000 });
-  // response.send({ status: "success", access_token });
+  response.cookie(config.PRIVATE_KEY_COOKIE, access_token, { maxAge: 24 * 60 * 60 * 1000 });
+// response.send({ status: "success", access_token });
 
   
   return response.redirect("/");
@@ -63,7 +65,7 @@ const user = request.user;
 
 sessionRouter.get("/logout", async (request, response) => {
   request.session.destroy(() => {
-    response.clearCookie('CoderKeyFromJulian');
+    response.clearCookie(config.PRIVATE_KEY_COOKIE);
     response.redirect("/");
   });
 });

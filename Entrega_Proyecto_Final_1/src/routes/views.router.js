@@ -180,8 +180,8 @@ viewsRouter.get("/register", async(request, response) => {
     response.redirect("/list")
   }
   
-    response.render("register",{})
-    
+  const errorMessage = request.flash('error')[0]; // no me esta funcionando este mensaje de usuario ya registrado 
+  response.render("register", { errorMessage });
  })
 
  function auth(request , response, next) {

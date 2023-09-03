@@ -49,11 +49,29 @@
     .register-form button:hover {
       background-color: #e6682c;
     }
+
+   .error-message {
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: #ffcccc;
+    border: 1px solid red;
+    border-radius: 5px;
+    padding: 10px;
+    }
   </style>
+
+
 </head>
 <body>
   <div class="register-form">
     <h1>Register</h1>
+     {{#if errorMessage}}
+    <div class="error-message">
+      {{errorMessage}}
+      <h1>Usuario ya registrado</h1>
+    </div>
+    {{/if}}
     <form action="/api/session/register" method="POST">
       <input type="text" name="first_name" placeholder="Nombre" required>
       <input type="text" name="last_name" placeholder="Apellido" required>

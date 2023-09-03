@@ -15,6 +15,8 @@ import sessionRouter from "./routes/session.router.js"
 import initializePassport from '../src/config/passport.config.js'
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
+import config from './config/config.js';
+import flash from 'connect-flash';
 
 
 const app = express();
@@ -25,32 +27,38 @@ const io = new Server(server);
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
+
+//express
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
+//cookieparser
 app.use(cookieParser());
 
-//session
-const URL = "mongodb+srv://julibischoff:julibischoff@cluster0.5dy77sq.mongodb.net/?retryWrites=true&w=majority";
-const dbName = "DataBaseEccomerce";
 
 
 
+
+console.log(process.env.MONGO_URL);
 
 
 app.use(session({
   store: MongoStore.create({
-    mongoUrl: URL,
-    dbName,
+    mongoUrl: config.MONGO_URL,
+    dbName :config.dbName,
     mongoOptions: {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     },
   }),
-  secret: 'secret', 
+  secret: config.SECRET_KEY, 
   resave: true,
   saveUninitialized: true,
 }));
+
+
+//flasherror
+app.use(flash())
 
 //Passport 
 initializePassport()
@@ -66,7 +74,7 @@ app.use("/", viewsRouter);
 
 // Socket.IO
 const runServer = () => {
-  const httpServer = server.listen(8080, () => console.log('Escuchando...'));
+  const httpServer = server.listen(config.PORT, () => console.log('Escuchando...'));
   const io = new Server(httpServer);
 
   io.on('connection', (socket) => {
@@ -93,8 +101,8 @@ const runServer = () => {
 
 // Database connection and server startup
 mongoose.set(`strictQuery`, false);
-mongoose.connect(URL, {
-  dbName: "DataBaseEccomerce"
+mongoose.connect(config.MONGO_URL, {
+  dbName: config.dbName,
 })
   .then(() => {
     console.log("DB conectada");

@@ -3,29 +3,20 @@ import local from 'passport-local'
 import UserModel from "../dao/models/user.models.js";
 import GitHubStrategy from 'passport-github2'
 import { createHash, isValidPassword } from "../utils.js";
+import cartsModel from "../dao/models/carts.models.js";
 import jwt from "passport-jwt"
-import dotenv from 'dotenv';
-dotenv.config();
-
-/**
- * 
- * 
-*App ID: 375542
-
-Client ID: Iv1.34c8634720befa98
- *  Secret: 11127051ef8270bfe0ae417d56081dba44f1d19b
-*/
+import config from "./config.js";
 
 
+console.log("SECRET_KEY: ", config.SECRET_KEY);
 
-dotenv.config();
-const secretKeyTokenJwt = process.env.PRIVATE_KEY;
+
 const JWTStrategy = jwt.Strategy // La estrategia de JWT
 const ExtractJWT = jwt.ExtractJwt // La funcion de extraccion
 
 
 const cookieExtractor = request => {
-    const token = (request?.cookies) ? request.cookies['CoderCookieJulian'] : null
+    const token = (request?.cookies) ? request.cookies[config.PRIVATE_KEY_COOKIE] : null
     
     console.log('COOKIE EXTRACTOR: ', token)
     return token
@@ -44,7 +35,7 @@ const initializePassport = () => {
         new JWTStrategy(
             {
                 jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), // aca se puede agregar mas extractores como el headear cookieExtractor : headear
-                secretOrKey: secretKeyTokenJwt
+                secretOrKey: config.SECRET_KEY
             },
             async (jwt_payload, done) => {
 
@@ -61,9 +52,9 @@ const initializePassport = () => {
 
     passport.use('github', new GitHubStrategy(
         {
-            clientID: 'Iv1.34c8634720befa98',
-            clientSecret: '11127051ef8270bfe0ae417d56081dba44f1d19b',
-            callbackURL: 'http://localhost:8080/githubcallback',
+            clientID: config.clientID,
+            clientSecret: config.clientSecret,
+            callbackURL: config.callbackURL,
             scope: ['user:email'] ,
         },
         async (accessToken, refreshToken, profile, done) => {
@@ -105,13 +96,14 @@ const initializePassport = () => {
                     console.log('User already exits')
                     return done(null, false)
                 }
+                const newCart = await cartsModel.create({ products: [] });
 
                 const newUser = {
                     first_name,
                     last_name,
-                    age, //
+                    age,
                     email,
-                    cartId, // 
+                    cartId: newCart._id, 
                     password: createHash(password)
                 }
                 const result = await UserModel.create(newUser)
