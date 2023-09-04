@@ -9,7 +9,7 @@ import handlebars from 'express-handlebars';
 import http from 'http';
 import { Server } from 'socket.io';
 import __dirname from './utils.js';
-import messagesModel from './dao/models/messages.model.js';
+import messagesModel from './models/messages.model.js';
 import viewsRouter from './routes/views.router.js';
 import sessionRouter from "./routes/session.router.js"
 import initializePassport from '../src/config/passport.config.js'
@@ -17,6 +17,7 @@ import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import config from './config/config.js';
 import flash from 'connect-flash';
+import * as chatController from "./controller/chatController.js";
 
 
 const app = express();
@@ -79,25 +80,14 @@ const runServer = () => {
 
   io.on('connection', (socket) => {
     console.log('Cliente conectado');
-
-    // chat
     socket.on('nuevo_mensaje', async (data) => {
-      try {
-        // guardar mensaje en mongo
-        await messagesModel.create(data);
-
-        // ahora está incluido el remitente
-        socket.emit('nuevo_mensaje', data);
-      } catch (error) {
-        console.error('Error al guardar el mensaje:', error);
-      }
+      await chatController.addMessage(data, socket);
     });
-
     socket.on('disconnect', () => {
       console.log('Cliente desconectado');
     });
   });
-}
+};
 
 // Database connection and server startup
 mongoose.set(`strictQuery`, false);

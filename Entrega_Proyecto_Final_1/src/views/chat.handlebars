@@ -114,13 +114,12 @@
   <h1>Chat</h1>
   <ul id="chat">
     {{#each messages}}
-      <li><strong>{{this.email}}</strong> (<em>{{this.user}}</em>): {{this.message}}</li>
+      <li><strong>{{this.email}}</strong>: {{this.message}}</li>
     {{/each}}
   </ul>
 
   <form id="chatForm">
     <input type="text" name="email" placeholder="Tu correo electrónico">
-    <input type="text" name="user" placeholder="Tu nombre de usuario">
     <input type="text" name="message" placeholder="Mensaje">
     <button type="submit">Enviar</button>
   </form>

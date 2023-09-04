@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import productsModel from '../dao/models/products.models.js';
-import cartsModel from '../dao/models/carts.models.js';
+import productsModel from '../models/products.models.js';
+import cartsModel from '../models/carts.models.js';
 import passport from "passport";
 const viewsRouter = express.Router();
 
