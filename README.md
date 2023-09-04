@@ -2,7 +2,7 @@
 # Entrega_Proyecto_Final_1
 
 ## Descripción ** 
--PATRON MVCMVC (Modelo-Vista-Controlador) es un patrón en el diseño de software comúnmente utilizado para implementar interfaces de usuario, datos y lógica de control
+-PATRON MVC (Modelo-Vista-Controlador) es un patrón en el diseño de software comúnmente utilizado para implementar interfaces de usuario, datos y lógica de control
 
 Este proyecto es una API de comercio electrónico con autenticación, chat y funcionalidades de carrito de compras.
 
