@@ -2,7 +2,7 @@
 # Entrega_Proyecto_Final_1
 
 ## Descripción ** 
--PATRON MVCMVC (Modelo-Vista-Controlador) es un patrón en el diseño de software comúnmente utilizado para implementar interfaces de usuario, datos y lógica de control
+-PATRON MVC (Modelo-Vista-Controlador) es un patrón en el diseño de software comúnmente utilizado para implementar interfaces de usuario, datos y lógica de control
 
 Este proyecto es una API de comercio electrónico con autenticación, chat y funcionalidades de carrito de compras.
 
@@ -71,10 +71,13 @@ para conectar base de datos
 
 ## Cómo usar
 
-1. Para ver todos los productos: `GET /api/productos`
-2. Para añadir un nuevo producto: `POST /api/productos`
-3. Para la autenticación: `POST /api/session`
-4. Chat en tiempo real disponible en `/chat`
+1. LOGIN O REGISTER(CREA TU PROPIO USUARIO)
+2. home (/list)
+3. profile (/current) 
+5. Para ver todos los productos: `GET /api/productos`
+6. Para añadir un nuevo producto: `POST /api/productos`
+7. Para la autenticación: `POST /api/session`
+8. Chat en tiempo real disponible en `/chat`
 
 ## Contribuciones
 
