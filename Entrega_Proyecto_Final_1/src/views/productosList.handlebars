@@ -244,14 +244,28 @@
       const url = `/list?limit=${limit}&page=${page}`;
       window.location.href = url;
     };
+
+  function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop().split(';').shift();
+  }
+  console.log(getCookie)
+}
+
   
 document.querySelectorAll('.addToCartForm').forEach(form => {
   form.addEventListener('submit', async function(event) {
     event.preventDefault();
+    
+    console.log('Enviando petición al servidor...');
 
     const formData = new FormData(form);
     const productId = formData.get('productId');
-    const cartId = getCookie('cartId'); 
+    const cartId = getCookie('cartId');
+    console.log("Cart ID:", cartId);
+ 
 
     try {
       const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
