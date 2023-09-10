@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import productsModel from "../models/products.models.js";
-import cartsModel from "../models/carts.models.js"
-import messagesModel from "../models/messages.model.js";  
+import productsModel from "../DAO/mongo/models/products.models.js";
+import cartsModel from "../DAO/mongo/models/carts.models.js"
+import messagesModel from "../DAO/mongo/models/messages.model.js";  
 
 
 

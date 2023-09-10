@@ -1,14 +1,19 @@
-import productsModel from '../models/products.models.js';
+import ProductDTO from '../DAO/DTO/products.dto.js';
 
-export const createNewProduct = async (productData) => {
-  const createdProduct = await productsModel.create(productData);
-  return createdProduct;
-};
-
-export const deleteExistingProduct = async (productId) => {
-  const result = await productsModel.deleteOne({ _id: productId });
-  if (result.deletedCount === 0) {
-    throw new Error('Producto no encontrado');
+export default class ProductRepository {
+  constructor(productsDAO) {
+    this.productsDAO = productsDAO;
   }
-  return true;
-};
+
+
+  createNewProduct = async (productData) => {
+    const productToCreate = new ProductDTO(productData);
+    return await this.productsDAO.createNewProduct(productToCreate);
+  }
+
+
+  deleteExistingProduct = async (productId) => {
+    return await this.productsDAO.deleteExistingProduct(productId);
+  }
+
+}

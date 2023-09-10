@@ -1,37 +1,29 @@
-import UserModel from "../models/user.models.js";
-import { isValidPassword, generateToken } from "../utils.js";
+import UserDTO from "../DAO/DTO/user.dto.js";
 
-
-export const loginUser = async ({ email, password }) => {
-  const user = await UserModel.findOne({ email });
-
-  if (!user || !isValidPassword(user, password)) {
-    throw new Error("Invalid Credentials");
+export default class UserRepository {
+  constructor(dao) {
+    this.dao = dao;
   }
 
-  if (user.email === "adminCoder@coder.com") {
-    user.role = "admin";
-  } else {
-    user.role = "usuario";
+  loginUser = async ({ email, password }) => {
+    const user = await this.dao.loginUser({ email, password });
+    if (!user) {
+      throw new Error("Invalid Credentials");
+    }
+    return new UserDTO(user);
   }
 
-  const access_token = generateToken(user);
-  return { user, access_token };
-};
-
-export const registerUser = async (user) => {
-  if (!user) {
-    throw new Error("User not found");
+  registerUser = async (user) => {
+    const userToRegister = new UserDTO(user);
+    return await this.dao.registerUser(userToRegister);
   }
 
-  const access_token = generateToken(user);
-  return { user, access_token };
-};
+  logoutUser = () => {
+    return true;
+  }
 
-export const logoutUser = () => {
-  return true;
-};
-
-export const getCurrentUser = (user) => {
-  return { status: 'success', payload: user };
-};
+  getCurrentUser = (user) => {
+    const currentUser = new UserDTO(user);
+    return { status: 'success', payload: currentUser };
+  }
+}

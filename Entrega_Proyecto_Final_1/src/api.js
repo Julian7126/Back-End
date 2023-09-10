@@ -9,7 +9,7 @@ import handlebars from 'express-handlebars';
 import http from 'http';
 import { Server } from 'socket.io';
 import __dirname from './utils.js';
-import messagesModel from './models/messages.model.js';
+
 import viewsRouter from './routes/views.router.js';
 import sessionRouter from "./routes/session.router.js"
 import initializePassport from '../src/config/passport.config.js'
@@ -35,14 +35,6 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
 //cookieparser
 app.use(cookieParser());
-
-
-
-
-
-console.log(process.env.MONGO_URL);
-
-
 app.use(session({
   store: MongoStore.create({
     mongoUrl: config.MONGO_URL,
@@ -89,11 +81,12 @@ const runServer = () => {
   });
 };
 
-// Database connection and server startup
+
 mongoose.set(`strictQuery`, false);
-mongoose.connect(config.MONGO_URL, {
-  dbName: config.dbName,
-})
+mongoose
+  .connect(config.MONGO_URL, {
+    dbName: config.dbName,
+  })
   .then(() => {
     console.log("DB conectada");
     runServer();
@@ -101,5 +94,4 @@ mongoose.connect(config.MONGO_URL, {
   .catch(() => {
     console.log("No se pudo conectar a la base de datos");
   });
-
 export { io };

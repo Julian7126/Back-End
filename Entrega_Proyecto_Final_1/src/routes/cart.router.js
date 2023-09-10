@@ -7,7 +7,6 @@ cartRouter.post('/', cartController.createCart);
 cartRouter.post("/:cid/products/:pid", cartController.addProductToCart);
 cartRouter.delete("/:cid/products/:pid", cartController.deleteProductFromCart);
 cartRouter.put("/:cid", cartController.updateCart);
-// cartRouter.put("/:cid/products/:pid", cartController.updateProductQuantityInCart);
 cartRouter.delete("/:cid/all", cartController.removeAllProductsFromCart);
 
 export default cartRouter;

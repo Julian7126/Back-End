@@ -1,20 +1,20 @@
-import messagesModel from '../models/messages.model.js';
+import MessageDTO from "../DAO/DTO/messages.dto.js";
 
-export const retrieveMessages = async () => {
-  try {
-    return await messagesModel.find().lean();
-  } catch (error) {
-    throw new Error('Error al obtener mensajes');
+export default class MessageRepository {
+  constructor(messageDAO) {
+    this.messageDAO = messageDAO;
   }
-};
 
-export const createMessage = async (data, socket) => {
-    try {
-      await messagesModel.create(data);
-      if (socket) {
-        socket.emit('nuevo_mensaje', data);
-      }
-    } catch (error) {
-      throw new Error('Error al crear mensaje');
+  async retrieveMessages() {
+    return await this.messageDAO.retrieveMessages();
+  }
+
+  async createMessage(data, socket = null) {
+    const messageToCreate = new MessageDTO(data);
+    const result = await this.messageDAO.createMessage(messageToCreate);
+    if (socket) {
+      socket.emit('nuevo_mensaje', result);
     }
-  };
+    return result;
+  }
+}
