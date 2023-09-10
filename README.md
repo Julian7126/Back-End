@@ -1,10 +1,10 @@
-# Back-End 
+# API ** 
 # Entrega_Proyecto_Final_1
 
 ## Descripción ** 
--PATRON MVC arquitectura (Modelo-Vista-Controlador) es un patrón en el diseño de software comúnmente utilizado para implementar interfaces de usuario, datos y lógica de control
+# PATRON MVC arquitectura (Modelo-Vista-Controlador) es un patrón en el diseño de software comúnmente utilizado para implementar interfaces de usuario, datos y lógica de control
+# PATRON DE DISEÑO // DAO , DTO 
 
-PATRON DE DISEÑO // DAO , DTO 
 
 Este proyecto es una API de comercio electrónico con autenticación, chat y funcionalidades de carrito de compras.
 
