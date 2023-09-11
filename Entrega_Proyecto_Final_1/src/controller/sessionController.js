@@ -1,4 +1,4 @@
-import * as sessionService from '../services/session.services.js';
+import { sessionService } from "../services/index.js";
 import config from "../config/config.js";
 
 export const login = async (request, response) => {

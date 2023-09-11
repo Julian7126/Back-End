@@ -1,20 +1,20 @@
-import * as productService from '../services/products.services.js';
+import { productService } from "../services/index.js";
 
-export const createProduct = async (req, res) => {
+export const createProduct = async (request, response) => {
   try {
-    const newProduct = await productService.createNewProduct(req.body);
-    res.status(201).json(newProduct);
+    const newProduct = await productService.createNewProduct(request.body);
+    response.status(201).json(newProduct);
   } catch (err) {
-    res.status(500).json({ error: 'Error al crear el producto' });
+    response.status(500).json({ error: 'Error al crear el producto' });
   }
 };
 
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (request, response) => {
   try {
-    const { id } = req.params;
+    const { id } = request.params;
     await productService.deleteExistingProduct(id);
-    res.status(200).json({ message: 'Producto eliminado con éxito' });
+    response.status(200).json({ message: 'Producto eliminado con éxito' });
   } catch (err) {
-    res.status(500).json({ error: 'Error al eliminar el producto' });
+    response.status(500).json({ error: 'Error al eliminar el producto' });
   }
 };

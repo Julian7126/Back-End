@@ -12,10 +12,9 @@ viewsRouter.get("/carts/:cid", viewController.getCartById);
 viewsRouter.get("/", viewController.getLogin);
 viewsRouter.get("/register", viewController.getRegister);
 viewsRouter.get("/profile", viewController.getProfile);
-// viewsRouter.get("/carts", viewController.getAllCarts);
-// viewsRouter.get('/list', viewController.getProductosList);
+viewsRouter.get('/list', viewController.getList);
+viewsRouter.get('/carts', viewController.getCarts);
 
- 
 //GITHUB
 
 viewsRouter.get(

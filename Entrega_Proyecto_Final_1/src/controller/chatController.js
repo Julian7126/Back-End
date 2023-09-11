@@ -1,8 +1,7 @@
-import * as chatService from '../services/chat.services.js';
-
+import { messageService } from "../services/index.js";
 export const getMessages = async (req, res) => {
   try {
-    const messages = await chatService.retrieveMessages();
+    const messages = await messageService.retrieveMessages();
     res.render('chat', { messages });
   } catch (error) {
     console.error('Error al obtener los mensajes:', error);
@@ -24,7 +23,7 @@ export const addMessage = async (data, socket = null, res = null) => {
       return;
     }
 
-    await chatService.createMessage({ email, message }, socket);
+    await messageService.createMessage({ email, message }, socket);
 
     if (socket) {
       socket.emit('nuevo_mensaje', { email, message });
