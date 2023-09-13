@@ -2,16 +2,16 @@
 import productsModel from './models/products.models.js';
 
 export default class ProductsMongo {
-  
-  static async createNewProduct(productData) {
+  static async create(productData) {
     return await productsModel.create(productData);
   }
 
-  static async deleteExistingProduct(productId) {
-    const result = await productsModel.deleteOne({ _id: productId });
-    if (result.deletedCount === 0) {
-      throw new Error('Producto no encontrado');
-    }
-    return true;
+  static async delete(productId) {
+    return await productsModel.deleteOne({ _id: productId });
   }
+
+  static async findProductByCode(productCode) {
+    return await productsModel.findOne({ code: productCode });
+  }
+
 }

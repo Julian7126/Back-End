@@ -12,7 +12,7 @@ export const createCart = async (req, res) => {
 export const addProductToCart = async (req, res) => {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
-  console.log('Petición recibida')
+
   try {
     const cart = await cartService.findCartById(cid);
     if (!cart) {
@@ -25,6 +25,7 @@ export const addProductToCart = async (req, res) => {
     res.status(500).json({ error: 'Error al añadir producto al carrito' });
   }
 };
+
 
 export const deleteProductFromCart = async (req, res) => {
   const { cid, pid } = req.params;

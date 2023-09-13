@@ -237,6 +237,18 @@
     </form>
   </div>
   <script>
+
+
+
+console.log("Valor de user:", {{user}});
+console.log("Valor de docs:", {{docs}});
+console.log("Valor de productId:", {{_id}});
+console.log("Valor de cartId:", {{cartId}});
+
+
+
+
+
     document.getElementById('form').onsubmit = (e) => {
       e.preventDefault();
       const limit = document.getElementById('limit').value;

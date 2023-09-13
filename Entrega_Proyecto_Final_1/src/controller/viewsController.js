@@ -1,8 +1,14 @@
 import * as viewsService from '../services/views.services.js';
 
 export const getProductos = async (req, res) => {
-  const products = await viewsService.getProductos();
-  res.render('home', { products });
+  try {
+    const products = await viewsService.getProductos();
+    console.log("Productos obtenidos:", products); 
+    res.render('home', { products });
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+    res.status(500).send("Error al obtener productos");
+  }
 };
 
 export const getList = async (req, res) => {

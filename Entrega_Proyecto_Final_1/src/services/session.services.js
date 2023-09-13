@@ -1,21 +1,41 @@
-import UserDTO from "../DAO/DTO/user.dto.js";
+import LoginUserDTO from "../DAO/DTO/login-user.dto.js";
+import RegisterUserDTO from "../DAO/DTO/register-user.dto.js";
+import passport from "passport";
+import { generateToken } from "../utils.js";
 
-export default class UserRepository {
+export default class UserService {
   constructor(dao) {
     this.dao = dao;
   }
 
   loginUser = async ({ email, password }) => {
-    const user = await this.dao.loginUser({ email, password });
+    const loginUserDTO = new LoginUserDTO({ email, password });
+    const user = await passport.authenticate('login', loginUserDTO);
     if (!user) {
-      throw new Error("Invalid Credentials");
+      throw new Error("Invalidas Credenciales");
     }
-    return new UserDTO(user);
+
+    // Asignar rol
+    if (email === "adminCoder@coder.com") {
+      user.role = "admin";
+    } else {
+      user.role = "usuario";
+    }
+
+    const access_token = generateToken(user);
+    
+    return { user, access_token }; 
   }
 
   registerUser = async (user) => {
-    const userToRegister = new UserDTO(user);
-    return await this.dao.registerUser(userToRegister);
+    const registerUserDTO = new RegisterUserDTO(user);
+    const registeredUser = await passport.authenticate('register', registerUserDTO);
+    if (!registeredUser) {
+      throw new Error("Could not register user");
+    }
+
+    const access_token = generateToken(registeredUser);
+    return { user: registeredUser, access_token }; 
   }
 
   logoutUser = () => {
@@ -23,7 +43,6 @@ export default class UserRepository {
   }
 
   getCurrentUser = (user) => {
-    const currentUser = new UserDTO(user);
-    return { status: 'success', payload: currentUser };
+    return { status: 'success', payload: user };
   }
 }

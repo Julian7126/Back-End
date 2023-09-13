@@ -1,6 +1,4 @@
-import CartDTO from "../DAO/DTO/carts.dto.js";
-
-export default class CartRepository {
+export default class CartService {
   constructor(dao) {
     this.dao = dao;
   }
@@ -14,20 +12,27 @@ export default class CartRepository {
   }
 
   addProductToExistingCart = async (cart, pid, quantity) => {
-    const cartToUpdate = new CartDTO(cart);
-    return await this.dao.addProductToExistingCart(cartToUpdate, pid, quantity);
+    const productIndex = cart.products.findIndex(item => item.products.toString() === pid);
+    if (productIndex !== -1) {
+      cart.products[productIndex].quantity += quantity;
+    } else {
+      cart.products.push({ products: pid, quantity });
+    }
+    return await this.dao.addProductToExistingCart(cart);
   }
 
   deleteProductFromExistingCart = async (cart, pid) => {
-    return await this.dao.deleteProductFromExistingCart(cart, pid);
+    cart.products = cart.products.filter(item => item.products.toString() !== pid);
+    return await this.dao.deleteProductFromExistingCart(cart);
   }
 
   updateExistingCart = async (cart, products) => {
-    const cartToUpdate = new CartDTO(cart);
-    return await this.dao.updateExistingCart(cartToUpdate, products);
+    cart.products = products;
+    return await this.dao.updateExistingCart(cart);
   }
 
   removeAllProducts = async (cart) => {
+    cart.products = [];
     return await this.dao.removeAllProducts(cart);
   }
 }

@@ -1,6 +1,7 @@
 import { sessionService } from "../services/index.js";
 import config from "../config/config.js";
 
+
 export const login = async (request, response) => {
   try {
     const { user, access_token } = await sessionService.loginUser(request.body);

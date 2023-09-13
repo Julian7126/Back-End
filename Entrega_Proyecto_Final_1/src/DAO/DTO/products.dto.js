@@ -1,11 +1,14 @@
 export default class ProductDTO {
-    constructor(product) {
-      this.title = product?.title ?? "Sin titulo";
-      this.description = product?.description ?? '';
-      this.price = product?.price ?? "Sin Precio";
-      this.thumbnail = product?.thumbnail ?? '';
-      this.code = product?.code ?? "Sin Codigo";
-      this.stock = product?.stock ?? 0;
+  constructor(product) {
+    if (!product.title || !product.price || !product.stock) {
+      throw new Error('Faltan campos obligatorios');
     }
+
+    this.title = product.title;
+    this.description = product.description || '';
+    this.price = product.price;
+    this.thumbnail = product.thumbnail || '';
+    this.code = product.code || '0';
+    this.stock = product.stock;
   }
-  
+}
