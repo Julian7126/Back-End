@@ -186,7 +186,7 @@
     <div class="navbar-content">
       <div class="navbar-links">
         <a href="/chat" class="chat-link">Chat</a>
-        {{#if user}}
+        {{#if payload.user}}
         <a href="/carts" class="cart-link">Carrito</a>
         <a href="/profile" class="profile-link">Profile</a>
         {{/if}}
@@ -194,7 +194,7 @@
     </div>
   </nav>
   <div class="user-info">
-    {{#if user}}
+    {{#if payload.user}}
     <p>Bienvenido, {{user.email}}!</p>
     <p>Rol: {{user.role}}</p>
     <a href="/api/session/logout">Cerrar sesión</a>
@@ -208,7 +208,7 @@
     </div>
     
     <ul>
-      {{#each docs}}
+      {{#each payload}}
       <li>
         <img src="{{thumbnail}}" alt="Imagen del producto">
         <h2>{{title}}</h2>

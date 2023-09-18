@@ -4,7 +4,7 @@ import config from "../config/config.js";
 
 export const login = async (request, response) => {
   try {
-    const { user, access_token } = await sessionService.loginUser(request.body);
+    const { user, access_token } = await sessionService.loginUser(request.user);
     request.session.user = user.payload; 
     response.cookie(config.PRIVATE_KEY_COOKIE, access_token, { maxAge: 24 * 60 * 60 * 1000 });
     return response.redirect("/list");

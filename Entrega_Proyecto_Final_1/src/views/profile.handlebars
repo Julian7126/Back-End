@@ -6,51 +6,63 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" rel="stylesheet">
   <style>
-    body {
-      background-color: black;
-      color: #CCCCCC; 
-    }
-    .card {
-      background-color: #333333; 
-    }
-    .card-title, .card-text {
-      color: #DDDDDD; 
-    }
+    body { background-color: black; color: #CCCCCC; }
+    .card { background-color: #333333; }
+    .card-title, .card-text { color: #DDDDDD; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1 class="text-center mt-5" style="color: #996666;">Información del Usuario</h1>
-    <div id="result" class="card mt-5" data-aos="zoom-in-up">
-      <div class="card-body">
-        <h5 class="card-title">Perfil</h5>
-        <p class="card-text">
-          Nombre: <span id="first_name"></span><br>
-          Apellido: <span id="last_name"></span><br>
-          Edad: <span id="age"></span><br>
-          Email: <span id="email"></span><br>
-          Rol: <span id="role"></span>
-        </p>
-      </div>
+<div class="container">
+  <h1 class="text-center mt-5" style="color: #996666;">Información del Usuario</h1>
+  <div id="result" class="card mt-5" data-aos="zoom-in-up">
+    <div class="card-body">
+      <h5 class="card-title">Perfil</h5>
+      <p class="card-text">
+        Nombre: <span id="first_name"></span><br>
+        Apellido: <span id="last_name"></span><br>
+        Edad: <span id="age"></span><br>
+        Email: <span id="email"></span><br>
+        Rol: <span id="role"></span>
+      </p>
     </div>
   </div>
+</div>
 
-  <script>
-    fetch('/api/session/current', { headers: { 'Content-Type': 'application/json' } })
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('first_name').innerText = data.payload.first_name;
-        document.getElementById('last_name').innerText = data.payload.last_name;
-        document.getElementById('age').innerText = data.payload.age;
-        document.getElementById('email').innerText = data.payload.email;
-        document.getElementById('role').innerText = data.payload.role;
-      })
-  </script>
-  <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script>
+<script>
+  function getCookie(name) {
+    const value = `${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return parts.pop().split(';').shift();
+    }
+  }
+  const cookie = getCookie('CoderCookieJulian');
+</script>
+
+<script>
+  fetch('/api/session/current', {
+    headers: {
+      'Content-Type': 'application/json',
+      'CoderCookieJulian': cookie
+    }
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.payload) {
+      document.getElementById('first_name').innerText = data.payload.first_name;
+      document.getElementById('last_name').innerText = data.payload.last_name;
+      document.getElementById('age').innerText = data.payload.age;
+      document.getElementById('email').innerText = data.payload.email;
+      document.getElementById('role').innerText = data.payload.role;
+    }
+  });
+</script>
+
+<script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+<script>
+  AOS.init();
+</script>
 
 </body>
 </html>

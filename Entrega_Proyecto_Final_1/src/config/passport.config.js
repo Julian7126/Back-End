@@ -6,6 +6,8 @@ import { createHash, isValidPassword } from "../utils.js";
 import cartsModel from "../DAO/mongo/models/carts.models.js";
 import jwt from "passport-jwt";
 import config from "./config.js";
+import LoginUserDTO from "../DAO/DTO/login-user.dto.js";
+
 
 // Log para depuración
 console.log("SECRET_KEY: ", config.SECRET_KEY);
@@ -47,27 +49,35 @@ const initializePassport = () => {
             clientSecret: config.clientSecret,
             callbackURL: config.callbackURL,
             scope: ['user:email'],
+            passReqToCallback: true
         },
-        async (accessToken, refreshToken, profile, done) => {
+        async (req, accessToken, refreshToken, profile, done) => {
             try {
                 const email = profile._json.email || profile.emails[0].value;
-                const user = await UserModel.findOne({ email });
-                if (user) {
-                    return done(null, user);
+                let user = await UserModel.findOne({ email });
+                let isNewUser = false;
+    
+                if (!user) {
+                    const newUser = {
+                        name: profile._json.name,
+                        email,
+                        password: ''
+                    };
+                    user = await UserModel.create(newUser);
+                    isNewUser = true;
                 }
-                const newUser = {
-                    name: profile._json.name,
-                    email,
-                    password: ''
-                };
-                const result = await UserModel.create(newUser);
-                return done(null, result);
+    
+                if (isNewUser) {
+                    const token = generateToken(user);
+                    req.res.cookie(config.PRIVATE_KEY_COOKIE, token, { maxAge: 24 * 60 * 60 * 1000 });
+                }
+    
+                return done(null, user);
             } catch (error) {
                 return done('Error to login with GitHub: ' + error);
             }
         }
     ));
-
     // Estrategia para registrarse
     passport.use('register', new LocalStrategy(
         {
@@ -97,17 +107,20 @@ const initializePassport = () => {
             }
         }
     ));
-
+  
     // Estrategia para iniciar sesión
     passport.use('login', new LocalStrategy(
         { usernameField: 'email' },
         async (username, password, done) => {
             try {
-                const user = await UserModel.findOne({ email: username }).lean().exec();
+        
+                const loginUserDTO = new LoginUserDTO({ email: username, password });
+                
+                const user = await UserModel.findOne({ email: loginUserDTO.email }).lean().exec();
                 if (!user) {
                     return done(null, false);
                 }
-                if (!isValidPassword(user, password)) {
+                if (!isValidPassword(user, loginUserDTO.password)) {
                     return done(null, false);
                 }
                 return done(null, user);
@@ -116,7 +129,6 @@ const initializePassport = () => {
             }
         }
     ));
-
     // Serialización
     passport.serializeUser((user, done) => {
         done(null, user._id);

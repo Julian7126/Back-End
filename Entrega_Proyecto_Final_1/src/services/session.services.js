@@ -1,30 +1,28 @@
-import LoginUserDTO from "../DAO/DTO/login-user.dto.js";
-import RegisterUserDTO from "../DAO/DTO/register-user.dto.js";
 import passport from "passport";
 import { generateToken } from "../utils.js";
+import RegisterUserDTO from "../DAO/DTO/register-user.dto.js";
 
 export default class UserService {
   constructor(dao) {
     this.dao = dao;
   }
 
-  loginUser = async ({ email, password }) => {
-    const loginUserDTO = new LoginUserDTO({ email, password });
-    const user = await passport.authenticate('login', loginUserDTO);
-    if (!user) {
+  loginUser = async (user) => {
+    const access_token = generateToken(user);                         
+      if (!user || !user.email) {
       throw new Error("Invalidas Credenciales");
     }
+      const { email } = user;
+  
+      // Asignar rol
+      if (email === "adminCoder@coder.com") {
+        user.role = "admin";
+      } else {
+        user.role = "usuario";
+      }
 
-    // Asignar rol
-    if (email === "adminCoder@coder.com") {
-      user.role = "admin";
-    } else {
-      user.role = "usuario";
-    }
+      return { user, access_token }; 
 
-    const access_token = generateToken(user);
-    
-    return { user, access_token }; 
   }
 
   registerUser = async (user) => {
@@ -37,6 +35,8 @@ export default class UserService {
     const access_token = generateToken(registeredUser);
     return { user: registeredUser, access_token }; 
   }
+
+
 
   logoutUser = () => {
     return true;
