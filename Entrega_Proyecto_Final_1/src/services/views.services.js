@@ -65,7 +65,7 @@ export const getList = async (request) => {
       prevLink,
       nextLink
     };
-  };
+  };                  
   
   export const getProductoById = async (id) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {

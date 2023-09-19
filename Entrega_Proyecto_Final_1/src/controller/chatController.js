@@ -23,6 +23,12 @@ export const addMessage = async (data, socket = null, res = null) => {
       return;
     }
 
+    // Añadido: verificamos el usuario
+    if (socket && socket.user && socket.user.role !== 'user') {
+      socket.emit('error', 'No tienes permisos para enviar un mensaje.');
+      return;
+    }
+
     await messageService.createMessage({ email, message }, socket);
 
     if (socket) {

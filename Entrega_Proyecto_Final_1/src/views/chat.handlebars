@@ -103,11 +103,10 @@
   </style>
 </head>
 <body>
-   <nav class="navbar">
+  <nav class="navbar">
     <div class="navbar-content">
       <div class="navbar-links">
         <a href="/list" class="home-link"> HOME </a>
-    
       </div>
     </div>
   </nav>
@@ -119,32 +118,69 @@
   </ul>
 
   <form id="chatForm">
-    <input type="text" name="email" placeholder="Tu correo electrónico">
+    <input type="hidden" name="email" value="{{user.email}}">
     <input type="text" name="message" placeholder="Mensaje">
     <button type="submit">Enviar</button>
   </form>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return parts.pop().split(';').shift();
+    }
+  }
+
+  const token = getCookie('CoderCookieJulian');
+  
+  fetch('/api/session/current', {
+    headers: {
+      'Content-Type': 'application/json',
+      'CoderCookieJulian': token
+    }
+  })
+  .then(r => {
+    if (r.ok) {
+      return r.json(); 
+    } else {
+      return r.text().then(text => Promise.reject(text));  
+    }
+  })
+  .then(data => {
+    const userRole = data.payload.role;
+    console.log('User Role:', userRole);
+
     const socket = io();
 
-    document.getElementById('chatForm').addEventListener('submit', (event) => {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const email = formData.get('email');
-      const user = formData.get('user');
-      const message = formData.get('message');
-      socket.emit('nuevo_mensaje', { email, user, message });
-      event.target.reset();
-    });
+    if (userRole === 'user') {
+      document.getElementById('chatForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const email = formData.get('email');
+        const message = formData.get('message');
+          
+        socket.emit('nuevo_mensaje', { email, message });
+        event.target.reset();
+      });
+    } else {
+      alert('No tienes permisos para enviar un mensaje.');
+    }
 
     socket.on('nuevo_mensaje', (data) => {
       const chatList = document.getElementById('chat');
       const li = document.createElement('li');
-      li.innerHTML = `<strong>${data.email}</strong> (<em>${data.user}</em>): ${data.message}`;
+      li.innerHTML = `<strong>${data.email}</strong>: ${data.message}`;
       chatList.appendChild(li);
       chatList.scrollTop = chatList.scrollHeight;
     });
-  </script>
+
+  })
+  .catch(error => {
+    console.error('Hubo un problema con la operación fetch:', error);
+  });
+</script>
+
 </body>
 </html>

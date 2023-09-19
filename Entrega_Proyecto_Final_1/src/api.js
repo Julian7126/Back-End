@@ -18,6 +18,7 @@ import cookieParser from 'cookie-parser';
 import config from './config/config.js';
 import flash from 'connect-flash';
 import * as chatController from "./controller/chatController.js";
+// import ticketRouter from './routes/ticket.router.js';
 
 
 const app = express();
@@ -63,6 +64,7 @@ app.use("/api/productos", productosRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/session", sessionRouter);
 app.use("/chat", chatRouter);
+// app.use("api/orders",ticketRouter)
 app.use("/", viewsRouter);
 
 // Socket.IO

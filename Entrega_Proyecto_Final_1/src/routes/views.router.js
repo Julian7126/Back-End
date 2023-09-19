@@ -5,15 +5,16 @@ import passport from 'passport';
 
 const viewsRouter = express.Router();
 
+viewsRouter.get('/list', viewController.getList);
 viewsRouter.get('/productos', viewController.getProductos);
 viewsRouter.get('/productos/:pid', viewController.getProductoById);
-viewsRouter.get('/chat', viewController.getChat);
-viewsRouter.get("/carts/:cid", viewController.getCartById);
 viewsRouter.get("/", viewController.getLogin);
 viewsRouter.get("/register", viewController.getRegister);
 viewsRouter.get("/profile", viewController.getProfile);
-viewsRouter.get('/list', viewController.getList);
+viewsRouter.get('/chat', viewController.getChat); 
 viewsRouter.get('/carts', viewController.getCarts);
+viewsRouter.get("/carts/:cid", viewController.getCartById);
+
 
 //GITHUB
 

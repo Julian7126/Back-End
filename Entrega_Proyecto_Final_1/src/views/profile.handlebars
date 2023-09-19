@@ -49,9 +49,9 @@
 })
 .then(r => {
   if (r.ok) {
-    return r.json();  //intenta convertirla a JSON
+    return r.json(); 
   } else {
-    return r.text().then(text => Promise.reject(text));  // Si la respuesta falla, convierte el cuerpo a texto y rechaza la promesa
+    return r.text().then(text => Promise.reject(text));  
   }
 })
 .then(data => {

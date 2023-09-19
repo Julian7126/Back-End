@@ -13,21 +13,20 @@ export default class UserService {
       throw new Error("Invalidas Credenciales");
     }
     
-    // Generar el token de acceso
+  
     const access_token = generateToken(user);
     
     const { email } = user;
     
-    // Asignar rol al usuario
     if (email === "adminCoder@coder.com") {
       user.role = "admin";
     } else {
       user.role = "usuario";
     }
 
-    console.log('User in loginUser service:', user); // Depuración
+    console.log('User in loginUser service:', user); 
 
-    // Devolver el objeto 'user' y el token de acceso
+   
     return { user, access_token }; 
   }
 
