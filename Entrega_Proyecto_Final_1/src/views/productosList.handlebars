@@ -264,6 +264,19 @@ async function fetchWithCookie(url, cookie) {
   return response.json();
 }
 
+ //verificacion si es user o no a travez de un middle
+ document.addEventListener('DOMContentLoaded', (event) => {
+    const userRole = document.querySelector('.user-info p:nth-child(2)').textContent.split(' ')[1];
+    
+    //ocultar o mostrar
+    
+    document.querySelectorAll('.addToCartForm').forEach(form => {
+      if (userRole !== 'user') {
+        form.style.display = 'none';
+      }
+    });
+  });
+
 // Manejo del evento al enviar el formulario para añadir al carrito
 document.querySelectorAll('.addToCartForm').forEach(form => {
   form.addEventListener('submit', async function(event) {
@@ -286,7 +299,7 @@ document.querySelectorAll('.addToCartForm').forEach(form => {
         console.error('Error al agregar al carrito');
       }
     } catch (error) {
-      console.error('Error al comunicarse con el servidor:', error);
+      console.error('Error al comunicarse con el servidor:Q', error);
     }
   });
 });

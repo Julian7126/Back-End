@@ -17,6 +17,7 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
         type :String,
         default: 'user',  
       },
+      ticket: {type: mongoose.Schema.Types.ObjectId, ref: "tickets"},
 }))
 
 export default UserModel
