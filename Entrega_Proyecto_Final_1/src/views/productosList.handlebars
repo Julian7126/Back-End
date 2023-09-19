@@ -186,7 +186,7 @@
     <div class="navbar-content">
       <div class="navbar-links">
         <a href="/chat" class="chat-link">Chat</a>
-        {{#if payload.user}}
+        {{#if user}}
         <a href="/carts" class="cart-link">Carrito</a>
         <a href="/profile" class="profile-link">Profile</a>
         {{/if}}
@@ -194,7 +194,7 @@
     </div>
   </nav>
   <div class="user-info">
-    {{#if payload.user}}
+    {{#if user}}
     <p>Bienvenido, {{user.email}}!</p>
     <p>Rol: {{user.role}}</p>
     <a href="/api/session/logout">Cerrar sesión</a>
@@ -236,18 +236,13 @@
       <button type="submit">Actualizar</button>
     </form>
   </div>
+
+
+
+
+
+
   <script>
-
-
-
-console.log("Valor de user:", {{user}});
-console.log("Valor de docs:", {{docs}});
-console.log("Valor de productId:", {{_id}});
-console.log("Valor de cartId:", {{cartId}});
-
-
-
-
 
     document.getElementById('form').onsubmit = (e) => {
       e.preventDefault();

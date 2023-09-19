@@ -7,24 +7,34 @@ export default class UserService {
     this.dao = dao;
   }
 
+  
   loginUser = async (user) => {
-    const access_token = generateToken(user);                         
-      if (!user || !user.email) {
+    if (!user || !user.email) {
       throw new Error("Invalidas Credenciales");
     }
-      const { email } = user;
-  
-      // Asignar rol
-      if (email === "adminCoder@coder.com") {
-        user.role = "admin";
-      } else {
-        user.role = "usuario";
-      }
+    
+    // Generar el token de acceso
+    const access_token = generateToken(user);
+    
+    const { email } = user;
+    
+    // Asignar rol al usuario
+    if (email === "adminCoder@coder.com") {
+      user.role = "admin";
+    } else {
+      user.role = "usuario";
+    }
 
-      return { user, access_token }; 
+    console.log('User in loginUser service:', user); // Depuración
 
+    // Devolver el objeto 'user' y el token de acceso
+    return { user, access_token }; 
   }
 
+
+
+
+  
   registerUser = async (user) => {
     const registerUserDTO = new RegisterUserDTO(user);
     const registeredUser = await passport.authenticate('register', registerUserDTO);
@@ -42,7 +52,12 @@ export default class UserService {
     return true;
   }
 
+ 
   getCurrentUser = (user) => {
-    return { status: 'success', payload: user };
-  }
+    if (!user) {
+      throw new Error("Usuario no encontrado en la sesión");
+    }
+    return user; 
+  };
+  
 }

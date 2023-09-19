@@ -54,6 +54,7 @@ export const getRegister = (req, res) => {
 };
 
 export const getProfile = (req, res) => {
+  console.log("Usuario de la sesión:", req.session.user); // Añade esto para depurar
   const user = req.session.user;
   res.render("profile", user);
 };

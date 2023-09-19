@@ -41,22 +41,31 @@
 </script>
 
 <script>
-  fetch('/api/session/current', {
-    headers: {
-      'Content-Type': 'application/json',
-      'CoderCookieJulian': cookie
-    }
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data.payload) {
-      document.getElementById('first_name').innerText = data.payload.first_name;
-      document.getElementById('last_name').innerText = data.payload.last_name;
-      document.getElementById('age').innerText = data.payload.age;
-      document.getElementById('email').innerText = data.payload.email;
-      document.getElementById('role').innerText = data.payload.role;
-    }
-  });
+ fetch('/api/session/current', {
+  headers: {
+    'Content-Type': 'application/json',
+    'CoderCookieJulian': cookie
+  }
+})
+.then(r => {
+  if (r.ok) {
+    return r.json();  //intenta convertirla a JSON
+  } else {
+    return r.text().then(text => Promise.reject(text));  // Si la respuesta falla, convierte el cuerpo a texto y rechaza la promesa
+  }
+})
+.then(data => {
+  if (data.payload) {
+    document.getElementById('first_name').innerText = data.payload.first_name;
+    document.getElementById('last_name').innerText = data.payload.last_name;
+    document.getElementById('age').innerText = data.payload.age;
+    document.getElementById('email').innerText = data.payload.email;
+    document.getElementById('role').innerText = data.payload.role;
+  }
+})
+.catch(error => {
+  console.error('Hubo un problema con la operación fetch:', error);
+});
 </script>
 
 <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
