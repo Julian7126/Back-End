@@ -38,6 +38,7 @@
     }
   }
   const cookie = getCookie('CoderCookieJulian');
+  console.log(cookie)
 </script>
 
 <script>
@@ -62,6 +63,7 @@
     document.getElementById('email').innerText = data.payload.email;
     document.getElementById('role').innerText = data.payload.role;
   }
+  console.log(data.payload)
 })
 .catch(error => {
   console.error('Hubo un problema con la operación fetch:', error);

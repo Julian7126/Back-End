@@ -64,7 +64,7 @@ app.use("/api/productos", productosRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/session", sessionRouter);
 app.use("/chat", chatRouter);
-app.use("api/orders",ticketRouter)
+app.use("/api/ticket",ticketRouter)
 app.use("/", viewsRouter);
 
 // Socket.IO

@@ -75,3 +75,34 @@ export const removeAllProductsFromCart = async (req, res) => {
     res.status(500).json({ error: 'Error al eliminar productos del carrito' });
   }
 };
+
+export const getCartDetails = async (req, res) => {
+  const { cid } = req.params;
+  try {
+    const details = await cartService.getCartDetails(cid);
+    if (!details) {
+      return res.status(404).json({ error: 'Detalles del carrito no encontrados' });
+    }
+    res.status(200).json(details);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener los detalles del carrito' });
+  }
+};
+
+export const finalizePurchase = async (req, res) => {
+  const { cid } = req.params;
+
+  try {
+    const { updatedCart, failedProducts } = await cartService.finalizeCartPurchase(cid);
+
+    if (failedProducts.length > 0) {
+      res.status(400).json({ error: 'No se pudieron comprar algunos productos', failedProducts });
+      return;
+    }
+
+    const ticket = await ticketService.createTicket( req.user, cid);;
+    res.status(200).json({ message: 'Compra finalizada con éxito', ticket });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al finalizar la compra' });
+  }
+};

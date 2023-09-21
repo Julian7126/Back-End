@@ -2,16 +2,23 @@
 import productsModel from './models/products.models.js';
 
 export default class ProductsMongo {
-  static async create(productData) {
+  async create(productData) {
     return await productsModel.create(productData);
   }
 
-  static async delete(productId) {
-    return await productsModel.deleteOne({ _id: productId });
+  async delete(productId) {
+    return await productsModel.findByIdAndDelete(productId);
   }
 
-  static async findProductByCode(productCode) {
+  async findProductByCode(productCode) {
     return await productsModel.findOne({ code: productCode });
   }
 
+  async findProductById(productId) {
+    return await productsModel.findById(productId);
+  }
+
+  async update(productId, updatedFields) {
+    return await productsModel.findByIdAndUpdate(productId, updatedFields, { new: true });
+  }
 }

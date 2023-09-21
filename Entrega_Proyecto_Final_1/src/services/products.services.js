@@ -35,4 +35,16 @@ export default class ProductService {
     }
     return true;
   }
+
+  updateExistingProduct = async (productId, updatedFields) => {
+    const existingProduct = await this.dao.findProductById(productId);
+    if (!existingProduct) {
+      throw new Error('Producto no encontrado');
+    }
+    const updatedProduct = await this.dao.update(productId, updatedFields);
+    return updatedProduct;
+  }
+  
 }
+
+

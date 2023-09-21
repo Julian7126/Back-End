@@ -1,3 +1,6 @@
+
+import { productService } from "../services/index.js";
+
 export default class CartService {
   constructor(dao) {
     this.dao = dao;
@@ -8,7 +11,7 @@ export default class CartService {
   }
 
   findCartById = async (cid) => {
-    return await this.dao.findCartById(cid);
+    return await this.dao.getCartById(cid);
   }
 
   addProductToExistingCart = async (cart, pid, quantity) => {
@@ -18,21 +21,73 @@ export default class CartService {
     } else {
       cart.products.push({ products: pid, quantity });
     }
-    return await this.dao.addProductToExistingCart(cart);
+    return await this.dao.updateCart(cart._id, cart);
   }
 
   deleteProductFromExistingCart = async (cart, pid) => {
     cart.products = cart.products.filter(item => item.products.toString() !== pid);
-    return await this.dao.deleteProductFromExistingCart(cart);
+    return await this.dao.updateCart(cart._id, cart);
   }
 
   updateExistingCart = async (cart, products) => {
     cart.products = products;
-    return await this.dao.updateExistingCart(cart);
+    return await this.dao.updateCart(cart._id, cart);
   }
 
   removeAllProducts = async (cart) => {
     cart.products = [];
-    return await this.dao.removeAllProducts(cart);
+    return await this.dao.updateCart(cart._id, cart);
+  }
+
+
+  getCartDetails = async (cartId) => {
+    const cart = await this.getCartById(cartId);
+    if (!cart) {
+      throw new Error('Carrito no encontrado');
+    }
+  
+  
+    const cartDetails = { items: [] };
+  
+  
+    for (const item of cart.products) {
+      // Obtener detalles del producto
+      const productDetails = await productService.findProductById(item.products);
+  
+      cartDetails.items.push({
+        productId: item.products,
+        quantity: item.quantity,
+        price: productDetails.price, 
+      });
+    }
+  
+    return cartDetails;
+  }
+  
+
+  finalizeCartPurchase = async (cartId) => {
+    const cart = await this.getCartById(cartId);
+    const failedProducts = [];
+  
+    for (const item of cart.products) {
+      const product = await productService.findProductById(item.products);
+  
+      if (product.stock < item.quantity) {
+        failedProducts.push(item.products);
+        continue;
+      }
+  
+      product.stock -= item.quantity;
+      await productService.update(product._id, product);
+    }
+  
+    if (failedProducts.length > 0) {
+      cart.products = cart.products.filter(item => !failedProducts.includes(item.products));
+      await this.dao.updateCart(cart._id, cart);
+    }
+  
+    return { updatedCart: cart, failedProducts };
   }
 }
+
+
