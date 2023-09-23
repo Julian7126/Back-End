@@ -115,25 +115,21 @@
       </div>
     </div>
   </nav>
-  <h1>Carritos de Compras</h1>
+
+  <h1>Carrito de Compras</h1>
   <div class="cart-container">
-    {{#each cart}}
-
-    {{log this}}  
-  <div class="cart">
- <h2>Producto </h2>
-    {{#each products}}
-  <div class="product">
-  <h4>Producto</h4>
-  <p>Nombre: {{this.title}}</p>
+    <div class="cart">
+      <h2>Producto</h2>
+      {{#each cart.products}} 
+        <div class="product">
+          <h4>Producto</h4>
+          <p>Nombre: {{this.title}}</p>
+        </div>
+      {{/each}}
+    </div>
   </div>
-{{/each }}
- </div>
-    {{/each}}
-  </div>
-
   <script>
-    // JavaScript Function (sin cambios)
+    
     function deleteProduct(cartId, productId) {
       fetch(`/api/carts/${cartId}/products/${productId}`, {
         method: 'DELETE'
