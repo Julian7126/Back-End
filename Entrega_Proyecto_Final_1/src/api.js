@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import productosRouter from './routes/products.router.js';
@@ -19,7 +18,7 @@ import config from './config/config.js';
 import flash from 'connect-flash';
 import * as chatController from "./controller/chatController.js";
 import ticketRouter from './routes/ticket.router.js';
-
+// import compression from 'express-compression';
 
 const app = express();
 const server = http.createServer(app);
@@ -30,11 +29,12 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
-//express
+// express
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
-//cookieparser
+
+// cookieparser
 app.use(cookieParser());
 app.use(session({
   store: MongoStore.create({
@@ -50,13 +50,12 @@ app.use(session({
   saveUninitialized: true,
 }));
 
+// flash error
+app.use(flash());
 
-//flasherror
-app.use(flash())
-
-//Passport 
-initializePassport()
-app.use(passport.initialize())
+// Passport 
+initializePassport();
+app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
@@ -64,13 +63,24 @@ app.use("/api/productos", productosRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/session", sessionRouter);
 app.use("/chat", chatRouter);
-app.use("/api/ticket",ticketRouter)
+app.use("/api/ticket", ticketRouter);
 app.use("/", viewsRouter);
+
+
+
+// app.use(compression({
+//   brotli: {
+//     enabled: true,
+//     zlib: {
+//     }
+//   }
+// }));
+
+
 
 // Socket.IO
 const runServer = () => {
-  const httpServer = server.listen(config.PORT, () => console.log('Escuchando...'));
-  const io = new Server(httpServer);
+  server.listen(config.PORT, () => console.log('Escuchando...'));
 
   io.on('connection', (socket) => {
     console.log('Cliente conectado');
@@ -83,17 +93,6 @@ const runServer = () => {
   });
 };
 
+runServer();
 
-mongoose.set(`strictQuery`, false);
-mongoose
-  .connect(config.MONGO_URL, {
-    dbName: config.dbName,
-  })
-  .then(() => {
-    console.log("DB conectada");
-    runServer();
-  })
-  .catch(() => {
-    console.log("No se pudo conectar a la base de datos");
-  });
 export { io };

@@ -125,13 +125,15 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) {
-      return parts.pop().split(';').shift();
+ function getCookie(name) {
+      const value = ${document.cookie};
+      const parts = value.split(; ${name}=);
+      if (parts[0].length !== 0) {
+        console.log("part", parts)
+        return parts.pop().split(';').shift();
+      }
     }
-  }
+
 
   const token = getCookie('CoderCookieJulian');
   
