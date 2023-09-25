@@ -1,4 +1,5 @@
-import { messageService } from "../services/index.js";
+import { messageService } from '../services/index.js';
+
 export const getMessages = async (req, res) => {
   try {
     const messages = await messageService.retrieveMessages();
@@ -11,28 +12,10 @@ export const getMessages = async (req, res) => {
 
 export const addMessage = async (data, socket = null, res = null) => {
   try {
-    const { email, message } = data;
-
-    if (!email || !message) {
-      if (socket) {
-        socket.emit('error', 'Faltan datos');
-      }
-      if (res) {
-        res.status(400).send('Faltan datos');
-      }
-      return;
-    }
-
-    // Añadido: verificamos el usuario
-    if (socket && socket.user && socket.user.role !== 'user') {
-      socket.emit('error', 'No tienes permisos para enviar un mensaje.');
-      return;
-    }
-
-    await messageService.createMessage({ email, message }, socket);
+    const savedMessage = await messageService.saveMessage(data);
 
     if (socket) {
-      socket.emit('nuevo_mensaje', { email, message });
+      socket.emit('nuevo_mensaje', savedMessage);
     }
     if (res) {
       res.status(200).send('Mensaje agregado');

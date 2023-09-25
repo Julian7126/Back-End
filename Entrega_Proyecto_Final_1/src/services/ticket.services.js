@@ -14,37 +14,59 @@ export default class TicketService {
     return await TicketModel.findOne({ _id: id });
   };
 
+
+
   createTicket = async (user, cartId) => {
-    if (!cartId || !user) {
-      throw new Error("Información del carrito o del usuario faltante");
-    }
-    
-    // Obtener detalles del carrito para calcular el monto total
-    const cartDetails = await cartService.getCartDetails(cartId);
-
-    // Calcular el monto total del carrito
-    let amount = 0;
-    for (const item of cartDetails.items) {
-      amount += item.price * item.quantity;
-    }
-
-    // Crear el objeto ticket
+  
+    const amount = 100;
+  
     const ticket = {
-      code: null,  // Este campo debería generarse automáticamente según tu modelo de Mongoose
+      code: null,
       purchase_datetime: new Date(),
       amount: amount,
-      purchaser: user.email,
+      purchaser: user ? user.email : 'email@example.com', 
       cartId: cartId,
-      user: user._id,
-      // Otros campos como status, etc.
+      user: user ? user._id : null, 
     };
-
+  
     return await TicketModel.create(ticket);
   };
+  
+  // createTicket = async (user, cartId) => {
+  //   if (!cartId || !user) {
+  //     throw new Error("Información del carrito o del usuario faltante");
+  //   }
+    
+  //   const cartDetails = await cartService.getCartDetails(cartId);
+
+  //   let amount = 0;
+  //   for (const item of cartDetails.items) {
+  //     amount += item.price * item.quantity;
+  //   }
+
+    
+  //   const ticket = {
+  //     code: null, 
+  //     purchase_datetime: new Date(),
+  //     amount: amount,
+  //     purchaser: user.email,
+  //     cartId: cartId,
+  //     user: user._id,
+     
+  //   };
+
+  //   return await TicketModel.create(ticket);
+  // };
 
   updateTicket = async (id, ticketData) => {
     return await TicketModel.updateOne({ _id: id }, { $set: ticketData });
   };
 
-  // Puedes agregar otros métodos según tus necesidades
+  getTicketByCartId = async (cartId) => {
+    return await TicketModel.findOne({ cartId });
+  };
+
+  updateTicketStatus = async (ticketId, status) => {
+    return await TicketModel.updateOne({ _id: ticketId }, { $set: { status } });
+  };
 }

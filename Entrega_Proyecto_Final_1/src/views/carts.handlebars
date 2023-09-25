@@ -116,18 +116,21 @@
     </div>
   </nav>
 
-  <h1>Carrito de Compras</h1>
-  <div class="cart-container">
-    <div class="cart">
-      <h2>Producto</h2>
-      {{#each cart.products}} 
-        <div class="product">
-          <h4>Producto</h4>
-          <p>Nombre: {{this.title}}</p>
-        </div>
-      {{/each}}
-    </div>
+<h1>Carrito de Compras</h1>
+<div class="cart-container">
+  <div class="cart">
+    <h2>Producto</h2>
+    {{cart}} // solo me encuentra esto 
+    {{#each cart.products}}
+      <div class="product-item">
+        <h3>Título: {{products.title}}</h3>
+        <p>Descripción: {{products.description}}</p>
+        <p>Precio: ${{products.price}}</p>
+        <p>Cantidad: {{quantity}}</p>
+      </div>
+    {{/each}}
   </div>
+</div>
   <script>
     
     function deleteProduct(cartId, productId) {

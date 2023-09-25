@@ -1,17 +1,29 @@
-export default class MessageRepository {
+export default class MessageService {
   constructor(dao) {
     this.dao = dao;
   }
 
   async retrieveMessages() {
-    return await this.dao.retrieveMessages();
+    try {
+      return await this.dao.retrieveMessages();
+    } catch (error) {
+      console.error('Error al obtener los mensajes:', error);
+      throw new Error('Error interno del servidor');
+    }
   }
 
-  async createMessage(data, socket = null) {
-    const result = await this.dao.createMessage(data);
-    if (socket) {
-      socket.emit('nuevo_mensaje', result);
+  async saveMessage(data) {
+    const { email, message } = data;
+
+    if (!email || !message) {
+      throw new Error('Faltan datos');
     }
-    return result;
+
+    try {
+      return await this.dao.createMessage(data);
+    } catch (error) {
+      console.error('Error al guardar el mensaje:', error);
+      throw new Error('Error interno del servidor');
+    }
   }
 }

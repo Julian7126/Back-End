@@ -91,6 +91,13 @@ export const getCartDetails = async (req, res) => {
 
 export const finalizePurchase = async (req, res) => {
   const { cid } = req.params;
+  
+  // Validamos que el ticket esté en estado "abierto"
+  const ticket = await ticketService.getTicketByCartId(cid);
+  if (!ticket || ticket.status !== 'abierto') {
+    res.status(400).json({ error: 'Ticket inválido o ya cerrado.' });
+    return;
+  }
 
   try {
     const { updatedCart, failedProducts } = await cartService.finalizeCartPurchase(cid);
@@ -100,8 +107,9 @@ export const finalizePurchase = async (req, res) => {
       return;
     }
 
-    const ticket = await ticketService.createTicket( req.user, cid);;
-    res.status(200).json({ message: 'Compra finalizada con éxito', ticket });
+    // Aquí, en lugar de crear un nuevo ticket, actualizamos el existente.
+    await ticketService.updateTicketStatus(ticket._id, 'finalizado');
+    res.status(200).json({ message: 'Compra finalizada con éxito', updatedCart });
   } catch (err) {
     res.status(500).json({ error: 'Error al finalizar la compra' });
   }

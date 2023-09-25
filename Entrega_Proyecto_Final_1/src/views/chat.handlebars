@@ -124,65 +124,64 @@
   </form>
 
 <script src="/socket.io/socket.io.js"></script>
-<script>
- function getCookie(name) {
-      const value = ${document.cookie};
-      const parts = value.split(; ${name}=);
-      if (parts[0].length !== 0) {
-        console.log("part", parts)
-        return parts.pop().split(';').shift();
+  <script>
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    const cookie = getCookie('CoderCookieJulian');
+
+    fetch('/api/session/current', {
+      headers: {
+        'Content-Type': 'application/json',
+        'CoderCookieJulian': cookie
       }
-    }
+    })
+    .then(r => {
+      if (r.ok) {
+        return r.json(); 
+      } else {
+        return r.text().then(text => Promise.reject(text));  
+      }
+    })
+    .then(data => {
+      const userRole = data.payload.role; // Obtenemos el rol del payload
+      const userEmail = data.payload.email // obetengo el email
+      console.log('User Role:', userRole); // Mostramos el rol en la consola
+      console.log('User email:', userEmail); // Mostramos el email en la consola
 
 
-  const token = getCookie('CoderCookieJulian');
-  
-  fetch('/api/session/current', {
-    headers: {
-      'Content-Type': 'application/json',
-      'CoderCookieJulian': token
-    }
-  })
-  .then(r => {
-    if (r.ok) {
-      return r.json(); 
-    } else {
-      return r.text().then(text => Promise.reject(text));  
-    }
-  })
-  .then(data => {
-    const userRole = data.payload.role;
-    console.log('User Role:', userRole);
+      // Inicializamos la conexión del socket
+      const socket = io();
 
-    const socket = io();
+      if (userRole === 'user') {
+        document.getElementById('chatForm').addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const formData = new FormData(event.target);
+          const message = formData.get('message');
+              
+          socket.emit('nuevo_mensaje', { email: userEmail, message }); 
+        });
+      } else {
+        // Si el rol no es 'user', mostramos una alerta
+        alert('No tienes permisos para enviar un mensaje.');
+      }
 
-    if (userRole === 'user') {
-      document.getElementById('chatForm').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const email = formData.get('email');
-        const message = formData.get('message');
-          
-        socket.emit('nuevo_mensaje', { email, message });
-        event.target.reset();
+      socket.on('nuevo_mensaje', (data) => {
+        const chatList = document.getElementById('chat');
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${data.email}</strong>: ${data.message}`;
+        chatList.appendChild(li);
+        chatList.scrollTop = chatList.scrollHeight;
       });
-    } else {
-      alert('No tienes permisos para enviar un mensaje.');
-    }
 
-    socket.on('nuevo_mensaje', (data) => {
-      const chatList = document.getElementById('chat');
-      const li = document.createElement('li');
-      li.innerHTML = `<strong>${data.email}</strong>: ${data.message}`;
-      chatList.appendChild(li);
-      chatList.scrollTop = chatList.scrollHeight;
+    })
+    .catch(error => {
+      console.error('Hubo un problema con la operación fetch:', error);
     });
-
-  })
-  .catch(error => {
-    console.error('Hubo un problema con la operación fetch:', error);
-  });
-</script>
+  </script>
 
 </body>
 </html>

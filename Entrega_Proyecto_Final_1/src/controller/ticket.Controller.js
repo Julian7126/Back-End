@@ -20,16 +20,28 @@ export const getTicketById = async (request, response) => {
   }
 };
 
+
+
+
 export const createTicket = async (request, response) => {
-    try {
-      const user = request.user;
-      const cartId = request.cookies.cartId;
-      const result = await ticketService.createTicket(user, cartId);
-      response.send({ status: 'success', payload: result });
-    } catch (error) {
-      response.status(400).send({ status: 'error', message: error.message });
-    }
-  };
+  try {
+    const { user, cartId } = request.body; // usar postman 
+    const result = await ticketService.createTicket(user, cartId);
+    response.send({ status: 'success', payload: result });
+  } catch (error) {
+    response.status(400).send({ status: 'error', message: error.message });
+  }
+};
+// export const createTicket = async (request, response) => {
+//     try {
+//       const user = request.user;
+//       const cartId = request.cookies.cartId;
+//       const result = await ticketService.createTicket(user, cartId);
+//       response.send({ status: 'success', payload: result });
+//     } catch (error) {
+//       response.status(400).send({ status: 'error', message: error.message });
+//     }
+//   };
 
 export const resolveTicket = async (request, response) => {
   try {
