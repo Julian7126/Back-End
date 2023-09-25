@@ -1,25 +1,17 @@
 import mongoose from 'mongoose';
-import crypto from 'crypto';
 
 const TicketSchema = new mongoose.Schema({
   _id: {
     type: mongoose.SchemaTypes.ObjectId,
     default: new mongoose.Types.ObjectId(),
   },
-  code: {
-    type: String,
-    unique: true,
-    default: () => crypto.randomBytes(8).toString('hex'),
-  },
-  purchase_datetime: {
-    type: Date,
-    default: Date.now,
-  },
   amount: {
     type: Number,
+    default: "No se establecio el precio"
   },
-  purchaser: {
+  purchaser: { 
     type: String,
+    required: true,
   },
   cartId: {
     type: mongoose.SchemaTypes.ObjectId,
@@ -31,6 +23,7 @@ const TicketSchema = new mongoose.Schema({
   },
   status: {
     type: String,
+    default: "abierto" 
   },
 });
 

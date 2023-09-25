@@ -8,7 +8,12 @@ const productsSchema = new mongoose.Schema({
 });
 
 const cartsSchema = new mongoose.Schema({
-    products: [productsSchema]
+    products: [productsSchema],
+    status: {
+        type: String,
+        enum: ['abierto', 'cerrado'],
+        default: 'abierto'
+      }
 });
 
 mongoose.set('strictQuery', false);

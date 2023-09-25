@@ -1,7 +1,6 @@
 import fs from 'fs';
 
 export default class TicketsFile {
-
   constructor(filename = 'tickets.json') {
     this.filename = filename;
     if (!fs.existsSync(this.filename)) {
@@ -9,24 +8,25 @@ export default class TicketsFile {
     }
   }
 
-  async getTicket() {
+  async find() {
     return await this.get();
   }
 
-  async getTicketById(id) {
+  async findOne(query) {
     const db = await this.get();
-    return db.find(ticket => ticket.id === id);
+    return db.find(ticket => ticket._id === query._id);
   }
 
-  async createTicket(ticket) {
+  async create(ticket) {
     const db = await this.get();
     db.push(ticket);
-    return fs.promises.writeFile(this.filename, JSON.stringify(db));
+    await fs.promises.writeFile(this.filename, JSON.stringify(db));
+    return ticket;
   }
 
-  async updateTicket(id, updatedTicket) {
+  async updateOne(query, updatedTicket) {
     const db = await this.get();
-    const ticketIndex = db.findIndex(ticket => ticket.id === id);
+    const ticketIndex = db.findIndex(ticket => ticket._id === query._id);
     if (ticketIndex !== -1) {
       db[ticketIndex] = { ...db[ticketIndex], ...updatedTicket };
       await fs.promises.writeFile(this.filename, JSON.stringify(db));
@@ -35,8 +35,8 @@ export default class TicketsFile {
     return null;
   }
 
-  get = async () => {
-    return fs.promises.readFile(this.filename, {encoding: 'utf-8'})
-      .then(r => JSON.parse(r));
+  async get() {
+    const content = await fs.promises.readFile(this.filename, { encoding: 'utf-8' });
+    return JSON.parse(content);
   }
 }

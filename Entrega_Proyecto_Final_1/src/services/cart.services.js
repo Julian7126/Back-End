@@ -41,7 +41,7 @@ export default class CartService {
 
 
   getCartDetails = async (cartId) => {
-    const cart = await this.getCartById(cartId);
+    const cart = await this.dao.getCartById(cartId);
     if (!cart) {
       throw new Error('Carrito no encontrado');
     }
@@ -66,9 +66,13 @@ export default class CartService {
   
 
   finalizeCartPurchase = async (cartId) => {
-    const cart = await this.getCartById(cartId);
+    const cart = await this.dao.getCartById(cartId);
+    if (!cart) {
+      throw new Error('Carrito no encontrado');
+    }
+    
     const failedProducts = [];
-  
+
     for (const item of cart.products) {
       const product = await productService.findProductById(item.products);
   
@@ -77,17 +81,20 @@ export default class CartService {
         continue;
       }
   
-      product.stock -= item.quantity;
-      await productService.update(product._id, product);
+      // product.stock -= item.quantity;
+      // await productService.update(product._id, product);
     }
   
     if (failedProducts.length > 0) {
       cart.products = cart.products.filter(item => !failedProducts.includes(item.products));
       await this.dao.updateCart(cart._id, cart);
+    } else {
+      cart.status = 'cerrado';
     }
   
     return { updatedCart: cart, failedProducts };
   }
 }
+
 
 

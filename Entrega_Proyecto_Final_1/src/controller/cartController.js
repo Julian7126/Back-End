@@ -1,4 +1,5 @@
-import { cartService } from "../services/index.js";
+import { cartService, ticketService, productService } from '../services/index.js';
+
 
 export const createCart = async (req, res) => {
   try {
@@ -89,27 +90,26 @@ export const getCartDetails = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
+
 export const finalizePurchase = async (req, res) => {
-  const { cid } = req.params;
-  
-  // Validamos que el ticket esté en estado "abierto"
-  const ticket = await ticketService.getTicketByCartId(cid);
-  if (!ticket || ticket.status !== 'abierto') {
-    res.status(400).json({ error: 'Ticket inválido o ya cerrado.' });
-    return;
-  }
+  const { cid } = req.params; // no se si es mejor mandarlo por http
+  const user = req.user;
+  // const cart = req.body.cart; // por si lo traigo del front , pero es mejor con el http
 
   try {
-    const { updatedCart, failedProducts } = await cartService.finalizeCartPurchase(cid);
-
-    if (failedProducts.length > 0) {
-      res.status(400).json({ error: 'No se pudieron comprar algunos productos', failedProducts });
-      return;
-    }
-
-    // Aquí, en lugar de crear un nuevo ticket, actualizamos el existente.
-    await ticketService.updateTicketStatus(ticket._id, 'finalizado');
-    res.status(200).json({ message: 'Compra finalizada con éxito', updatedCart });
+    const { updatedCart, failedProducts } = await cartService.finalizeCartPurchase(user, cid);
+    
+    res.status(200).json({
+      message: 'Compra procesada',
+      failedProducts,
+      cart: updatedCart.products
+    });
   } catch (err) {
     res.status(500).json({ error: 'Error al finalizar la compra' });
   }

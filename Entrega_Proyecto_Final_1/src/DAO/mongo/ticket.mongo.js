@@ -1,10 +1,20 @@
 import TicketModel from "./models/ticket.models.js"
 
 export default class Ticket {
-    getTicket = async () => { return await TicketModel.find() }
-    getTicketById = async (id) => { return await TicketModel.findOne({ _id: id }) }
-    create= async (ticket) => { return await TicketModel.create(ticket) }
-    update = async (id, ticket) => {
-        return await TicketModel.updateOne({ _id: id }, { $set: ticket })
+    async find() {
+      return await TicketModel.find();
     }
-}
+  
+    async findOne(query) {
+      return await TicketModel.findOne(query);
+    }
+  
+    async create(ticket) {
+      return await TicketModel.create(ticket);
+    }
+  
+    async updateOne(query, ticket) {
+      return await TicketModel.updateOne(query, { $set: ticket });
+    }
+  }
+  
