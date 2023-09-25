@@ -1,37 +1,62 @@
-import UserModel from "../models/user.models.js";
-import { isValidPassword, generateToken } from "../utils.js";
+import passport from "passport";
+import { generateToken } from "../utils.js";
+import RegisterUserDTO from "../DAO/DTO/register-user.dto.js";
 
-
-export const loginUser = async ({ email, password }) => {
-  const user = await UserModel.findOne({ email });
-
-  if (!user || !isValidPassword(user, password)) {
-    throw new Error("Invalid Credentials");
+export default class UserService {
+  constructor(dao) {
+    this.dao = dao;
   }
 
-  if (user.email === "adminCoder@coder.com") {
-    user.role = "admin";
-  } else {
-    user.role = "usuario";
+  
+  loginUser = async (user) => {
+    if (!user || !user.email) {
+      throw new Error("Invalidas Credenciales");
+    }
+    
+  
+    const access_token = generateToken(user);
+    
+    const { email } = user;
+    
+    if (email === "adminCoder@coder.com") {
+      user.role = "admin";
+    } else {
+      user.role = "usuario";
+    }
+
+    console.log('User in loginUser service:', user); 
+
+   
+    return { user, access_token }; 
   }
 
-  const access_token = generateToken(user);
-  return { user, access_token };
-};
 
-export const registerUser = async (user) => {
-  if (!user) {
-    throw new Error("User not found");
+
+
+  
+  registerUser = async (user) => {
+    const registerUserDTO = new RegisterUserDTO(user);
+    const registeredUser = await passport.authenticate('register', registerUserDTO);
+    if (!registeredUser) {
+      throw new Error("Could not register user");
+    }
+
+    const access_token = generateToken(registeredUser);
+    return { user: registeredUser, access_token }; 
   }
 
-  const access_token = generateToken(user);
-  return { user, access_token };
-};
 
-export const logoutUser = () => {
-  return true;
-};
 
-export const getCurrentUser = (user) => {
-  return { status: 'success', payload: user };
-};
+  logoutUser = () => {
+    return true;
+  }
+
+ 
+  getCurrentUser = (user) => {
+    if (!user) {
+      throw new Error("Usuario no encontrado en la sesión");
+    }
+    return user; 
+  };
+  
+}

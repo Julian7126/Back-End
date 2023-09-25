@@ -7,8 +7,9 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
     last_name:String,
     age:Number,
     email: {
-        type :String,
+        type: String,
         unique: true,
+        required: true,
     },
     cartId: { type: mongoose.Schema.Types.ObjectId, ref: "carts" },
     password: String,
@@ -16,6 +17,7 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
         type :String,
         default: 'user',  
       },
+      ticket: {type: mongoose.Schema.Types.ObjectId, ref: "tickets"},
 }))
 
 export default UserModel

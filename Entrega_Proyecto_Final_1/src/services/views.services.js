@@ -1,17 +1,24 @@
 import mongoose from 'mongoose';
-import productsModel from "../models/products.models.js";
-import cartsModel from "../models/carts.models.js"
-import messagesModel from "../models/messages.model.js";  
-
-
-
+import productsModel from "../DAO/mongo/models/products.models.js";
+import cartsModel from "../DAO/mongo/models/carts.models.js"
+import messagesModel from "../DAO/mongo/models/messages.model.js";  
 
 
 
 export const getProductos = async () => {
-    return await productsModel.find().lean().exec();
-  };
-  
+  try {
+    const products = await productsModel.find().lean().exec();
+    if (!products || products.length === 0) {
+      console.warn("No se encontraron productos en la base de datos.");
+    }
+    return products;
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+    throw error;
+  }
+};
+
+
 export const getList = async (request) => {
     let page = parseInt(request.query?.page || 1);
     let limit = parseInt(request.query?.limit || 10);
@@ -58,7 +65,7 @@ export const getList = async (request) => {
       prevLink,
       nextLink
     };
-  };
+  };                  
   
   export const getProductoById = async (id) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {

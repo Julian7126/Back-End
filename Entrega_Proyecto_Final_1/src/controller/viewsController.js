@@ -1,14 +1,21 @@
 import * as viewsService from '../services/views.services.js';
 
 export const getProductos = async (req, res) => {
-  const products = await viewsService.getProductos();
-  res.render('home', { products });
+  try {
+    const products = await viewsService.getProductos();
+    console.log("Productos obtenidos:", products); 
+    res.render('home', { products });
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+    res.status(500).send("Error al obtener productos");
+  }
 };
 
 export const getList = async (req, res) => {
-    const result = await viewsService.getList(req.query);
-    res.render('productosList', { ...result });
-  };
+  const result = await viewsService.getList(req.query);
+  const user = req.session.user;
+  res.render('productosList', { ...result, user });
+};
 
 export const getProductoById = async (req, res) => {
   const product = await viewsService.getProductoById(req.params.pid);
@@ -21,7 +28,8 @@ export const getProductoById = async (req, res) => {
 
 export const getChat = async (req, res) => {
   const messages = await viewsService.getChat();
-  res.render('chat', { messages });
+  const user = req.session.user;
+  res.render('chat', { messages , user });
 };
 
 export const getCarts = async (req, res) => {
@@ -31,8 +39,10 @@ export const getCarts = async (req, res) => {
 
 export const getCartById = async (req, res) => {
   const cart = await viewsService.getCartById(req.params.cid);
+  const user = req.session.user;
   if (cart) {
-    res.render('carts', { cart: cart });
+    const cartJSON = JSON.stringify(cart); 
+    res.render('carts', { cart: cartJSON, user });
   } else {
     res.status(404).send(`Carrito no encontrado`);
   }
@@ -48,6 +58,7 @@ export const getRegister = (req, res) => {
 };
 
 export const getProfile = (req, res) => {
+  console.log("Usuario de la sesión:", req.session.user); // Añade esto para depurar
   const user = req.session.user;
   res.render("profile", user);
 };

@@ -1,8 +1,8 @@
-import * as chatService from '../services/chat.services.js';
+import { messageService } from '../services/index.js';
 
 export const getMessages = async (req, res) => {
   try {
-    const messages = await chatService.retrieveMessages();
+    const messages = await messageService.retrieveMessages();
     res.render('chat', { messages });
   } catch (error) {
     console.error('Error al obtener los mensajes:', error);
@@ -12,22 +12,10 @@ export const getMessages = async (req, res) => {
 
 export const addMessage = async (data, socket = null, res = null) => {
   try {
-    const { email, message } = data;
-
-    if (!email || !message) {
-      if (socket) {
-        socket.emit('error', 'Faltan datos');
-      }
-      if (res) {
-        res.status(400).send('Faltan datos');
-      }
-      return;
-    }
-
-    await chatService.createMessage({ email, message }, socket);
+    const savedMessage = await messageService.saveMessage(data);
 
     if (socket) {
-      socket.emit('nuevo_mensaje', { email, message });
+      socket.emit('nuevo_mensaje', savedMessage);
     }
     if (res) {
       res.status(200).send('Mensaje agregado');

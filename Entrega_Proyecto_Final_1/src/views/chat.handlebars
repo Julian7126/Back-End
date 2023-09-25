@@ -103,11 +103,10 @@
   </style>
 </head>
 <body>
-   <nav class="navbar">
+  <nav class="navbar">
     <div class="navbar-content">
       <div class="navbar-links">
-        <a href="/" class="home-link"> HOME </a>
-    
+        <a href="/list" class="home-link"> HOME </a>
       </div>
     </div>
   </nav>
@@ -119,32 +118,70 @@
   </ul>
 
   <form id="chatForm">
-    <input type="text" name="email" placeholder="Tu correo electrónico">
+    <input type="hidden" name="email" value="{{user.email}}">
     <input type="text" name="message" placeholder="Mensaje">
     <button type="submit">Enviar</button>
   </form>
 
-  <script src="/socket.io/socket.io.js"></script>
+<script src="/socket.io/socket.io.js"></script>
   <script>
-    const socket = io();
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
-    document.getElementById('chatForm').addEventListener('submit', (event) => {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const email = formData.get('email');
-      const user = formData.get('user');
-      const message = formData.get('message');
-      socket.emit('nuevo_mensaje', { email, user, message });
-      event.target.reset();
-    });
+    const cookie = getCookie('CoderCookieJulian');
 
-    socket.on('nuevo_mensaje', (data) => {
-      const chatList = document.getElementById('chat');
-      const li = document.createElement('li');
-      li.innerHTML = `<strong>${data.email}</strong> (<em>${data.user}</em>): ${data.message}`;
-      chatList.appendChild(li);
-      chatList.scrollTop = chatList.scrollHeight;
+    fetch('/api/session/current', {
+      headers: {
+        'Content-Type': 'application/json',
+        'CoderCookieJulian': cookie
+      }
+    })
+    .then(r => {
+      if (r.ok) {
+        return r.json(); 
+      } else {
+        return r.text().then(text => Promise.reject(text));  
+      }
+    })
+    .then(data => {
+      const userRole = data.payload.role; // Obtenemos el rol del payload
+      const userEmail = data.payload.email // obetengo el email
+      console.log('User Role:', userRole); // Mostramos el rol en la consola
+      console.log('User email:', userEmail); // Mostramos el email en la consola
+
+
+      // Inicializamos la conexión del socket
+      const socket = io();
+
+      if (userRole === 'user') {
+        document.getElementById('chatForm').addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const formData = new FormData(event.target);
+          const message = formData.get('message');
+              
+          socket.emit('nuevo_mensaje', { email: userEmail, message }); 
+        });
+      } else {
+        // Si el rol no es 'user', mostramos una alerta
+        alert('No tienes permisos para enviar un mensaje.');
+      }
+
+      socket.on('nuevo_mensaje', (data) => {
+        const chatList = document.getElementById('chat');
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${data.email}</strong>: ${data.message}`;
+        chatList.appendChild(li);
+        chatList.scrollTop = chatList.scrollHeight;
+      });
+
+    })
+    .catch(error => {
+      console.error('Hubo un problema con la operación fetch:', error);
     });
   </script>
+
 </body>
 </html>
