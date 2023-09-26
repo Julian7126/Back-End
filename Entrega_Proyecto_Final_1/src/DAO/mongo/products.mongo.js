@@ -20,5 +20,7 @@ export default class ProductsMongo {
 
   async update(productId, updatedFields) {
     return await productsModel.findByIdAndUpdate(productId, updatedFields, { new: true });
+
   }
+
 }

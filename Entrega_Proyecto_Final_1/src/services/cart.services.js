@@ -65,26 +65,23 @@ export default class CartService {
   }
   
 
-  finalizeCartPurchase = async (cartId) => {
+  finalizeCartPurchase = async (user , cartId) => {
     const cart = await this.dao.getCartById(cartId);
+    
     if (!cart) {
       throw new Error('Carrito no encontrado');
     }
     
     const failedProducts = [];
-
+    
     for (const item of cart.products) {
       const product = await productService.findProductById(item.products);
-  
       if (product.stock < item.quantity) {
         failedProducts.push(item.products);
         continue;
       }
-  
-      // product.stock -= item.quantity;
-      // await productService.update(product._id, product);
     }
-  
+    
     if (failedProducts.length > 0) {
       cart.products = cart.products.filter(item => !failedProducts.includes(item.products));
       await this.dao.updateCart(cart._id, cart);
@@ -95,6 +92,5 @@ export default class CartService {
     return { updatedCart: cart, failedProducts };
   }
 }
-
 
 

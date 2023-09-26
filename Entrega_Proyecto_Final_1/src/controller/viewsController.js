@@ -41,10 +41,11 @@ export const getCartById = async (req, res) => {
   const cart = await viewsService.getCartById(req.params.cid);
   const user = req.session.user;
   if (cart) {
-    const cartJSON = JSON.stringify(cart); 
-    res.render('carts', { cart: cartJSON, user });
+
+    console.log(cart)
+    res.render('carts', { cart: cart.toObject(), user });
   } else {
-    res.status(404).send(`Carrito no encontrado`);
+    res.status(404).send("Carrito no encontrado");
   }
 };
 

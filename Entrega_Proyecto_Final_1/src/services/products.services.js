@@ -44,6 +44,16 @@ export default class ProductService {
     const updatedProduct = await this.dao.update(productId, updatedFields);
     return updatedProduct;
   }
+
+  findProductById = async (productId) => {
+    const product = await this.dao.findProductById(productId);
+    if (!product) {
+      throw new Error('Producto no encontrado');
+    }
+    return product;
+  }
+
+
   
 }
 

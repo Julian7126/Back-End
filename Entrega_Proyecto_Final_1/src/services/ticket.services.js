@@ -44,29 +44,3 @@ export default class TicketService {
   }
 }
 
-
-// createTicket = async (user, cartId) => {
-//   if (!cartId || !user) {
-//     throw new Error("Información del carrito o del usuario faltante");
-//   }
-  
-//   const cartDetails = await cartService.getCartDetails(cartId);
-
-//   let amount = 0;
-//   for (const item of cartDetails.items) {
-//     amount += item.price * item.quantity;
-//   }
-
-  
-//   const ticket = {
-//     code: null, 
-//     purchase_datetime: new Date(),
-//     amount: amount,
-//     purchaser: user.email,
-//     cartId: cartId,
-//     user: user._id,
-   
-//   };
-
-//   return await TicketModel.create(ticket);
-// };

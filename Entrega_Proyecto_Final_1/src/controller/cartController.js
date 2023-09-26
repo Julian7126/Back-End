@@ -93,22 +93,21 @@ export const getCartDetails = async (req, res) => {
 
 
 
-
-
-
-
 export const finalizePurchase = async (req, res) => {
-  const { cid } = req.params; // no se si es mejor mandarlo por http
+  const { cid } = req.params;
   const user = req.user;
-  // const cart = req.body.cart; // por si lo traigo del front , pero es mejor con el http
 
   try {
     const { updatedCart, failedProducts } = await cartService.finalizeCartPurchase(user, cid);
+
+
+    const newTicket = await ticketService.createTicket(user, cid);
     
     res.status(200).json({
       message: 'Compra procesada',
       failedProducts,
-      cart: updatedCart.products
+      cart: updatedCart.products,
+      ticket: newTicket,
     });
   } catch (err) {
     res.status(500).json({ error: 'Error al finalizar la compra' });
