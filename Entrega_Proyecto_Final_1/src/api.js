@@ -18,7 +18,8 @@ import config from './config/config.js';
 import flash from 'connect-flash';
 import * as chatController from "./controller/chatController.js";
 import ticketRouter from './routes/ticket.router.js';
-// import compression from 'express-compression';
+import compression from 'express-compression';
+import errorHandle from "./middleware/error.js"
 
 const app = express();
 const server = http.createServer(app);
@@ -52,6 +53,8 @@ app.use(session({
 
 // flash error
 app.use(flash());
+//custom error
+app.use(errorHandle)
 
 // Passport 
 initializePassport();
@@ -68,13 +71,13 @@ app.use("/", viewsRouter);
 
 
 
-// app.use(compression({
-//   brotli: {
-//     enabled: true,
-//     zlib: {
-//     }
-//   }
-// }));
+app.use(compression({
+  brotli: {
+    enabled: true,
+    zlib: {
+    }
+  }
+}));
 
 
 

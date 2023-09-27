@@ -63,3 +63,16 @@ export const getProfile = (req, res) => {
   const user = req.session.user;
   res.render("profile", user);
 };
+
+
+//MOCK
+export const getMockProductos = async (req, res) => {
+  try {
+    const productsMock = await viewsService.getMockProductos();
+    console.log("Productos obtenidos del Mock:", productsMock);
+    res.render('mock', { products: productsMock });
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+    res.status(500).send("Error al obtener productos");
+  }
+};

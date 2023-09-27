@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 import productsModel from "../DAO/mongo/models/products.models.js";
 import cartsModel from "../DAO/mongo/models/carts.models.js"
-import messagesModel from "../DAO/mongo/models/messages.model.js";  
+import messagesModel from "../DAO/mongo/models/messages.model.js"; 
+import { generateMock } from "../utils.js"
 
 
 
@@ -87,4 +88,12 @@ export const getList = async (request) => {
       return null;
     }
     return await cartsModel.findById(id).populate('products.products').exec();
+  };
+
+//no se si guardar en mongo 
+  export const getMockProductos = async () => {
+   
+    const mockData = generateMock();
+    
+    return mockData;
   };

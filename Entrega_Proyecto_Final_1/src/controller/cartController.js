@@ -9,20 +9,20 @@ export const createCart = async (req, res) => {
     res.status(500).json({ error: 'Error al crear el carrito' });
   }
 };
-
 export const addProductToCart = async (req, res) => {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
 
   try {
     const cart = await cartService.findCartById(cid);
-    if (!cart) {
-      return res.status(404).json({ error: 'Carrito no encontrado' });
-    }
-
     const updatedCart = await cartService.addProductToExistingCart(cart, pid, quantity);
     res.status(200).json(updatedCart);
   } catch (err) {
+    if (err instanceof CustomError) {
+      if (err.code === EErrors.CART_NOT_FOUND || err.code === EErrors.PRODUCT_NOT_FOUND) {
+        return res.status(404).json({ error: 'Carrito o producto no encontrado' });
+      }
+    }
     res.status(500).json({ error: 'Error al añadir producto al carrito' });
   }
 };
@@ -99,8 +99,6 @@ export const finalizePurchase = async (req, res) => {
 
   try {
     const { updatedCart, failedProducts } = await cartService.finalizeCartPurchase(user, cid);
-
-
     const newTicket = await ticketService.createTicket(user, cid);
     
     res.status(200).json({
@@ -110,6 +108,9 @@ export const finalizePurchase = async (req, res) => {
       ticket: newTicket,
     });
   } catch (err) {
+    if (err instanceof CustomError && err.code === EErrors.CART_FINALIZATION_FAILED) {
+      return res.status(400).json({ error: 'Error al finalizar la compra' });
+    }
     res.status(500).json({ error: 'Error al finalizar la compra' });
   }
 };

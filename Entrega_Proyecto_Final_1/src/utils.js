@@ -3,6 +3,8 @@ import { dirname } from 'path'
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 import config from './config/config.js';
+import { faker } from "@faker-js/faker/locale/es";
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -81,6 +83,34 @@ export const authorization = role => {
     }
 
 }
+
+
+
+
+//MOCK
+export const generateMock = () => {
+    const numOfProducts = faker.datatype.number({ max: 100 });
+    const products = [];
+
+    for (let i = 0; i < numOfProducts; i++) {
+        products.push(generateProduct());
+    }
+    
+    return products;
+};
+
+const generateProduct = () => {
+    return {
+        title: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        price: parseFloat(faker.commerce.price()),
+        thumbnail: faker.image.url(),
+        code: faker.number.binary(255),
+        stock: faker.number.int({ max: 100 }),
+    };
+};
+
+
 
 
 export default __dirname

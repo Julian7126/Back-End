@@ -23,7 +23,7 @@ export default class CartService {
     }
     return await this.dao.updateCart(cart._id, cart);
   }
-
+  
   deleteProductFromExistingCart = async (cart, pid) => {
     cart.products = cart.products.filter(item => item.products.toString() !== pid);
     return await this.dao.updateCart(cart._id, cart);

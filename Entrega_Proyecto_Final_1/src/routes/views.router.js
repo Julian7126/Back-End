@@ -14,6 +14,7 @@ viewsRouter.get("/profile", viewController.getProfile);
 viewsRouter.get('/chat', viewController.getChat); 
 viewsRouter.get('/carts', viewController.getCarts);
 viewsRouter.get("/carts/:cid", viewController.getCartById);
+viewsRouter.get("/mockingproducts", viewController.getMockProductos);
 
 
 //GITHUB

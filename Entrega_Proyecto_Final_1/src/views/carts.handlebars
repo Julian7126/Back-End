@@ -4,104 +4,147 @@
   <title>Carritos de Compras</title>
  <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #222222;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
+  font-family: Arial, sans-serif;
+  background-color: #222222;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
 
-    .cart-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+.cart-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-    .cart {
-      background-color: #333333;
-      color: #ffffff;
-      border: 2px solid #ff9900;
-      border-radius: 5px;
-      margin: 10px;
-      padding: 20px;
-      width: 300px;
-      text-align: center;
-    }
+.cart {
+  background-color: #333333;
+  color: #ffffff;
+  border: 2px solid #ff9900;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  position: relative;
+}
 
-    .cart h2 {
-      font-size: 1.5rem;
-      margin-bottom: 10px;
-      color: #ff9900; 
-    }
+.cart h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #ff9900;
+}
 
-    .product {
-      border-bottom: 1px solid #ff9900; 
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
+.product {
+  border-bottom: 1px solid #ff9900;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
 
-    .product h4 {
-      font-size: 1rem;
-      margin-bottom: 5px;
-    }
+.product h4 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
 
-    .product-name {
-      font-weight: bold;
-    }
+.product-name {
+  font-weight: bold;
+}
 
-    .product-delete {
-      background-color: #ff9900; 
-      color: #ffffff;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
+.product-delete {
+  background-color: #ff9900;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
 
-    .product-delete:hover {
-      background-color: #dd7700;
-    }
+.product-delete:hover {
+  background-color: #dd7700;
+}
 
-       
-  .navbar {
-    background-color: #333333;
-    color: white;
-    padding: 10px 0;
- 
-  }
+.navbar {
+  background-color: #333333;
+  color: white;
+  padding: 10px 0;
+}
 
-  .navbar-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
 
-  .navbar-links {
-    display: flex;
-    gap: 20px;
-    text-decoration: none;
+.navbar-links {
+  display: flex;
+  gap: 20px;
+}
 
-  }
+.cart-link, .chat-link {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
 
-  
-  .cart-link{
-     color: white;
-    text-decoration: none;
-    font-size: 14px;
+.checkout-button {
+  background-color: #ff9900;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: #ffffff;
+  cursor: pointer;
+}
 
-  }
-  .chat-link {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-  }
+.checkout-button:hover {
+  background-color: #dd7700;
+}
+
+/* Nuevo CSS para efectos del ticket */
+#ticket-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+#ticket-details {
+  background-color: #333333;
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid #ff9900;
+  position: relative;
+}
+
+.close-ticket {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  background-color: #ff9900;
+  border: none;
+  border-radius: 50%;
+  padding: 5px 10px;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.close-ticket:hover {
+  background-color: #dd7700;
+}
+
   </style>
 </head>
 <body>
@@ -115,25 +158,115 @@
       </div>
     </div>
   </nav>
-
 <h1>Carrito de Compras</h1>
 <div class="cart-container">
   <div class="cart">
     <h2>Producto</h2>
-    {{cart}} // solo me encuentra esto 
+    {{cart}}
     {{#each cart.products}}
       <div class="product-item">
-        <h3>Título: {{products.title}}</h3>
-        <p>Descripción: {{products.description}}</p>
-        <p>Precio: ${{products.price}}</p>
-        <p>Cantidad: {{quantity}}</p>
+        <h3>Título: {{this.title}}</h3>
+        <p>Descripción: {{this.description}}</p>
+        <p>Precio: ${{this.price}}</p>
+        <p>Cantidad: {{this.quantity}}</p>
+        <button onclick="deleteProduct({{this.id}})">Eliminar</button>
       </div>
     {{/each}}
+    <button id="checkout-button">Finalizar Compra</button>
+    <div id="ticket-container" style="display:none;">
+      <button class="close-ticket" onclick="closeTicket(cartId, productId)" >X</button>
+      <h2>Ticket de Compra</h2>
+      <div id="ticket-details"></div>
+    </div>
   </div>
 </div>
+
   <script>
-    
-    function deleteProduct(cartId, productId) {
+
+
+ let cartId;
+
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+const cookie = getCookie('CoderCookieJulian');
+
+if (cookie) {
+  fetch('/api/session/current', {
+    headers: {
+      'Content-Type': 'application/json',
+      'CoderCookieJulian': cookie
+    }
+  })
+  .then(r => {
+    if (r.ok) {
+      return r.json();
+    } else {
+      return r.text().then(text => Promise.reject(text));
+    }
+  })
+  .then(data => {
+    if (data.payload) {
+      cartId = data.payload.cartId;
+      console.log('Cart ID obtenido:', cartId);
+    }
+  })
+  .catch(error => {
+    console.error('Hubo un problema con la operación fetch:', error);
+  });
+}
+
+async function finalizePurchase() {
+    try {
+      const response = await fetch(`/api/carts/${cartId}/purchase`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${cookie}`
+        }
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        const ticketContainer = document.getElementById('ticket-container');
+        const ticketDetails = document.getElementById('ticket-details');
+  
+        let ticketInfo = `
+          <p>ID de Ticket: ${data.ticket.id}</p>
+          <p>Productos: </p>
+          <ul>
+        `;
+  
+        data.cart.forEach(product => {
+          ticketInfo += `<li>${product.title} - ${product.quantity} unidades - $${product.price}</li>`;
+        });
+  
+        ticketInfo += '</ul>';
+        ticketDetails.innerHTML = ticketInfo;
+        ticketContainer.style.display = 'block';
+      } else {
+        console.error('Error al finalizar la compra');
+      }
+    } catch (error) {
+      console.error('Hubo un error en la finalización de la compra:', error);
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const checkoutButton = document.getElementById('checkout-button');
+  
+    if (checkoutButton) {
+      checkoutButton.addEventListener('click', finalizePurchase);
+    }
+  });
+
+
+    function deleteProduct(productId) {
+        console.log(`Intentando eliminar producto ${productId} del carrito ${cartId}`);
       fetch(`/api/carts/${cartId}/products/${productId}`, {
         method: 'DELETE'
       }).then(() => {
