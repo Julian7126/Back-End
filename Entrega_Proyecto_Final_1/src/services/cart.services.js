@@ -1,5 +1,5 @@
 
-import { productService } from "../services/index.js";
+import { productService, ticketService } from "../services/index.js";
 
 export default class CartService {
   constructor(dao) {
@@ -65,32 +65,37 @@ export default class CartService {
   }
   
 
-  finalizeCartPurchase = async (user , cartId) => {
-    const cart = await this.dao.getCartById(cartId);
-    
-    if (!cart) {
-      throw new Error('Carrito no encontrado');
-    }
-    
-    const failedProducts = [];
-    
-    for (const item of cart.products) {
-      const product = await productService.findProductById(item.products);
-      if (product.stock < item.quantity) {
-        failedProducts.push(item.products);
-        continue;
-      }
-    }
-    
-    if (failedProducts.length > 0) {
-      cart.products = cart.products.filter(item => !failedProducts.includes(item.products));
-      await this.dao.updateCart(cart._id, cart);
-    } else {
-      cart.status = 'cerrado';
-    }
-  
-    return { updatedCart: cart, failedProducts };
+finalizeCartPurchase = async (user, cartId) => {
+  const cart = await this.dao.getCartById(cartId);
+
+  if (!cart) {
+    throw new Error('Carrito no encontrado');
   }
+
+  const failedProducts = [];
+
+  for (const item of cart.products) {
+    const product = await productService.findProductById(item.products);
+    if (product.stock < item.quantity) {
+      const errorMessage = `Quieres comprar ${item.quantity} productos y solo tenemos ${product.stock} en stock.`;
+      failedProducts.push({
+        productSearch: item.products,
+        message: errorMessage
+      });
+      continue;
+    }
+  }
+
+  let newTicket = null;
+
+  if (failedProducts.length > 0) {
+    cart.products = cart.products.filter(item => !failedProducts.map(fp => fp.productSearch).includes(item.products));
+    await this.dao.updateCart(cart._id, cart);
+  } else {
+    cart.status = 'cerrado';
+    newTicket = await ticketService.createTicket(user, cartId);
+  }
+
+  return { updatedCart: cart, failedProducts, newTicket };
+ };
 }
-
-

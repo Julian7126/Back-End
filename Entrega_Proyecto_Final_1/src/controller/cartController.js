@@ -98,8 +98,8 @@ export const finalizePurchase = async (req, res) => {
   const user = req.user;
 
   try {
-    const { updatedCart, failedProducts } = await cartService.finalizeCartPurchase(user, cid);
-    const newTicket = await ticketService.createTicket(user, cid);
+    const { updatedCart, failedProducts, newTicket } = await cartService.finalizeCartPurchase(user, cid);
+   
     
     res.status(200).json({
       message: 'Compra procesada',
