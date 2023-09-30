@@ -83,6 +83,9 @@ finalizeCartPurchase = async (user, cartId) => {
         message: errorMessage
       });
       continue;
+     }else {
+      await productService.updateProductStock(item.products, product.stock - item.quantity);
+      
     }
   }
 

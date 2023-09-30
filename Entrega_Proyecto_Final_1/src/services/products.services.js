@@ -36,14 +36,20 @@ export default class ProductService {
     return true;
   }
 
-  updateExistingProduct = async (productId, updatedFields) => {
+  updateProductStock = async (productId, newStock) => {
     const existingProduct = await this.dao.findProductById(productId);
     if (!existingProduct) {
       throw new Error('Producto no encontrado');
     }
-    const updatedProduct = await this.dao.update(productId, updatedFields);
+                                           
+    const updatedProduct = await this.dao.update(productId, { stock: newStock });
+  
+    if (!updatedProduct) {
+      throw new Error('Error al actualizar el stock del producto');
+    }
+  
     return updatedProduct;
-  }
+  };
 
   findProductById = async (productId) => {
     const product = await this.dao.findProductById(productId);
@@ -52,6 +58,12 @@ export default class ProductService {
     }
     return product;
   }
+
+
+
+
+
+  
 
 
   
