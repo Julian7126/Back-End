@@ -17,4 +17,4 @@ if (options.persistence) {
   dotenv.config({ path: envPath });
 }
 
-import '../src/api.js';  // reemplaza con el nombre real de tu archivo principal
+import '../src/api.js'; 
