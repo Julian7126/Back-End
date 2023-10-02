@@ -17,4 +17,8 @@ if (options.persistence) {
   dotenv.config({ path: envPath });
 }
 
+<<<<<<< HEAD
 import '../src/api.js';
+=======
+import '../src/api.js'; 
+>>>>>>> 24439afc0c14b942388752dd0c3f6d9fde610308
