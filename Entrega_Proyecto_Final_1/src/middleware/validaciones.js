@@ -1,5 +1,5 @@
-import CustomError from '../services/error/custom_error';
-import EErrors from '../services/error/enums';
+import CustomError from '../services/error/custom_error.js';
+import EErrors from '../services/error/enums.js';
 
 export const isAdmin = async (req, res, next) => {
   const { role } = req.user;
