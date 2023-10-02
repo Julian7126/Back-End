@@ -53,8 +53,6 @@ app.use(session({
 
 // flash error
 app.use(flash());
-//custom error
-app.use(errorHandle)
 
 // Passport 
 initializePassport();
@@ -69,6 +67,8 @@ app.use("/chat", chatRouter);
 app.use("/api/ticket", ticketRouter);
 app.use("/", viewsRouter);
 
+//custom error
+app.use(errorHandle)
 
 
 app.use(compression({

@@ -1,12 +1,12 @@
-import { cartService, ticketService, productService } from '../services/index.js';
+import { cartService } from '../services/index.js';
 
 
-export const createCart = async (req, res) => {
+export const createCart = async (req, res, next) => {
   try {
     const newCart = await cartService.createNewCart();
     res.status(201).json(newCart);
   } catch (err) {
-    res.status(500).json({ error: 'Error al crear el carrito' });
+    next(err)
   }
 };
 export const addProductToCart = async (req, res) => {
@@ -23,12 +23,12 @@ export const addProductToCart = async (req, res) => {
         return res.status(404).json({ error: 'Carrito o producto no encontrado' });
       }
     }
-    res.status(500).json({ error: 'Error al añadir producto al carrito' });
+    next(err)
   }
 };
 
 
-export const deleteProductFromCart = async (req, res) => {
+export const deleteProductFromCart = async (req, res, next) => {
   const { cid, pid } = req.params;
 
   try {
@@ -40,11 +40,11 @@ export const deleteProductFromCart = async (req, res) => {
     const updatedCart = await cartService.deleteProductFromExistingCart(cart, pid);
     res.status(200).json({ message: 'Producto eliminado del carrito', updatedCart });
   } catch (err) {
-    res.status(500).json({ error: 'Error al eliminar producto del carrito' });
+    next(err)
   }
 };
 
-export const updateCart = async (req, res) => {
+export const updateCart = async (req, res, next) => {
   const { cid } = req.params;
   const { products } = req.body;
 
@@ -57,11 +57,11 @@ export const updateCart = async (req, res) => {
     const updatedCart = await cartService.updateExistingCart(cart, products);
     res.status(200).json(updatedCart);
   } catch (err) {
-    res.status(500).json({ error: 'Error al actualizar el carrito' });
+   next(err)
   }
 };
 
-export const removeAllProductsFromCart = async (req, res) => {
+export const removeAllProductsFromCart = async (req, res, next) => {
   const { cid } = req.params;
 
   try {
@@ -73,11 +73,11 @@ export const removeAllProductsFromCart = async (req, res) => {
     const updatedCart = await cartService.removeAllProducts(cart);
     res.status(200).json({ message: 'Todos los productos han sido eliminados', updatedCart });
   } catch (err) {
-    res.status(500).json({ error: 'Error al eliminar productos del carrito' });
+    next(err)
   }
 };
 
-export const getCartDetails = async (req, res) => {
+export const getCartDetails = async (req, res, next) => {
   const { cid } = req.params;
   try {
     const details = await cartService.getCartDetails(cid);
@@ -86,14 +86,14 @@ export const getCartDetails = async (req, res) => {
     }
     res.status(200).json(details);
   } catch (err) {
-    res.status(500).json({ error: 'Error al obtener los detalles del carrito' });
+    next(err)
   }
 };
 
 
 
 
-export const finalizePurchase = async (req, res) => {
+export const finalizePurchase = async (req, res, next) => {
   const { cid } = req.params;
   const user = req.user;
 
@@ -111,6 +111,6 @@ export const finalizePurchase = async (req, res) => {
     if (err instanceof CustomError && err.code === EErrors.CART_FINALIZATION_FAILED) {
       return res.status(400).json({ error: 'Error al finalizar la compra' });
     }
-    res.status(500).json({ error: 'Error al finalizar la compra' });
+    next(err)
   }
 };

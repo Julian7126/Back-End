@@ -2,7 +2,7 @@ import { sessionService } from "../services/index.js";
 import config from "../config/config.js";
 
 
-export const login = async (request, response) => {
+export const login = async (request, response , next) => {
   try {
     const { user, access_token } = await sessionService.loginUser(request.user);
     // console.log("user payload", user.payload)
@@ -16,40 +16,40 @@ export const login = async (request, response) => {
     
     // Redirigir al usuario
     return response.redirect("/list");
-  } catch (error) {
-    return response.status(400).send(error.message);
+  } catch (err) {
+    next(err)
   }
 };
 
 
-export const register = async (request, response) => {
+export const register = async (request, response, next) => {
   try {
     const { user, access_token } = await sessionService.registerUser(request.body);  
     response.cookie(config.PRIVATE_KEY_COOKIE, access_token, { maxAge: 24 * 60 * 60 * 1000 });
     return response.redirect("/");
-  } catch (error) {
-    return response.status(400).send(error.message);
+  } catch (err) {
+    next(err)
   }
 };
 
-export const logout = async (request, response) => {
+export const logout = async (request, response , next) => {
   try {
     sessionService.logoutUser();
     request.session.destroy(() => {
       response.clearCookie(config.PRIVATE_KEY_COOKIE);
       response.redirect("/");
     });
-  } catch (error) {
-    return response.status(400).send(error.message);
+  } catch (err) {
+    next(err)
   }
 };
 
-export const currentUser = async (request, response) => {
+export const currentUser = async (request, response, next) => {
   try {
     const user = await sessionService.getCurrentUser(request.user);
     return response.status(200).json({ status: 'success', payload: user });
-  } catch (error) {
-    return response.status(400).json({ status: 'error', message: error.message });
+  } catch (err) {
+    next(err)
   }
 };
 

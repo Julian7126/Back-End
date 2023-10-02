@@ -1,23 +1,22 @@
 import * as viewsService from '../services/views.services.js';
 
-export const getProductos = async (req, res) => {
+export const getProductos = async (req, res, next) => {
   try {
     const products = await viewsService.getProductos();
     console.log("Productos obtenidos:", products); 
     res.render('home', { products });
-  } catch (error) {
-    console.error("Error al obtener productos:", error);
-    res.status(500).send("Error al obtener productos");
+  } catch (err) {
+    next(err)
   }
 };
 
-export const getList = async (req, res) => {
+export const getList = async (req, res,) => {
   const result = await viewsService.getList(req.query);
   const user = req.session.user;
   res.render('productosList', { ...result, user });
 };
 
-export const getProductoById = async (req, res) => {
+export const getProductoById = async (req, res ,next ) => {
   const product = await viewsService.getProductoById(req.params.pid);
   if (product) {
     res.render('one', product.toObject());
@@ -26,18 +25,18 @@ export const getProductoById = async (req, res) => {
   }
 };
 
-export const getChat = async (req, res) => {
+export const getChat = async (req, res,) => {
   const messages = await viewsService.getChat();
   const user = req.session.user;
   res.render('chat', { messages , user });
 };
 
-export const getCarts = async (req, res) => {
+export const getCarts = async (req, res, ) => {
   const result = await viewsService.getCarts();
   res.render('carts', { result });
 };
 
-export const getCartById = async (req, res) => {
+export const getCartById = async (req, res, ) => {
   const cart = await viewsService.getCartById(req.params.cid);
   const user = req.session.user;
   if (cart) {
@@ -59,20 +58,19 @@ export const getRegister = (req, res) => {
 };
 
 export const getProfile = (req, res) => {
-  console.log("Usuario de la sesión:", req.session.user); // Añade esto para depurar
+  console.log("Usuario de la sesión:", req.session.user);
   const user = req.session.user;
   res.render("profile", user);
 };
 
 
 //MOCK
-export const getMockProductos = async (req, res) => {
+export const getMockProductos = async (req, res, next) => {
   try {
     const productsMock = await viewsService.getMockProductos();
     console.log("Productos obtenidos del Mock:", productsMock);
     res.render('mock', { products: productsMock });
   } catch (error) {
-    console.error("Error al obtener productos:", error);
-    res.status(500).send("Error al obtener productos");
+   next(err)
   }
 };

@@ -8,33 +8,37 @@ export default (error, req, res, next) => {
 
   switch (error.code) {
     case EErrors.INVALID_TYPES_ERROR:
-      return res.status(400).json({
+      res.status(400).json({
         status: 'error',
         error: error.name,
         cause: error.cause
       });
+      break;
     case EErrors.DATABASES_ERROR:
-      return res.status(500).json({
+      res.status(500).json({
         status: 'error',
         error: 'Error de base de datos',
         cause: error.cause
       });
+      break;
     case EErrors.UNAUTHORIZED:
-      return res.status(401).json({
+      res.status(401).json({
         status: 'error',
         error: 'No autorizado',
         cause: error.cause
       });
-    default:
-      return res.status(status).json({
-        status: 'error',
-        message: message
-      });
-      case EErrors.NOT_OWNER:
-      return res.status(403).json({
+      break;
+    case EErrors.NOT_OWNER:
+      res.status(403).json({
         status: 'error',
         error: 'No eres el propietario',
         cause: error.cause
-  });
+      });
+      break;
+    default:
+      res.status(status).json({
+        status: 'error',
+        message: message
+      });
   }
 };
