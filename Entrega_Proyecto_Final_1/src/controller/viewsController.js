@@ -74,3 +74,19 @@ export const getMockProductos = async (req, res, next) => {
    next(err)
   }
 };
+
+
+export const getLoggerTest = async (req, res) =>{
+ try {
+  req.logger.debug('para depuracion');
+  req.logger.info('informacion');
+  req.logger.warning('warning');
+  req.logger.error('error');
+  req.logger.fatal('fatal');
+  res.send('Mandamo los logs');
+ } catch (err) {
+  next(err)
+ }
+
+
+}

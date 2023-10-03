@@ -15,6 +15,9 @@ viewsRouter.get('/chat', viewController.getChat);
 viewsRouter.get('/carts', viewController.getCarts);
 viewsRouter.get("/carts/:cid", viewController.getCartById);
 viewsRouter.get("/mockingproducts", viewController.getMockProductos);
+viewsRouter.get("/loggerTest" ,viewController.getLoggerTest) 
+
+
 
 
 //GITHUB
@@ -23,7 +26,7 @@ viewsRouter.get(
   `/login-github`,
   passport.authenticate('github', { scope: ['user:email'] }),
   async (request, response) =>{}
-)
+)  
 
 
 viewsRouter.get(
@@ -35,9 +38,9 @@ viewsRouter.get(
     console.log(request.session)
     response.redirect(`/list`)
 
-  }
+  }  
 
-)
+)  
 
 
 

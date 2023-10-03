@@ -20,6 +20,8 @@ import * as chatController from "./controller/chatController.js";
 import ticketRouter from './routes/ticket.router.js';
 import compression from 'express-compression';
 import errorHandle from "./middleware/error.js"
+import {addLogger , productionLogger} from "./middleware/logger/configLogger.js"
+
 
 const app = express();
 const server = http.createServer(app);
@@ -70,6 +72,10 @@ app.use("/", viewsRouter);
 //custom error
 app.use(errorHandle)
 
+//logger
+app.use(addLogger)
+
+
 
 app.use(compression({
   brotli: {
@@ -82,16 +88,19 @@ app.use(compression({
 
 
 // Socket.IO
-const runServer = () => {
-  server.listen(config.PORT, () => console.log('Escuchando...'));
+const runServer = ( req, res ) => {
+  server.listen(config.PORT, () => req.logger.info ('Escuchando...'));
 
-  io.on('connection', (socket) => {
-    console.log('Cliente conectado');
+
+  /// ejemplo aca o usar production.info  e importarlo ...
+
+  io.on('connection', (socket , req, res) => {
+    req.logger.info('Cliente conectado');
     socket.on('nuevo_mensaje', async (data) => {
       await chatController.addMessage(data, socket);
     });
     socket.on('disconnect', () => {
-      console.log('Cliente desconectado');
+      req.logger.info('Cliente desconectado');
     });
   });
 };
