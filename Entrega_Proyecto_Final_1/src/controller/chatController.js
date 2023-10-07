@@ -1,11 +1,12 @@
 import { messageService } from '../services/index.js';
+import logger from "../middleware/logger/configLogger.js"
 
 export const getMessages = async (req, res, next) => {
   try {
     const messages = await messageService.retrieveMessages();
     res.render('chat', { messages });
   } catch (err) {
-    console.error('Error al obtener los mensajes:', err);
+    logger.error('Error al obtener los mensajes:', err);
     next(err)
   }
 };

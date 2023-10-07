@@ -1,6 +1,7 @@
 import passport from "passport";
 import { generateToken } from "../utils.js";
 import RegisterUserDTO from "../DAO/DTO/register-user.dto.js";
+import logger from "../middleware/logger/configLogger.js"
 
 export default class UserService {
   constructor(dao) {
@@ -10,7 +11,7 @@ export default class UserService {
   
   loginUser = async (user) => {
     if (!user || !user.email) {
-      throw new Error("Invalidas Credenciales");
+    logger.Error("Invalidas Credenciales"); 
     }
     
   
@@ -23,9 +24,6 @@ export default class UserService {
     } else {
       user.role = "usuario";
     }
-
-    console.log('User in loginUser service:', user); 
-
    
     return { user, access_token }; 
   }
@@ -38,7 +36,7 @@ export default class UserService {
     const registerUserDTO = new RegisterUserDTO(user);
     const registeredUser = await passport.authenticate('register', registerUserDTO);
     if (!registeredUser) {
-      throw new Error("Could not register user");
+      logger.error("Could not register user");
     }
 
     const access_token = generateToken(registeredUser);
@@ -54,7 +52,7 @@ export default class UserService {
  
   getCurrentUser = (user) => {
     if (!user) {
-      throw new Error("Usuario no encontrado en la sesión");
+      logger.error("Usuario no encontrado en la sesión");
     }
     return user; 
   };

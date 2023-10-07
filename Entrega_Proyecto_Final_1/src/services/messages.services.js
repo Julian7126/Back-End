@@ -1,3 +1,5 @@
+import logger from "../middleware/logger/configLogger.js";
+
 export default class MessageService {
   constructor(dao) {
     this.dao = dao;
@@ -7,7 +9,7 @@ export default class MessageService {
     try {
       return await this.dao.retrieveMessages();
     } catch (error) {
-      console.error('Error al obtener los mensajes:', error);
+      logger.error('Error al obtener los mensajes:', error);
       throw new Error('Error interno del servidor');
     }
   }
@@ -22,7 +24,7 @@ export default class MessageService {
     try {
       return await this.dao.createMessage(data);
     } catch (error) {
-      console.error('Error al guardar el mensaje:', error);
+      logger.error('Error al guardar el mensaje:', error);
       throw new Error('Error interno del servidor');
     }
   }

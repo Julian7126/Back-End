@@ -1,9 +1,13 @@
 import * as viewsService from '../services/views.services.js';
+import  logger  from "../middleware/logger/configLogger.js"
+
+
+
 
 export const getProductos = async (req, res, next) => {
   try {
     const products = await viewsService.getProductos();
-    console.log("Productos obtenidos:", products); 
+    logger.info("Productos obtenidos:", products); 
     res.render('home', { products });
   } catch (err) {
     next(err)
@@ -41,7 +45,7 @@ export const getCartById = async (req, res, ) => {
   const user = req.session.user;
   if (cart) {
 
-    console.log(cart)
+    logger.info(cart)
     res.render('carts', { cart: cart.toObject(), user });
   } else {
     res.status(404).send("Carrito no encontrado");
@@ -58,7 +62,7 @@ export const getRegister = (req, res) => {
 };
 
 export const getProfile = (req, res) => {
-  console.log("Usuario de la sesión:", req.session.user);
+  logger.info("Usuario de la sesión:", req.session.user);
   const user = req.session.user;
   res.render("profile", user);
 };
@@ -76,13 +80,13 @@ export const getMockProductos = async (req, res, next) => {
 };
 
 
-export const getLoggerTest = async (req, res) =>{
+export const getLoggerTest = async (req, res , next) =>{
  try {
-  req.logger.debug('para depuracion');
-  req.logger.info('informacion');
-  req.logger.warning('warning');
-  req.logger.error('error');
-  req.logger.fatal('fatal');
+  logger.debug('para depuracion');
+  logger.http('htpp');
+  logger.info('informacion');
+  logger.error('error');
+  logger.fatal('fatal');
   res.send('Mandamo los logs');
  } catch (err) {
   next(err)

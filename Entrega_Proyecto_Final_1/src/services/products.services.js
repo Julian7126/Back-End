@@ -1,4 +1,5 @@
 import ProductDTO from '../DAO/DTO/products.dto.js';
+import logger from "../middleware/logger/configLogger.js"
 
 export default class ProductService {
   constructor(dao) {
@@ -12,7 +13,7 @@ export default class ProductService {
 
     const existingProduct = await this.dao.findProductByCode(productData.code);
     if (existingProduct) {
-      throw new Error('El producto con este código ya existe');
+      logger.error('El producto con este código ya existe');
     }
 
     if (productData.stock < 5 && productData.demand > 50) {
@@ -21,7 +22,7 @@ export default class ProductService {
 
     const productToCreate = new ProductDTO(productData);
     if (productToCreate.stock >= 100) {
-      throw new Error("El stock no puede ser mayor o igual a 100");
+      logger.error("El stock no puede ser mayor o igual a 100");
     }
 
     const createdProduct = await this.dao.create(productToCreate);
@@ -31,7 +32,7 @@ export default class ProductService {
   deleteExistingProduct = async (productId) => {
     const deletedProduct = await this.dao.delete(productId);
     if (deletedProduct.deletedCount === 0) {
-      throw new Error('Producto no encontrado');
+      logger.error('Producto no encontrado');
     }
     return true;
   }
@@ -39,13 +40,13 @@ export default class ProductService {
   updateProductStock = async (productId, newStock) => {
     const existingProduct = await this.dao.findProductById(productId);
     if (!existingProduct) {
-      throw new Error('Producto no encontrado');
+      logger.error('Producto no encontrado');
     }
                                            
     const updatedProduct = await this.dao.update(productId, { stock: newStock });
   
     if (!updatedProduct) {
-      throw new Error('Error al actualizar el stock del producto');
+     logger.error('Error al actualizar el stock del producto');
     }
   
     return updatedProduct;
@@ -54,7 +55,7 @@ export default class ProductService {
   findProductById = async (productId) => {
     const product = await this.dao.findProductById(productId);
     if (!product) {
-      throw new Error('Producto no encontrado');
+      logger.error('Producto no encontrado');
     }
     return product;
   }

@@ -1,6 +1,7 @@
 import { productService } from "../services/index.js";
 import CustomError from '../services/error/custom_error.js';
 import EErrors from '../services/error/enums.js';
+import logger from "../middleware/logger/configLogger.js"
 
 export const createProduct = async (request, response,next) => {
   try {
@@ -10,6 +11,7 @@ export const createProduct = async (request, response,next) => {
     if (err instanceof CustomError && err.code === EErrors.INVALID_PRODUCT) {
       response.status(400).json({ error: 'Producto inválido' });
     } else {
+      logger.error('error al crear un producto:', err);
       next(err)
     }
   }
@@ -24,6 +26,7 @@ export const deleteProduct = async (request, response, next) => {
     if (err instanceof CustomError && err.code === EErrors.PRODUCT_NOT_FOUND) {
       response.status(404).json({ error: 'Producto no encontrado' });
     } else {
+      logger.error('error al eliminar un producto:', err);
       next(err)
     }
   }
@@ -38,6 +41,7 @@ export const updateProduct = async (request, response, next) => {
     if (err instanceof CustomError && err.code === EErrors.PRODUCT_NOT_FOUND) {
       response.status(404).json({ error: 'Producto no encontrado' });
     } else {
+      logger.error('error al actualizar un producto:', err);
       next(err)
     }
   }

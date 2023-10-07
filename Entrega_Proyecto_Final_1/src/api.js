@@ -20,8 +20,11 @@ import * as chatController from "./controller/chatController.js";
 import ticketRouter from './routes/ticket.router.js';
 import compression from 'express-compression';
 import errorHandle from "./middleware/error.js"
-import {addLogger , productionLogger} from "./middleware/logger/configLogger.js"
+import { addLogger } from "./middleware/logger/configLogger.js";
 
+import { cpus } from 'os';
+
+console.log(` Esta PC tiene ${cpus().length} procesadores`)
 
 const app = express();
 const server = http.createServer(app);
@@ -73,7 +76,7 @@ app.use("/", viewsRouter);
 app.use(errorHandle)
 
 //logger
-app.use(addLogger)
+app.use(addLogger) 
 
 
 
@@ -87,20 +90,17 @@ app.use(compression({
 
 
 
-// Socket.IO
-const runServer = ( req, res ) => {
-  server.listen(config.PORT, () => req.logger.info ('Escuchando...'));
+
+const runServer = () => {
+  server.listen(config.PORT, ()  => console.log ('Escuchando...'));
 
 
-  /// ejemplo aca o usar production.info  e importarlo ...
-
-  io.on('connection', (socket , req, res) => {
-    req.logger.info('Cliente conectado');
+  io.on('connection', (socket) => {
+    ;
     socket.on('nuevo_mensaje', async (data) => {
       await chatController.addMessage(data, socket);
     });
     socket.on('disconnect', () => {
-      req.logger.info('Cliente desconectado');
     });
   });
 };

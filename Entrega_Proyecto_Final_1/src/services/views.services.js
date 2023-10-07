@@ -3,6 +3,7 @@ import productsModel from "../DAO/mongo/models/products.models.js";
 import cartsModel from "../DAO/mongo/models/carts.models.js"
 import messagesModel from "../DAO/mongo/models/messages.model.js"; 
 import { generateMock } from "../utils.js"
+import logger from "../middleware/logger/configLogger.js"
 
 
 
@@ -10,11 +11,11 @@ export const getProductos = async () => {
   try {
     const products = await productsModel.find().lean().exec();
     if (!products || products.length === 0) {
-      console.warn("No se encontraron productos en la base de datos.");
+      logger.error("No se encontraron productos en la base de datos.");
     }
     return products;
   } catch (error) {
-    console.error("Error al obtener productos:", error);
+    logger.error("Error al obtener productos:", error);
     throw error;
   }
 };

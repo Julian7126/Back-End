@@ -1,6 +1,7 @@
 import winston from 'winston';
 import config from '../../config/config.js';
 
+
 const levelOptions = {
     levels: {
       fatal: 0,
@@ -37,10 +38,22 @@ const levelOptions = {
       })
     ]
   });
+  
+
+  
+  let logger;
+
+  if( config.AMBIENTE === "production" ){
+    logger = productionLogger
+   
+  }else{
+    logger = developmentLogger
+    
+  }
+  export default logger 
 
   export const addLogger = (req, res, next) => {
-    const logger = config.AMBIENTE === 'production' ? productionLogger : developmentLogger;
-  
+    
     const logInfo = {
       method: req.method,
       url: req.url,
