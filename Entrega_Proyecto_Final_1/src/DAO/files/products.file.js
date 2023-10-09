@@ -1,7 +1,6 @@
 import fs from 'fs';
 
 export default class ProductsFile {
-
   constructor(filename = 'products.json') {
     this.filename = filename;
     if (!fs.existsSync(this.filename)) {
@@ -9,10 +8,15 @@ export default class ProductsFile {
     }
   }
 
-  async create(product) {
-    const db = await this.get();
-    db.push(product);
-    return fs.promises.writeFile(this.filename, JSON.stringify(db));
+  async create(user, product) {
+    if (user.role === "premium" || user.role === "admin") {
+      const db = await this.get();
+      product.owner = user.email;
+      db.push(product);
+      return fs.promises.writeFile(this.filename, JSON.stringify(db));
+    } else { 
+      throw new Error("Solo los usuarios premium o admin pueden crear productos.");
+    }
   }
 
   async delete(productId) {
@@ -43,7 +47,7 @@ export default class ProductsFile {
   }
 
   get = async () => {
-    return fs.promises.readFile(this.filename, {encoding: 'utf-8'})
+    return fs.promises.readFile(this.filename, { encoding: 'utf-8' })
       .then(r => JSON.parse(r));
   }
 }

@@ -17,13 +17,6 @@ export default class UserService {
   
     const access_token = generateToken(user);
     
-    const { email } = user;
-    
-    if (email === "adminCoder@coder.com") {
-      user.role = "admin";
-    } else {
-      user.role = "usuario";
-    }
    
     return { user, access_token }; 
   }
@@ -35,6 +28,7 @@ export default class UserService {
   registerUser = async (user) => {
     const registerUserDTO = new RegisterUserDTO(user);
     const registeredUser = await passport.authenticate('register', registerUserDTO);
+    
     if (!registeredUser) {
       logger.error("Could not register user");
     }
