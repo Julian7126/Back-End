@@ -1,54 +1,54 @@
-import passport from "passport";
 import { generateToken } from "../utils.js";
 import RegisterUserDTO from "../DAO/DTO/register-user.dto.js";
-import logger from "../middleware/logger/configLogger.js"
+import logger from "../middleware/logger/configLogger.js";
 
 export default class UserService {
-  constructor(dao) {
-    this.dao = dao;
+  constructor(userDAO) {
+    this.userDAO = userDAO;
   }
 
-  
   loginUser = async (user) => {
     if (!user || !user.email) {
-    logger.Error("Invalidas Credenciales"); 
+      logger.error("Credenciales inválidas");
     }
-    
-  
+
     const access_token = generateToken(user);
-    
-   
-    return { user, access_token }; 
-  }
 
+    return { user, access_token };
+  };
 
-
-
-  
   registerUser = async (user) => {
-    const registerUserDTO = new RegisterUserDTO(user);
-    const registeredUser = await passport.authenticate('register', registerUserDTO);
-    
-    if (!registeredUser) {
-      logger.error("Could not register user");
+    try {
+      const registerUserDTO = new RegisterUserDTO(user);
+      const newUser = await this.userDAO.createUser(registerUserDTO);
+      const access_token = generateToken(newUser);
+
+      return { user: newUser, access_token };
+    } catch (err) {
+      logger.error("Fallo en el registro de nuevo usuario ", err);
+      throw err; 
+      
     }
+  };
 
-    const access_token = generateToken(registeredUser);
-    return { user: registeredUser, access_token }; 
-  }
+  logoutUser = (request) => {
+    return new Promise((resolve, reject) => {
+      try {
+        request.logout();
 
+        request.session.destroy(() => {
+          resolve(true);
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
 
-
-  logoutUser = () => {
-    return true;
-  }
-
- 
   getCurrentUser = (user) => {
     if (!user) {
       logger.error("Usuario no encontrado en la sesión");
     }
-    return user; 
+    return user;
   };
-  
 }

@@ -12,16 +12,9 @@ const productsSchema = new mongoose.Schema({
   stock: Number,
   owner: {
     type: String,
-    required: true,
-    default: "admin",
-    validate: {
-      validator: function (value) {
-        return value.endsWith("@premium.com"); 
-      },
-      message: "El propietario debe ser un usuario premium.",
     },
   },
-});
+);
 
 productsSchema.plugin(mongoosePaginate);
 

@@ -13,12 +13,8 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
     password: String,
     role: {
         type: String,
-        default: 'user', 
-        enum: ['user', 'admin', 'premium'], 
-    },
-    isPremium: {
-        type: Boolean,
-        default: false, 
+        default: 'premium', 
+    
     },
     ticket: { type: mongoose.Schema.Types.ObjectId, ref: "tickets" },
 }));

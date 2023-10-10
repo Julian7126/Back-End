@@ -12,7 +12,7 @@ export default class UserFile {
   async createUser(user) {
     const db = await this.get();
     if (!user.role) {
-      user.role = "user"
+      user.role = "premium"
     }
     db.push(user);
     return fs.promises.writeFile(this.filename, JSON.stringify(db));

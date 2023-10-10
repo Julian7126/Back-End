@@ -1,4 +1,4 @@
-// session.routes.js
+
 import express from "express";
 import { login, register, logout, currentUser } from "../controller/sessionController.js";
 import passport from "passport";

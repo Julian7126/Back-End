@@ -27,29 +27,29 @@ export const login = async (request, response , next) => {
 
 export const register = async (request, response, next) => {
   try {
-    const { user, access_token } = await sessionService.registerUser(request.body);  
+    const user = request.body;
+    const {  user: registeredUser , access_token } = await sessionService.registerUser(user);  
     response.cookie(config.PRIVATE_KEY_COOKIE, access_token, { maxAge: 24 * 60 * 60 * 1000 });
-    logger.info("se registro el usuario")
+    logger.info("Se registró el usuario");
     return response.redirect("/");
-    
   } catch (err) {
     logger.error("Error en el registro de usuario:", err);
-    next(err)
+    next(err);
   }
 };
 
-export const logout = async (request, response , next) => {
+export const logout = async (request, response, next) => {
   try {
-    sessionService.logoutUser();
+    await sessionService.logoutUser(request);
     request.session.destroy(() => {
       response.clearCookie(config.PRIVATE_KEY_COOKIE);
       response.redirect("/");
     });
   } catch (err) {
     logger.error("Error en el cierre de sesión:", err);
-    next(err)
+    next(err);
   }
-};
+}
 
 export const currentUser = async (request, response, next) => {
   
