@@ -10,7 +10,7 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
         required: true,
     },
     cartId: { type: mongoose.Schema.Types.ObjectId, ref: "carts" },
-    password: String,
+    password: String, 
     role: {
         type: String,
         default: 'premium', 

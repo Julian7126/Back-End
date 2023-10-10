@@ -19,8 +19,7 @@ export default class UserService {
 
   registerUser = async (user) => {
     try {
-      const registerUserDTO = new RegisterUserDTO(user);
-      const newUser = await this.userDAO.createUser(registerUserDTO);
+      const newUser = await this.userDAO.createUser(user);
       const access_token = generateToken(newUser);
 
       return { user: newUser, access_token };
