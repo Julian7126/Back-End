@@ -1,11 +1,13 @@
 import EErrors from "../services/error/enums.js";
+import logger from "./logger/configLogger.js"
 
 export default (error, req, res, next) => {
-  console.error(error);
-
-  const status = error.status || 500;
-  const message = error.message || 'Error interno del servidor';
-
+    if (error.status === 500) {
+      logger.fatal(`Error 500: ${error.message}`);
+    } else {
+      logger.error(`Error ${error.status}: ${error.message}`);
+    }
+  
   switch (error.code) {
     case EErrors.INVALID_TYPES_ERROR:
       res.status(400).json({
