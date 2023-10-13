@@ -200,8 +200,8 @@
   </div>
 </nav>
   <div class="user-info">
-    {{#if user}}
-    <p>Bienvenido, {{user.email}}!</p>
+    {{#if user }}
+    <p>Bienvenido, {{user.email}}</p>
     <p>Rol: {{user.role}}</p>
     <a href="/api/session/logout">Cerrar sesión</a>
     {{/if}}
@@ -220,6 +220,7 @@
         <h2>{{title}}</h2>
         <p>{{description}}</p>
         <p class="price">Precio: ${{price}}</p>
+        <p>Owner: {{owner}}</p>
         <p>Código: {{code}}</p>
         <p>Stock: {{stock}}</p>
         <a href="/productos/{{this._id}}">Ver detalles</a>

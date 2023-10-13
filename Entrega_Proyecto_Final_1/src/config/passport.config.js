@@ -87,10 +87,12 @@ const initializePassport = () => {
         async (req, username, password, done) => {
             try {
                 const { first_name, last_name, age, email } = req.body;
-                const user = await UserModel.findOne({ email: username });
-                if (user) {
-                    return done(null, false);
+                const existingUser = await UserModel.findOne({ email: username });
+
+                if (existingUser) {
+                  return done(null, false, { message: 'Usuario ya registrado anteriormente' });
                 }
+
                 const newCart = await cartsModel.create({ products: [] });
                 const newUser = {
                     first_name,

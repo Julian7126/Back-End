@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crear Producto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #222222;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #ff9900; 
+    }
+
+    form {
+      max-width: 400px;
+      width: 100%;
+    }
+
+    label, input {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+    }
+
+    button {
+      background-color: #ff9900;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #dd7700; 
+    }
+  </style>
+</head>
+<body>
+  <h1>Crear Producto</h1>
+<form id="productForm" action="/api/productos" method="post">   
+    <label name="title">Título del Producto</label>
+    <input type="text" name="title" >
+
+    <label name="description">Descripción</label>
+    <input type="text" name="description" >
+
+    <label name="price">Precio</label>
+    <input type="number" name="price" >
+
+    <label name="stock">Stock</label>
+    <input type="number" name="stock" >
+
+    <input type="hidden" name="owner" value="{{user.email}}">
+
+    <button type="submit">Crear Producto</button>
+  </form>
+  <script>
+
+     function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    const cookie = getCookie('CoderCookieJulian');
+
+    const form = document.getElementById('productForm');
+    const submitButton = document.getElementById('submitForm');
+
+    submitButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+
+      
+      try {
+        const response = await fetch('/api/session/current', {
+          headers: {
+            'Content-Type': 'application/json',
+            'CoderCookieJulian': cookie
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const userEmail = data.payload.email;
+
+          console.log(userEmail);
+
+          
+          const formData = new FormData(form);
+          formData.append('owner', userEmail);
+
+          try {
+            const response = await fetch('/api/productos', {
+              method: 'POST',
+              body: formData,
+            });
+
+            if (response.ok) {
+              alert('Producto creado con éxito');
+            } else {
+              alert('Error al crear el producto');
+            }
+          } catch (error) {
+            alert('Error al comunicarse con el servidor:', error);
+          }
+        } else {
+          alert('Error al obtener el usuario actual');
+        }
+      } catch (error) {
+        alert('Error al comunicarse con el servidor:', error);
+      }
+    });
+
+  
+</script>
+</body>
+</html>
+

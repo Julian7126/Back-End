@@ -172,7 +172,7 @@
       // Inicializamos la conexión del socket
       const socket = io();
 
-      if (userRole === 'user') {
+      if (userRole === 'premium') {
         document.getElementById('chatForm').addEventListener('submit', async (event) => {
           event.preventDefault();
           const formData = new FormData(event.target);

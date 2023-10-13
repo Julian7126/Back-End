@@ -3,13 +3,15 @@ import CustomError from '../services/error/custom_error.js';
 import EErrors from '../services/error/enums.js';
 import logger from "../middleware/logger/configLogger.js"
 
-export const createProduct = async (request, response,next) => {
+export const createProduct = async (req, res,next) => {
   try {
-    const newProduct = await productService.createNewProduct(request.body);
-    response.status(201).json(newProduct);
+    const product = req.body
+    console.log("Datos del producto recibidos:", product); 
+    const newProduct = await productService.createNewProduct(product);
+    res.status(201).json(newProduct);
   } catch (err) {
     if (err instanceof CustomError && err.code === EErrors.INVALID_PRODUCT) {
-      response.status(400).json({ error: 'Producto inválido' });
+      res.status(400).json({ error: 'Producto inválido' });
     } else {
       logger.error('error al crear un producto:', err);
       next(err)
@@ -17,14 +19,14 @@ export const createProduct = async (request, response,next) => {
   }
 };
 
-export const deleteProduct = async (request, response, next) => {
+export const deleteProduct = async (req, res, next) => {
   try {
-    const { pid } = request.params;
+    const { pid } = req.params;
     await productService.deleteExistingProduct(pid);
-    response.status(200).json({ message: 'Producto eliminado con éxito' });
+    res.status(200).json({ message: 'Producto eliminado con éxito' });
   } catch (err) {
     if (err instanceof CustomError && err.code === EErrors.PRODUCT_NOT_FOUND) {
-      response.status(404).json({ error: 'Producto no encontrado' });
+      res.status(404).json({ error: 'Producto no encontrado' });
     } else {
       logger.error('error al eliminar un producto:', err);
       next(err)
@@ -32,14 +34,14 @@ export const deleteProduct = async (request, response, next) => {
   }
 };
 
-export const updateProduct = async (request, response, next) => {
+export const updateProduct = async (req, res, next) => {
   try {
-    const { pid } = request.params;
-    const updatedProduct = await productService.updateExistingProduct(pid, request.body);
-    response.status(200).json(updatedProduct);
+    const { pid } = req.params;
+    const updatedProduct = await productService.updateExistingProduct(pid, req.body);
+    res.status(200).json(updatedProduct);
   } catch (err) {
     if (err instanceof CustomError && err.code === EErrors.PRODUCT_NOT_FOUND) {
-      response.status(404).json({ error: 'Producto no encontrado' });
+      res.status(404).json({ error: 'Producto no encontrado' });
     } else {
       logger.error('error al actualizar un producto:', err);
       next(err)

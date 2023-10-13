@@ -22,6 +22,7 @@ import compression from 'express-compression';
 import errorHandle from "./middleware/error.js"
 import { addLogger } from "./middleware/logger/configLogger.js";
 
+
 import { cpus } from 'os';
 
 console.log(` Esta PC tiene ${cpus().length} procesadores`)
@@ -39,6 +40,8 @@ app.set('view engine', 'handlebars');
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
+
+
 
 // cookieparser
 app.use(cookieParser());

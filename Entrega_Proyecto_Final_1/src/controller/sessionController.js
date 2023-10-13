@@ -28,15 +28,18 @@ export const login = async (request, response , next) => {
 export const register = async (request, response, next) => {
   try {
     const user = request.body;
-    const {  user: registeredUser , access_token } = await sessionService.registerUser(user);  
+    const { user: registeredUser, access_token } = await sessionService.registerUser(user);
     response.cookie(config.PRIVATE_KEY_COOKIE, access_token, { maxAge: 24 * 60 * 60 * 1000 });
     logger.info("Se registró el usuario");
     return response.redirect("/");
   } catch (err) {
-    logger.error("Error en el registro de usuario:", err);
-    next(err);
+    logger.info("Error en el registro de usuario:", err);
+    next(err)
   }
 };
+
+
+
 
 export const logout = async (request, response, next) => {
   try {
@@ -50,6 +53,8 @@ export const logout = async (request, response, next) => {
     next(err);
   }
 }
+
+
 
 export const currentUser = async (request, response, next) => {
   

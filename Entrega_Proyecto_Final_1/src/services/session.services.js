@@ -17,19 +17,22 @@ export default class UserService {
     return { user, access_token };
   };
 
+
+
+  //por ahora usamos la logica de passport en el config , sino se intenta crear 2 vecces
+   
   registerUser = async (user) => {
     try {
-      const newUser = await this.userDAO.createUser(user);
-      const access_token = generateToken(newUser);
-
-      return { user: newUser, access_token };
+      logger.info("services", user)
+      const access_token = generateToken(user);
+      return {  access_token };
     } catch (err) {
       logger.error("Fallo en el registro de nuevo usuario ", err);
-      throw err; 
+     
       
     }
   };
-
+  
   logoutUser = (request) => {
     return new Promise((resolve, reject) => {
       try {
@@ -43,6 +46,8 @@ export default class UserService {
       }
     });
   };
+  
+
 
   getCurrentUser = (user) => {
     if (!user) {

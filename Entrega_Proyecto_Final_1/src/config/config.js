@@ -11,7 +11,6 @@ const config = {
  callbackURL:process.env.callbackURL,
  PRIVATE_KEY_TOKEN:process.env.PRIVATE_KEY_TOKEN,
  PRIVATE_KEY_COOKIE:process.env.PRIVATE_KEY_COOKIE,
- //PATRON DE DISEÑO 
  persistence: process.env.PERSISTENCE || "MONGO",
  AMBIENTE: process.env.NODE_ENV_PRODUCTION
 

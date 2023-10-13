@@ -2,7 +2,7 @@ import * as viewsService from '../services/views.services.js';
 import  logger  from "../middleware/logger/configLogger.js"
 
 
-
+//se cambio todos los req.session.user ya que no trabajamos mas con sessio
 
 export const getProductos = async (req, res, next) => {
   try {
@@ -16,7 +16,7 @@ export const getProductos = async (req, res, next) => {
 
 export const getList = async (req, res,) => {
   const result = await viewsService.getList(req.query);
-  const user = req.session.user;
+  const user = req.user;
   res.render('productosList', { ...result, user });
 };
 
@@ -31,7 +31,7 @@ export const getProductoById = async (req, res ,next ) => {
 
 export const getChat = async (req, res,) => {
   const messages = await viewsService.getChat();
-  const user = req.session.user;
+  const user = req.user;
   res.render('chat', { messages , user });
 };
 
@@ -42,7 +42,7 @@ export const getCarts = async (req, res, ) => {
 
 export const getCartById = async (req, res, ) => {
   const cart = await viewsService.getCartById(req.params.cid);
-  const user = req.session.user;
+  const user = req.user;
   if (cart) {
 
     logger.info(cart)
@@ -66,6 +66,15 @@ export const getProfile = (req, res) => {
   const user = req.session.user;
   res.render("profile", user);
 };
+
+
+export const getCrearProducto = (req, res) => {
+  const user = req.user;
+  console.log(user)
+  res.render('crearProducto', { user });
+}
+
+
 
 
 //MOCK

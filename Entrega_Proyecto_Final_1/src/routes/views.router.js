@@ -16,6 +16,9 @@ viewsRouter.get('/carts', viewController.getCarts);
 viewsRouter.get("/carts/:cid", viewController.getCartById);
 viewsRouter.get("/mockingproducts", viewController.getMockProductos);
 viewsRouter.get("/loggerTest" ,viewController.getLoggerTest) 
+viewsRouter.get("/crearProducto" ,viewController.getCrearProducto) 
+
+
 
 
 

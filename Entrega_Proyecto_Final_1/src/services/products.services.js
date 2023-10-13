@@ -6,36 +6,62 @@ export default class ProductService {
     this.dao = dao;
   }
 
-  createNewProduct = async (productData) => {
-    if (!productData.code) {
-      productData.code = Math.floor(Math.random() * 100000);
-    }
+  
+  createNewProduct = async (user, product) => {
+   
+    console.log("Datos del producto recibidos en createNewProduct:", product);
 
-    const existingProduct = await this.dao.findProductByCode(productData.code);
+    if (!product.code) {
+      product.code = Math.floor(Math.random() * 100000);
+    }
+  
+    const existingProduct = await this.dao.findProductByCode(product.code);
     if (existingProduct) {
       logger.error('El producto con este código ya existe');
     }
-
-    if (productData.stock < 5 && productData.demand > 50) {
-      productData.price *= 1.1;
+  
+    if (product.stock < 5 && product.demand > 50) {
+      product.price *= 1.1;
     }
-
-    const productToCreate = new ProductDTO(productData);
+  
+    const productToCreate = new ProductDTO(product);
     if (productToCreate.stock >= 100) {
       logger.error("El stock no puede ser mayor o igual a 100");
     }
-
-    const createdProduct = await this.dao.create(productToCreate);
-    return createdProduct;
-  }
-
-  deleteExistingProduct = async (productId) => {
-    const deletedProduct = await this.dao.delete(productId);
-    if (deletedProduct.deletedCount === 0) {
-      logger.error('Producto no encontrado');
+  
+    if (user.role === "admin" || user.role === "premium") {
+      const createdProduct = await this.dao.create(user, productToCreate);
+      return createdProduct;
+    } else {
+      console.error("Error en createNewProduct:", error);
+      throw new Error("Solo los usuarios admin o premium pueden crear productos.");
     }
-    return true;
   }
+
+
+
+
+
+  deleteExistingProduct = async (user, productId) => {
+    const product = await this.dao.getById(productId);
+    if (!product) {
+      logger.error('Producto no encontrado');
+      return false; 
+    }
+
+    if (user.role === 'admin' || (user.role === 'premium' && product.owner === user.email)) {
+      const deletedProduct = await this.dao.delete(productId);
+      if (deletedProduct.deletedCount === 0) {
+        logger.error('Error al eliminar el producto');
+        return false; 
+      }
+      return true; 
+    } else {
+      logger.error('No tienes permisos para borrar este producto');
+      return false; 
+    }
+  }
+  
 
   updateProductStock = async (productId, newStock) => {
     const existingProduct = await this.dao.findProductById(productId);
