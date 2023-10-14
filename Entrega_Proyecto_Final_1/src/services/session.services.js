@@ -33,20 +33,7 @@ export default class UserService {
     }
   };
   
-  logoutUser = (request) => {
-    return new Promise((resolve, reject) => {
-      try {
-        request.logout();
 
-        request.session.destroy(() => {
-          resolve(true);
-        });
-      } catch (err) {
-        reject(err);
-      }
-    });
-  };
-  
 
 
   getCurrentUser = (user) => {

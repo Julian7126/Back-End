@@ -8,35 +8,40 @@ export default class ProductService {
 
   
   createNewProduct = async (user, product) => {
-   
-    console.log("Datos del producto recibidos en createNewProduct:", product);
+    try {
+        console.log("Datos del producto recibidos en createNewProduct:", product);
 
-    if (!product.code) {
-      product.code = Math.floor(Math.random() * 100000);
+        if (!product.code) {
+            product.code = Math.floor(Math.random() * 100000);
+        }
+
+        const existingProduct = await this.dao.findProductByCode(product.code);
+        if (existingProduct) {
+            logger.error('El producto con este código ya existe');
+            throw new Error('El producto con este código ya existe');
+        }
+
+        if (product.stock < 5 && product.demand > 50) {
+            product.price *= 1.1;
+        }
+
+        const productToCreate = new ProductDTO(product);
+        if (productToCreate.stock >= 100) {
+          logger.error("El stock no puede ser mayor o igual a 100");
+          throw new Error("El stock no puede ser mayor o igual a 100");
+        }
+
+        if (user.role === "admin" || user.role === "premium") {
+            const createdProduct = await this.dao.create(user, productToCreate);
+            return createdProduct;
+        } else {
+          logger.error("Solo los usuarios admin o premium pueden crear productos.");
+        }
+    } catch (err) {
+        logger.error("Error en createNewProduct:", err);
+        throw err;
     }
-  
-    const existingProduct = await this.dao.findProductByCode(product.code);
-    if (existingProduct) {
-      logger.error('El producto con este código ya existe');
-    }
-  
-    if (product.stock < 5 && product.demand > 50) {
-      product.price *= 1.1;
-    }
-  
-    const productToCreate = new ProductDTO(product);
-    if (productToCreate.stock >= 100) {
-      logger.error("El stock no puede ser mayor o igual a 100");
-    }
-  
-    if (user.role === "admin" || user.role === "premium") {
-      const createdProduct = await this.dao.create(user, productToCreate);
-      return createdProduct;
-    } else {
-      console.error("Error en createNewProduct:", error);
-      throw new Error("Solo los usuarios admin o premium pueden crear productos.");
-    }
-  }
+}
 
 
 

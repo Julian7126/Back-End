@@ -14,11 +14,18 @@ export const getProductos = async (req, res, next) => {
   }
 };
 
+
+
 export const getList = async (req, res,) => {
   const result = await viewsService.getList(req.query);
   const user = req.user;
-  res.render('productosList', { ...result, user });
-};
+
+  if (req.user) {
+    result.user = user.toObject();
+  }
+
+  res.render('productosList', { ...result });
+}; 
 
 export const getProductoById = async (req, res ,next ) => {
   const product = await viewsService.getProductoById(req.params.pid);

@@ -6,9 +6,11 @@ import logger from "../middleware/logger/configLogger.js"
 export const createProduct = async (req, res,next) => {
   try {
     const product = req.body
+    const user = req.user
     console.log("Datos del producto recibidos:", product); 
-    const newProduct = await productService.createNewProduct(product);
+    const newProduct = await productService.createNewProduct(user, product);  
     res.status(201).json(newProduct);
+    res.redirect('/');
   } catch (err) {
     if (err instanceof CustomError && err.code === EErrors.INVALID_PRODUCT) {
       res.status(400).json({ error: 'Producto inválido' });

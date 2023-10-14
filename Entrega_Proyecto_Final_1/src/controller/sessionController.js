@@ -43,17 +43,16 @@ export const register = async (request, response, next) => {
 
 export const logout = async (request, response, next) => {
   try {
-    await sessionService.logoutUser(request);
-    request.session.destroy(() => {
+    request.logout((err) => {
+      if (err) return next(err)
       response.clearCookie(config.PRIVATE_KEY_COOKIE);
-      response.redirect("/");
+      response.redirect('/');
     });
   } catch (err) {
     logger.error("Error en el cierre de sesión:", err);
     next(err);
   }
 }
-
 
 
 export const currentUser = async (request, response, next) => {
