@@ -9,8 +9,8 @@ export default class ProductsMongo {
   }
   
 
-  async delete(user, productId) {
-    return await productsModel.findByIdAndDelete(productId);
+  async delete(user, _id) {
+    return await productsModel.findByIdAndDelete(_id);
   }
   
   
@@ -18,12 +18,12 @@ export default class ProductsMongo {
     return await productsModel.findOne({ code: productCode });
   }
 
-  async findProductById(productId) {
-    return await productsModel.findById(productId);
+  async findProductById(_id) {
+    return await productsModel.findById(_id);
   }
 
-  async update(productId, updatedFields) {
-    return await productsModel.findByIdAndUpdate(productId, updatedFields, { new: true });
+  async update(_id, updatedFields) {
+    return await productsModel.findByIdAndUpdate(_id, updatedFields, { new: true });
 
   }
 

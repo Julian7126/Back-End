@@ -1,0 +1,158 @@
+openapi: 3.0.1
+info:
+  title: Documentación de la API de Productos
+  description: Documentación de la API para gestionar productos y vistas
+  version: 1.0
+
+tags:
+  - name: Productos
+    description: Operaciones relacionadas con productos
+  - name: Vistas
+    description: Operaciones relacionadas con vistas
+
+paths:
+  /api/productos:
+    post:
+      summary: Crear un nuevo producto
+      description: Permite crear un nuevo producto.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Producto creado con éxito
+        '400':
+          description: Error en la solicitud
+        '401':
+          description: No autorizado
+      tags:
+        - Productos
+
+  /api/productos/{pid}:
+    delete:
+      summary: Eliminar un producto por ID
+      description: Permite eliminar un producto por su ID.
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a eliminar
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Producto eliminado con éxito
+        '404':
+          description: Producto no encontrado
+        '401':
+          description: No autorizado
+      tags:
+        - Productos
+
+    put:
+      summary: Actualizar un producto por ID
+      description: Permite actualizar un producto por su ID.
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a actualizar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Producto actualizado con éxito
+        '400':
+          description: Error en la solicitud
+        '401':
+          description: No autorizado
+      tags:
+        - Productos
+
+/list:
+    get:
+      summary: Obtener una lista de productos
+      description: Permite obtener una lista de productos.
+      responses:
+        '200':
+          description: Lista de productos obtenida con éxito
+        '401':
+          description: No autorizado
+      tags:
+        - Vistas
+
+/productos/{pid}:
+    get:
+      summary: Obtener un producto por ID
+      description: Permite obtener un producto por su ID.
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a obtener
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Producto obtenido con éxito
+        '404':
+          description: Producto no encontrado
+        '401':
+          description: No autorizado
+      tags:
+        - Vistas
+
+/crearProducto:
+    get:
+      summary: Crear un nuevo producto (vista)
+      description: Permite ver una vista para crear un nuevo producto.
+      responses:
+        '200':
+          description: Vista para crear producto cargada con éxito
+        '401':
+          description: No autorizado
+      tags:
+        - Vistas
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Título del producto
+        description:
+          type: string
+          description: Descripción del producto
+        price:
+          type: number
+          description: Precio del producto
+        thumbnail:
+          type: string
+          description: URL de la imagen del producto
+        code:
+          type: integer
+          description: Código del producto
+        stock:
+          type: integer
+          description: Stock disponible del producto
+        owner:
+          type: string
+          description: Propietario del producto
+      required:
+        - title
+        - description
+        - price
+        - code
+        - stock
+        - owner

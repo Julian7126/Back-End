@@ -3,11 +3,11 @@ import EErrors from '../services/error/enums.js';
 
 export const isAdmin = async (req, res, next) => {
   const { role } = req.user;
-  if (role !== 'admin') {
+  if (role !== 'admin' || role !=='premium' ) {
     next(
       CustomError.createError({
         name: 'Unauthorized',
-        cause: 'No tiene permisos para realizar porque no eres usuario',
+        cause: 'No tiene permisos para realizar porque no eres admin , ni tampoco usuario premium',
         message: "No puedes realizar esta acción. Unauthorized",
         code: EErrors.UNAUTHORIZED,
         status: 401

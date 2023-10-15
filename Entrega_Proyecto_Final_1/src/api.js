@@ -8,6 +8,9 @@ import handlebars from 'express-handlebars';
 import http from 'http';
 import { Server } from 'socket.io';
 import __dirname from './utils.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExrpess from 'swagger-ui-express';
+
 
 import viewsRouter from './routes/views.router.js';
 import sessionRouter from "./routes/session.router.js"
@@ -21,15 +24,30 @@ import ticketRouter from './routes/ticket.router.js';
 import compression from 'express-compression';
 import errorHandle from "./middleware/error.js"
 import { addLogger } from "./middleware/logger/configLogger.js";
-
+import logger from "./middleware/logger/configLogger.js"
 
 import { cpus } from 'os';
+// import { logger } from 'handlebars';
 
 console.log(` Esta PC tiene ${cpus().length} procesadores`)
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
+
+const swaggerOption ={
+  definition:{
+    openapi: "3.0.1",
+    info : {
+      title: " Documentacion API Celulares by Julian Bischoff",
+      description: "Este es un proyecto realizado para poder probar las diferentes tecnologias en un ambiente de back"
+    }
+  },
+    apis: [`${__dirname}/docs/**/*.yaml`],
+}
+
+
+
 
 // handlebars
 app.engine('handlebars', handlebars.engine());
@@ -66,6 +84,10 @@ app.use(flash());
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+
+const specs = swaggerJSDoc(swaggerOption)
+app.use(`/api/docs`, swaggerUiExrpess.serve, swaggerUiExrpess.setup(specs))
+console.log(specs)
 
 // Routes
 app.use("/api/productos", productosRouter);

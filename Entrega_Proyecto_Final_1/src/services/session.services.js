@@ -24,7 +24,8 @@ export default class UserService {
   registerUser = async (user) => {
     try {
       logger.info("services", user)
-      const access_token = generateToken(user);
+      const userinfo = { password , ...user }
+      const access_token = generateToken(userinfo);
       return {  access_token };
     } catch (err) {
       logger.error("Fallo en el registro de nuevo usuario ", err);

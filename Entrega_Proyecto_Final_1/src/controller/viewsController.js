@@ -1,4 +1,4 @@
-import * as viewsService from '../services/views.services.js';
+import { viewsService } from "../services/index.js";
 import  logger  from "../middleware/logger/configLogger.js"
 
 

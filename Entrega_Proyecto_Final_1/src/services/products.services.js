@@ -33,6 +33,7 @@ export default class ProductService {
 
         if (user.role === "admin" || user.role === "premium") {
             const createdProduct = await this.dao.create(user, productToCreate);
+            logger.info(`producto creado con exito , gracias por aportar nueva mercaderia ${user.email}`)
             return createdProduct;
         } else {
           logger.error("Solo los usuarios admin o premium pueden crear productos.");
@@ -46,27 +47,29 @@ export default class ProductService {
 
 
 
-
-  deleteExistingProduct = async (user, productId) => {
-    const product = await this.dao.getById(productId);
+deleteExistingProduct = async (user, _id) => {
+  try {
+    const product = await this.dao.findProductById(_id);
+    
     if (!product) {
       logger.error('Producto no encontrado');
-      return false; 
+      return false;
     }
 
-    if (user.role === 'admin' || (user.role === 'premium' && product.owner === user.email)) {
-      const deletedProduct = await this.dao.delete(productId);
-      if (deletedProduct.deletedCount === 0) {
-        logger.error('Error al eliminar el producto');
-        return false; 
-      }
-      return true; 
-    } else {
-      logger.error('No tienes permisos para borrar este producto');
-      return false; 
+    const deletedProduct = await this.dao.delete(_id);
+    
+    if (!deletedProduct) {
+      logger.error('Error al eliminar el producto');
+      return false;
     }
+    
+    return true;
+  } catch (error) {
+    logger.error('Error al eliminar el producto:', error);
+    return false;
   }
-  
+}
+
 
   updateProductStock = async (productId, newStock) => {
     const existingProduct = await this.dao.findProductById(productId);
