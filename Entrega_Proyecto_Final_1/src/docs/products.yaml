@@ -3,12 +3,13 @@ info:
   title: Documentación de la API de Productos
   description: Documentación de la API para gestionar productos y vistas
   version: 1.0
-
 tags:
   - name: Productos
-    description: Operaciones relacionadas con productos
+    description: Operaciones relacionadas con Productos
+  - name: Carrito 
+    description: Operaciones relacionadas con Carrito
   - name: Vistas
-    description: Operaciones relacionadas con vistas
+    description: Operaciones relacionadas con Vistas
 
 paths:
   /api/productos:
@@ -78,50 +79,231 @@ paths:
       tags:
         - Productos
 
-/list:
-    get:
-      summary: Obtener una lista de productos
-      description: Permite obtener una lista de productos.
+  /api/carts:
+    post:
+      summary: Crear un nuevo carrito
+      description: Permite crear un nuevo carrito.
       responses:
-        '200':
-          description: Lista de productos obtenida con éxito
+        '201':
+          description: Carrito creado con éxito
+        '400':
+          description: Error en la solicitud
         '401':
           description: No autorizado
       tags:
-        - Vistas
+        - Carrito
 
-/productos/{pid}:
-    get:
-      summary: Obtener un producto por ID
-      description: Permite obtener un producto por su ID.
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Agregar producto a un carrito
+      description: Permite agregar un producto a un carrito existente.
       parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito al que se agregará el producto
+          schema:
+            type: integer
         - name: pid
           in: path
           required: true
-          description: ID del producto a obtener
+          description: ID del producto que se agregará al carrito
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+        '200':
+          description: Producto agregado al carrito con éxito
+        '400':
+          description: Error en la solicitud
+        '401':
+          description: No autorizado
+        '404':
+          description: Carrito o producto no encontrado
+      tags:
+        - Carrito
+
+  /api/carts/{cid}:
+    put:
+      summary: Actualizar un carrito
+      description: Permite actualizar un carrito existente.
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a actualizar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+        '200':
+          description: Carrito actualizado con éxito
+        '400':
+          description: Error en la solicitud
+        '401':
+          description: No autorizado
+        '404':
+          description: Carrito no encontrado
+      tags:
+        - Carrito
+
+  /api/carts/{cid}/all:
+    delete:
+      summary: Eliminar todos los productos de un carrito
+      description: Permite eliminar todos los productos de un carrito existente.
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito del que se eliminarán todos los productos
           schema:
             type: integer
       responses:
         '200':
-          description: Producto obtenido con éxito
-        '404':
-          description: Producto no encontrado
+          description: Todos los productos eliminados del carrito con éxito
+        '400':
+          description: Error en la solicitud
         '401':
           description: No autorizado
+        '404':
+          description: Carrito no encontrado
+      tags:
+        - Carrito
+
+  /api/carts/{cid}/details:
+    get:
+      summary: Obtener detalles de un carrito
+      description: Permite obtener detalles de un carrito.
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito del que se obtendrán los detalles
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalles del carrito obtenidos con éxito
+        '401':
+          description: No autorizado
+        '404':
+          description: Carrito no encontrado
+      tags:
+        - Carrito
+
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Finalizar compra de un carrito
+      description: Permite finalizar la compra de un carrito.
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito que se finalizará
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Compra del carrito finalizada con éxito
+        '400':
+          description: Error en la solicitud
+        '401':
+          description: No autorizado
+        '404':
+          description: Carrito no encontrado
+      tags:
+        - Carrito
+
+/list:
+  get:
+    summary: Obtener una lista de productos
+    description: Permite obtener una lista de productos.
+    responses:
+      '200':
+        description: Lista de productos obtenida con éxito
+      '401':
+        description: No autorizado
       tags:
         - Vistas
 
+/productos/{pid}:
+  get:
+    summary: Obtener un producto por ID
+    description: Permite obtener un producto por su ID.
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        description: ID del producto a obtener
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: Producto obtenido con éxito
+      '404':
+        description: Producto no encontrado
+      '401':
+        description: No autorizado
+    tags:
+      - Vistas
+
 /crearProducto:
-    get:
-      summary: Crear un nuevo producto (vista)
-      description: Permite ver una vista para crear un nuevo producto.
-      responses:
-        '200':
-          description: Vista para crear producto cargada con éxito
-        '401':
-          description: No autorizado
-      tags:
-        - Vistas
+  get:
+    summary: Crear un nuevo producto (vista)
+    description: Permite ver una vista para crear un nuevo producto.
+    responses:
+      '200':
+        description: Vista para crear producto cargada con éxito
+      '401':
+        description: No autorizado
+    tags:
+      - Vistas
+      
+/carts:
+  get:
+    summary: Obtener una lista de carritos
+    description: Permite obtener una lista de carritos.
+    responses:
+      '200':
+        description: Lista de carritos obtenida con éxito
+      '401':
+        description: No autorizado
+    tags:
+      - Vistas
+
+/carts/{cid}:
+  get:
+    summary: Obtener información de un carrito por ID
+    description: Permite obtener información detallada de un carrito por su ID.
+    parameters:
+      - name: cid
+        in: path
+        required: true
+        description: ID del carrito a obtener
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: Información del carrito obtenida con éxito
+      '404':
+        description: Carrito no encontrado
+      '401':
+        description: No autorizado
+    tags:
+      - Vistas
+
+
+
 
 components:
   schemas:
@@ -156,3 +338,22 @@ components:
         - code
         - stock
         - owner
+
+
+    Cart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: integer
+                description: ID del producto en el carrito
+              quantity:
+                type: integer
+                description: Cantidad del producto en el carrito
+        status:
+          type: string
+          description: Estado del carrito (puede ser 'abierto' o 'cerrado')

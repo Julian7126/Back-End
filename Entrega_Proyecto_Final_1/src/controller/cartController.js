@@ -15,6 +15,9 @@ export const createCart = async (req, res, next) => {
     next(err)
   }
 };
+
+
+
 export const addProductToCart = async (req, res) => {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
@@ -90,11 +93,14 @@ export const removeAllProductsFromCart = async (req, res, next) => {
     }
 
     const updatedCart = await cartService.removeAllProducts(cart);
+    logger.info(`Se Eliminaron todos los productos del carrtio con el ID ${cid}`)
     res.status(200).json({ message: 'Todos los productos han sido eliminados', updatedCart });
   } catch (err) {
     logger.error("todos los productos no han sido eliminados del carrito", err)
     next(err)
   }
+
+
 };
 
 
@@ -107,6 +113,10 @@ export const getCartDetails = async (req, res, next) => {
     if (!details) {
       return res.status(404).json({ error: 'Detalles del carrito no encontrados' });
     }
+
+    const detailsJSON = JSON.stringify(details);
+    logger.info(detailsJSON)
+
     res.status(200).json(details);
   } catch (err) {
     next(err)
