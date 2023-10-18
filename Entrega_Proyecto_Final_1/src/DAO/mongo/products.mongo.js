@@ -9,9 +9,10 @@ export default class ProductsMongo {
   }
   
 
-  async delete(user, _id) {
+  async delete(_id) {
     return await productsModel.findByIdAndDelete(_id);
-  }
+  } 
+
   
   
   async findProductByCode(productCode) {

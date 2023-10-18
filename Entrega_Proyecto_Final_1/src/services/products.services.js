@@ -47,7 +47,7 @@ export default class ProductService {
 
 
 
-deleteExistingProduct = async (user, _id) => {
+deleteExistingProduct = async (_id) => { 
   try {
     const product = await this.dao.findProductById(_id);
     
@@ -68,16 +68,17 @@ deleteExistingProduct = async (user, _id) => {
     logger.error('Error al eliminar el producto:', error);
     return false;
   }
-}
+} 
 
 
-  updateProductStock = async (productId, newStock) => {
-    const existingProduct = await this.dao.findProductById(productId);
+
+  updateProductStock = async (_id, newStock) => {
+    const existingProduct = await this.dao.findProductById(_id);
     if (!existingProduct) {
       logger.error('Producto no encontrado');
     }
                                            
-    const updatedProduct = await this.dao.update(productId, { stock: newStock });
+    const updatedProduct = await this.dao.update(_id, { stock: newStock });
   
     if (!updatedProduct) {
      logger.error('Error al actualizar el stock del producto');
@@ -86,8 +87,9 @@ deleteExistingProduct = async (user, _id) => {
     return updatedProduct;
   };
 
-  findProductById = async (productId) => {
-    const product = await this.dao.findProductById(productId);
+  
+  findProductById = async (_id) => {
+    const product = await this.dao.findProductById(_id);
     if (!product) {
       logger.error('Producto no encontrado');
     }

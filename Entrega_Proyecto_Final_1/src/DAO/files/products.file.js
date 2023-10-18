@@ -15,9 +15,9 @@ export default class ProductsFile {
     return fs.promises.writeFile(this.filename, JSON.stringify(db));
   }
   
-  async delete(productId) {
+  async delete(_id) {
     const db = await this.get();
-    const newDb = db.filter((product) => product.id !== productId);
+    const newDb = db.filter((product) => product.id !== _id);
     await fs.promises.writeFile(this.filename, JSON.stringify(newDb));
   }
   
@@ -28,14 +28,14 @@ export default class ProductsFile {
     return db.find(product => product.code === productCode);
   }
 
-  async findProductById(productId) {
+  async findProductById(_id) {
     const db = await this.get();
-    return db.find(product => product.id === productId);
+    return db.find(product => product.id === _id);
   }
 
-  async update(productId, updatedFields) {
+  async update(_id, updatedFields) {
     const db = await this.get();
-    const productIndex = db.findIndex(product => product.id === productId);
+    const productIndex = db.findIndex(product => product.id === _id);
     if (productIndex !== -1) {
       db[productIndex] = { ...db[productIndex], ...updatedFields };
       await fs.promises.writeFile(this.filename, JSON.stringify(db));

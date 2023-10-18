@@ -42,7 +42,7 @@ paths:
           required: true
           description: ID del producto a eliminar
           schema:
-            type: integer
+            type: integer  
       responses:
         '204':
           description: Producto eliminado con éxito
