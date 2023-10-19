@@ -22,7 +22,6 @@ export const createProduct = async (req, res, next) => {
   }
 };
 
-export const uploadProductImage = upload.single('thumbnail'); 
 
 export const deleteProduct = async (req, res, next) => {
   try {

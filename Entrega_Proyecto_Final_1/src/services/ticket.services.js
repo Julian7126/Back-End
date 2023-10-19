@@ -14,7 +14,7 @@ export default class TicketService {
   };
 
   createTicket = async (user, cartId) => {
-    const amount = 100;
+    const amount = 1;
 
 
     const code = crypto.randomBytes(4).toString('hex');

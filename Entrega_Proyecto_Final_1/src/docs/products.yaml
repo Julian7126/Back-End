@@ -138,7 +138,7 @@ paths:
           required: true
           description: ID del carrito a actualizar
           schema:
-            type: integer
+            type: string
       requestBody:
         required: true
         content:
@@ -167,7 +167,7 @@ paths:
           required: true
           description: ID del carrito del que se eliminarán todos los productos
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: Todos los productos eliminados del carrito con éxito

@@ -25,6 +25,9 @@ const TicketSchema = new mongoose.Schema({
     type: String,
     default: "abierto" 
   },
+  code :{
+    type: String,
+  },
 });
 
 const TicketModel = mongoose.model('tickets', TicketSchema);
