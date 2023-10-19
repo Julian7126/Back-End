@@ -103,13 +103,13 @@ paths:
           required: true
           description: ID del carrito al que se agregará el producto
           schema:
-            type: integer
+            type: string  
         - name: pid
           in: path
           required: true
           description: ID del producto que se agregará al carrito
           schema:
-            type: integer
+            type: string
       requestBody:
         required: true
         content:

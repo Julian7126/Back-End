@@ -51,8 +51,8 @@
   </style>
 </head>
 <body>
-  <h1>Crear Producto</h1>
-<form id="productForm" action="/api/productos" method="post">   
+<h1>Crear Producto</h1>
+<form id="productForm" action="/api/productos" method="post" enctype="multipart/form-data">   
     <label name="title">Título del Producto</label>
     <input type="text" name="title" >
 
@@ -67,8 +67,11 @@
 
     <input type="hidden" name="owner" value="{{user.email}}">
 
-    <button type="submit">Crear Producto</button>
-  </form>
+  <label for="thumbnail">Imagen</label>
+  <input type="file" name="thumbnail">
+
+  <button type="submit">Crear Producto</button>
+</form>
   <script>
 
      function getCookie(name) {

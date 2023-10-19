@@ -3,23 +3,26 @@ import CustomError from '../services/error/custom_error.js';
 import EErrors from '../services/error/enums.js';
 import logger from "../middleware/logger/configLogger.js"
 
-export const createProduct = async (req, res,next) => {
+
+
+export const createProduct = async (req, res, next) => {
   try {
-    const product = req.body
-    const user = req.user
-    console.log("Datos del producto recibidos:", product); 
-    const newProduct = await productService.createNewProduct(user, product);  
-    res.status(201).json(newProduct);
-    res.redirect('/');
+    const product = req.body;
+    const user = req.user;
+    console.log("Datos del producto recibidos:", product);
+    const newProduct = await productService.createNewProduct(user, product);
+    res.redirect('/list');
   } catch (err) {
     if (err instanceof CustomError && err.code === EErrors.INVALID_PRODUCT) {
       res.status(400).json({ error: 'Producto inválido' });
     } else {
       logger.error('error al crear un producto:', err);
-      next(err)
+      next(err);
     }
   }
 };
+
+export const uploadProductImage = upload.single('thumbnail'); 
 
 export const deleteProduct = async (req, res, next) => {
   try {
