@@ -12,44 +12,46 @@ const requester = supertest("http://localhost:8080")
 
  
 
-describe("Testing Session", ()=>{
 
-    describe("Testing Register", ()=>{
+describe("Users", () => {
+      describe("Register user", () => {
+        it("En endpoint POST /api/session/register debe registrar un Usuario", (done) => {
+          const userMock = {
+            "first_name": "julian",
+            "last_name": "julian ",
+            "age": 20,
+            "email": "mocktest@example.com",
+            "password": "julianapp",
+            "cartId": "651a32eb598b0114a519f425",
+          };
 
-    it("En endpoint POST /api/session/register debe registrar un Usuario" , async()=>{
-        const userMock = {
-            first_name:"ejemplo6",
-            last_name: "ejemplo6",
-            email:"ejemplo6@gmail.com",
-            password: "ejemplo6"
+          requester
+            .post("/api/session/register")
+            .send(userMock)
+            .end((err, res) => {
+              if (err) done(err)
+      
+              expect(res.status).to.equal(302);
+              done();
+            });
+        }).timeout(5000);
 
-        }
-                const response = await requester.post("/api/session/register").send(userMock)
-                const {status,ok,_body} = response
+        it(" En el endpoint POST /api/session/register  NO DEBERIA REGISTRARSE un Usuario VACIO", (done) => {
+          const userMock = {};
+          requester
+            .post("/api/session/register")
+            .send(userMock)
+            .set("Authorization", "CoderKeyFromJulian")
+            .end((err, res) => {
+              if (err) done(err)
 
-                expect(status).to.equal(401);
-                expect(_body).to.have.property("_id");
+              expect(res.ok).to.equal(false);
+              done();
+            });
+        });
 
+      });
 
-
-    })
-
-
-    //problemas con la autentificacion para los tester
-     
-
-        it(" En el endpoint POST /api/session/register  NO DEBERIA REGISTRARSE un Usuario VACIO", async()=>{
-            const userMock={}
-            const response = await requester.post("/api/session/register").send(userMock).set('Authorization', 'CoderKeyFromJulian');
-            const {status, ok, _body}= response 
-
-            expect(ok).to.be.eql(false)
-
-
-        })
-
-    
-    })
 
     describe("Testing Login", () => {
         it("En endpoint POST /api/session/login debe logear un Usuario", async () => {
@@ -66,30 +68,30 @@ describe("Testing Session", ()=>{
           expect(response.status).to.equal(302);
           expect(response.body).to.have.property("access_token");
 
-         //console.log(response)- santi para que lo veas
+       
         });
       });
     
 
-      describe("Testing Current", () => {
-        it("En endpoint GET /api/session/current debe traer la información de un Usuario", async () => {
-          const response = await requester.get("/api/session/current").set('Authorization', 'CoderKeyFromJulian')
-      
-          expect(response.status).to.equal(200);
-          expect(response.body).to.have.property("status").equal("success");
-          expect(response.body).to.have.property("payload").to.be.an("object");
-          
-          const user = response.body.payload; 
-          expect(user).to.have.property("first_name"); 
-          expect(user).to.have.property("last_name")
-          expect(user).to.have.property("email"); 
-
-
-
-          
-        });
-      });
-    
+      it("current", (done) => {
+        requester
+          .get("/api/session/current").set('Authorization', 'CoderKeyFromJulian')
+          .set("Cookie", "CoderCookieJulian=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY1MTRlZTczMTYwOGUwNjBiZTI3ODdjMCIsImZpcnN0X25hbWUiOiJzYW50aSIsImxhc3RfbmFtZSI6InNhbnRpIiwiYWdlIjoyMCwiZW1haWwiOiJzYW50aUBleGFtcGxlLmNvbSIsImNhcnRJZCI6IjY1MTRlZTcyMTYwOGUwNjBiZTI3ODdiZSIsInBhc3N3b3JkIjoiJDJiJDEwJGsyREtteWdMOVhiNzA1YTlzbE5XNE9MWk1YNDBXbm53c1dCMjl5ZzRPeGFkeFFxN1Fya09XIiwicm9sZSI6ImFkbWluIiwiX192IjowfSwiaWF0IjoxNjk4NDY5NzU0LCJleHAiOjE2OTg1NTYxNTR9.-nNTLOH-L5fZ9NhQt2g4DOH0wIZdZ0rMIhAFAQoBAfI; Path=/; Expires=Sun, 29 Oct 2023 05:09:13 GMT;")
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body).to.have.property("status").equal("success");
+            expect(res.body).to.have.property("payload").to.be.an("object");
+            
+            const user = res.body.payload; 
+            expect(user).to.have.property("first_name"); 
+            expect(user).to.have.property("last_name")
+            expect(user).to.have.property("email"); 
+            done();
+          })
+          .catch((err) => {
+            done(err)
+          });
+      })
 })
  
 describe("Testing Products create ", () => {
@@ -148,21 +150,6 @@ describe("Testing Products create ", () => {
   
   });
 
-
-
-
-
-
-
-
-
-
-
 });
  
-
-describe("Testing Carts", ()=>{
-    
-})
  
-

@@ -2,7 +2,7 @@ import { viewsService } from "../services/index.js";
 import  logger  from "../middleware/logger/configLogger.js"
 
 
-//se cambio todos los req.session.user ya que no trabajamos mas con sessio
+
 
 export const getProductos = async (req, res, next) => {
   try {
