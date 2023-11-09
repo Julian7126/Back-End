@@ -88,6 +88,8 @@
 }
 
 .cart-link, .chat-link {
+ 
+  border-radius: 2rem;
   color: white;
   text-decoration: none;
   font-size: 14px;
@@ -106,7 +108,6 @@
   background-color: #dd7700;
 }
 
-/* Nuevo CSS para efectos del ticket */
 #ticket-container {
   display: none;
   position: fixed;
@@ -160,7 +161,9 @@
     <div class="navbar-content">
       <div class="navbar-links">
         {{#if user}}
-        <a href="/chat" class="chat-link">Chat</a>
+        <a href="/chat" class="chat-link">Chat</a><br>
+
+        <a href="/list" class="chat-link">Home</a>
         {{/if}}
       </div>
     </div>
@@ -168,15 +171,15 @@
 <h1>Carrito de Compras</h1>
 <div class="cart-container">
   <div class="cart">
-    <h2>Producto</h2>
-    {{cart}}
+    <h2>Productos</h2>
+    {{ cart}}
     {{#each cart.products}}
       <div class="product-item">
         <h3>Título: {{this.title}}</h3>
-        <p>Descripción: {{this.description}}</p>
+        <p>Descripción:{{this.description}}</p>
         <p>Precio: ${{this.price}}</p>
         <p>Cantidad: {{this.quantity}}</p>
-        <button onclick="deleteProduct({{this.id}})">Eliminar</button>
+        <button onclick="deleteProduct({{this._id}})">Eliminar</button>
       </div>
     {{/each}}
     <button id="checkout-button">Finalizar Compra</button>
@@ -278,9 +281,7 @@ async function finalizePurchase() {
       checkoutButton.addEventListener('click', finalizePurchase);
     }
   });
-
-
-    function deleteProduct(productId) {
+ function deleteProduct(productId) {
         console.log(`Intentando eliminar producto ${productId} del carrito ${cartId}`);
       fetch(`/api/carts/${cartId}/products/${productId}`, {
         method: 'DELETE'

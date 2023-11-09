@@ -47,8 +47,6 @@ const swaggerOption ={
 }
 
 
-
-
 // handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');

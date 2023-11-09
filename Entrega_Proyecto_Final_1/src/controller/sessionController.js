@@ -39,8 +39,6 @@ export const register = async (request, response, next) => {
 };
 
 
-
-
 export const logout = async (request, response, next) => {
   try {
     request.logout((err) => {
@@ -67,3 +65,21 @@ export const currentUser = async (request, response, next) => {
   }
 };
 
+export const deleteUser= async(request,  response, next)=>{
+  try {
+    const userId = request.params.id;
+
+    const result = await sessionService.deleteUser(userId);
+
+    if (result) {
+      return response.status(200).json({ message: "Usuario eliminado con éxito" });
+    } else {
+      return response.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+  } catch (err) {
+    logger.error("Error al Elminar un Usuario",err);
+    next(err)
+    
+  }
+}

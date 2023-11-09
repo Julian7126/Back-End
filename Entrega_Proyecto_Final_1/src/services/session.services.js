@@ -39,4 +39,19 @@ export default class UserService {
     }
     return user;
   };
+
+  
+  deleteUser = async (userId) => {
+  
+      const deleted = await this.userDAO.deleteUser(userId);
+      
+      if (deleted) {
+        logger.info("Usuario eliminado con éxito");
+      } else {
+        logger.error("Error al eliminar al usuario");
+        
+      }
+
+  };
+
 }
