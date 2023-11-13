@@ -82,4 +82,33 @@ export const deleteUser= async(request,  response, next)=>{
     next(err)
     
   }
+
+  
 }
+
+export const premiumUser = async (request, response, next) => {
+  try {
+    const { uid } = request.params;
+    const resultPremium = await sessionService.premiumUser(uid);
+    if (!resultPremium) {
+      return response.status(404).json({ messages: "Usuario premiums no encontrado" });
+    } else {
+      return response.status(200).json({ message: "Usuario premium encontrado " });
+    }
+  } catch (err) {
+    logger.error("Error al procesar la solicitud premium", err);
+    next(err);
+  }
+};
+
+
+
+export const uploadDocuments = async (req, res, next) => {
+  try {
+    const user = await sessionService.uploadDocuments(req.params.uid, req.files);
+    res.status(200).json({ message: "Documentos subidos con éxito", user });
+  } catch (err) {
+    logger.error("Error al subir documentos:", err);
+    next(err);
+  }
+};

@@ -172,12 +172,11 @@
 <div class="cart-container">
   <div class="cart">
     <h2>Productos</h2>
-    {{ cart}}
     {{#each cart.products}}
       <div class="product-item">
-        <h3>Título: {{this.title}}</h3>
-        <p>Descripción:{{this.description}}</p>
-        <p>Precio: ${{this.price}}</p>
+        <h3>Título: {{this.products.title}}</h3>
+        <p>Descripción:{{this.products.description}}</p>
+        <p>Precio: ${{this.products.price}}</p>
         <p>Cantidad: {{this.quantity}}</p>
         <button onclick="deleteProduct({{this._id}})">Eliminar</button>
       </div>

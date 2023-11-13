@@ -1,6 +1,7 @@
 import { generateToken } from "../utils.js";
 import RegisterUserDTO from "../DAO/DTO/register-user.dto.js";
 import logger from "../middleware/logger/configLogger.js";
+import path from 'path';
 
 export default class UserService {
   constructor(userDAO) {
@@ -53,5 +54,69 @@ export default class UserService {
       }
 
   };
+
+
+ premiumUser = async (userId) => {
+    try {
+      const user = await this.userDAO.getUserById(userId);
+      if (!user) {
+        logger.error("Usuario no encontrado");
+        return null;
+      }
+      if (user.role !== 'admin') {
+        user.role = 'premium';
+        await user.save();
+
+        logger.info("actualizado a premium con éxito");
+      } else {
+        logger.info("ya es admin', no se necesita actualizar");
+      }
+
+      return user;
+    } catch (err) {
+      logger.error("err al actualizar a usuario premium", err);
+      throw err;
+    }
+  };
+
+
+
+  uploadDocuments = async (userId, files) => {
+    try {
+      const user = await this.userDAO.getUserById(userId);
+  
+      if (!user) {
+        logger.error("Usuario no encontrado");
+        return null;
+      }
+  
+      const userFolder = path.join(__dirname, '..', 'public', 'documents', user._id.toString());
+  
+      if (!fs.existsSync(userFolder)) {
+        fs.mkdirSync(userFolder, { recursive: true });
+      }
+  
+  
+      user.documents = [];
+  
+      files.forEach(file => {
+        const documentInfo = {
+          name: file.originalname,
+          reference: path.join(userFolder, file.filename),
+        };
+
+        user.documents.push(documentInfo)
+        fs.renameSync(file.path, path.join(userFolder, file.filename));
+      });
+  
+     
+      await user.save();
+      return user;
+    } catch (err) {
+      logger.error("Error al manejar la subida de documentos:", err);
+      throw err;
+    }
+  };
+  
 
 }

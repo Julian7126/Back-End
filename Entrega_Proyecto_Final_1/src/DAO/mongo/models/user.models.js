@@ -17,6 +17,14 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
     
     },
     ticket: { type: mongoose.Schema.Types.ObjectId, ref: "tickets" },
+    documents: [
+        {
+          name: { type: String },
+          reference: { type: String },
+        },
+      ],
+    
+      last_connection: { type: Date },
 }));
 
 export default UserModel;

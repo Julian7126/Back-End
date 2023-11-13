@@ -7,10 +7,9 @@ export default class CartsMongo {
   }
 
  
-   async getCartById(cid) {
-    return await cartsModel.findById(cid);
+  async getCartById(cid) {
+    return await cartsModel.findById(cid).populate('products');
   }
-
   
    async createNewCart() {
     return await cartsModel.create({ products: [] });
