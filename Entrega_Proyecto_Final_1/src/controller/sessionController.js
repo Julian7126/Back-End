@@ -5,9 +5,10 @@ import  logger  from "../middleware/logger/configLogger.js"
 
 export const login = async (request, response , next) => {
   try {
+
+   
     const { user, access_token } = await sessionService.loginUser(request.user);
-    
- 
+
     logger.info( "usuario es:" , user)
     console.log("Access Token:", access_token);
     
@@ -41,8 +42,10 @@ export const register = async (request, response, next) => {
 
 export const logout = async (request, response, next) => {
   try {
+ 
     request.logout((err) => {
       if (err) return next(err)
+
       response.clearCookie(config.PRIVATE_KEY_COOKIE);
       response.redirect('/');
     });

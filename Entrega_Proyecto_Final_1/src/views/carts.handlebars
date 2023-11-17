@@ -178,9 +178,7 @@
         <p>Descripción:{{this.products.description}}</p>
         <p>Precio: ${{this.products.price}}</p>
         <p>Cantidad: {{this.quantity}}</p>
-        <button onclick="deleteProduct({{this._id}})">Eliminar</button>
-      </div>
-    {{/each}}
+<button class="product-delete" data-product-id="{{this._id}}" onclick="deleteProduct(event, '{{this._id}}')">Eliminar</button>    {{/each}}
     <button id="checkout-button">Finalizar Compra</button>
     <div id="ticket-container" style="display:none;">
       <button class="close-ticket" onclick="closeTicket(cartId, productId)" >X</button>
@@ -273,14 +271,33 @@ async function finalizePurchase() {
     }
   }
   
+
+
+
   document.addEventListener('DOMContentLoaded', (event) => {
     const checkoutButton = document.getElementById('checkout-button');
-  
+     const deleteButtons = document.querySelectorAll('.product-delete');
+
     if (checkoutButton) {
       checkoutButton.addEventListener('click', finalizePurchase);
     }
+
+    deleteButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const productId = button.getAttribute('data-product-id');
+      deleteProduct(productId);
+    });
   });
+
+
+  });
+
+
+
+
+
  function deleteProduct(productId) {
+  event.preventDefault()
         console.log(`Intentando eliminar producto ${productId} del carrito ${cartId}`);
       fetch(`/api/carts/${cartId}/products/${productId}`, {
         method: 'DELETE'

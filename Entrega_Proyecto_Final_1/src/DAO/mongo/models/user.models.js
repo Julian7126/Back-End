@@ -24,7 +24,7 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
         },
       ],
     
-      last_connection: { type: Date },
+      last_connection: { type: Date, default: null },
 }));
 
 export default UserModel;

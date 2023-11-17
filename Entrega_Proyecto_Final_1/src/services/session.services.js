@@ -12,7 +12,8 @@ export default class UserService {
     if (!user || !user.email) {
       logger.error("Credenciales inválidas");
     }
-
+   
+  
     const access_token = generateToken(user);
 
     return { user, access_token };
@@ -32,6 +33,8 @@ export default class UserService {
       
     }
   };
+
+ 
 
 
   getCurrentUser = (user) => {
@@ -78,7 +81,6 @@ export default class UserService {
       throw err;
     }
   };
-
 
 
   uploadDocuments = async (userId, files) => {
