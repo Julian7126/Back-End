@@ -10,7 +10,9 @@ export const createProduct = async (req, res, next) => {
     const product = req.body;
     const user = req.user;
     console.log("Datos del producto recibidos:", product);
+    console.log("datos traidos del usuario", user)
     const newProduct = await productService.createNewProduct(user, product);
+    console.log("datos traidos del NEWPRODUCT", newProduct)
     res.redirect('/list');
   } catch (err) {
     if (err instanceof CustomError && err.code === EErrors.INVALID_PRODUCT) {

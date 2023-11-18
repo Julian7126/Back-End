@@ -34,6 +34,7 @@ export default class ProductService {
         if (user.role === "admin" || user.role === "premium") {
             const createdProduct = await this.dao.create(user, productToCreate);
             logger.info(`producto creado con exito , gracias por aportar nueva mercaderia ${user.email}`)
+            logger.info("producto que se esta creando", createdProduct)
             return createdProduct;
         } else {
           logger.error("Solo los usuarios admin o premium pueden crear productos.");

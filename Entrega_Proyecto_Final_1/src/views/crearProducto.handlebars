@@ -52,18 +52,18 @@
 </head>
 <body>
 <h1>Crear Producto</h1>
-<form id="productForm" action="/api/productos" method="post" enctype="multipart/form-data">   
+<form id="productForm" action="/api/productos/" method="post" enctype="multipart/form-data">   
     <label name="title">Título del Producto</label>
-    <input type="text" name="title" >
+    <input type="text" for="title" >
 
     <label name="description">Descripción</label>
-    <input type="text" name="description" >
+    <input type="text" for="description" >
 
     <label name="price">Precio</label>
-    <input type="number" name="price" >
+    <input type="number" for="price" >
 
     <label name="stock">Stock</label>
-    <input type="number" name="stock" >
+    <input type="number" for="stock" >
 
     <input type="hidden" name="owner" value="{{user.email}}">
 

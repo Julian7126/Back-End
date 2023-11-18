@@ -25,6 +25,7 @@ import compression from 'express-compression';
 import errorHandle from "./middleware/error.js"
 import { addLogger } from "./middleware/logger/configLogger.js";
 import logger from "./middleware/logger/configLogger.js"
+import bodyParser from 'body-parser';
 
 import { cpus } from 'os';
 // import { logger } from 'handlebars';
