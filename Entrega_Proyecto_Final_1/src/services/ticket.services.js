@@ -6,11 +6,14 @@ export default class TicketService {
   }
   
   getTicket = async () => {
-    return await this.dao.find(); 
+    const ticket = await this.dao.find(); 
+    return ticket;
   };
 
   getTicketById = async (id) => {
-    return await this.dao.findOne({ _id: id }); 
+   const ticketId=  await this.dao.findOne({ _id: id }); 
+   return ticketId;
+    
   };
 
   createTicket = async (user, cartId) => {

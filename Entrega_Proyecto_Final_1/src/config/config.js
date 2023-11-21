@@ -12,8 +12,9 @@ const config = {
  PRIVATE_KEY_TOKEN:process.env.PRIVATE_KEY_TOKEN,
  PRIVATE_KEY_COOKIE:process.env.PRIVATE_KEY_COOKIE,
  persistence: process.env.PERSISTENCE || "MONGO",
- AMBIENTE: process.env.NODE_ENV_PRODUCTION
-
+ AMBIENTE: process.env.NODE_ENV_PRODUCTION,
+ email: process.env.EMAIL,
+password: process.env.PASSWORD,
 }
 
 export default config;

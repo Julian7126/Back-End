@@ -2,11 +2,11 @@ import TicketModel from "./models/ticket.models.js"
 
 export default class Ticket {
     async find() {
-      return await TicketModel.find().populate("carts").exec();
+      return await TicketModel.find();
     }
   
     async findOne(query) {
-      return await TicketModel.findOne(query).populate("carts").exec();
+      return await TicketModel.findOne(query);
     }
   
     async create(ticket) {

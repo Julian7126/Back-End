@@ -1,12 +1,11 @@
 import express from "express";
-import passport from "passport";
 import * as ticketController from "../controller/ticket.Controller.js";
+
 
 const ticketRouter = express.Router();
 
-ticketRouter.get("/", ticketController.getTicket); // por ahora le saque el jwt
+ticketRouter.get("/", ticketController.getTicket); 
 ticketRouter.get("/:tid", ticketController.getTicketById);
-ticketRouter.post("/", ticketController.createTicket); // por ahora le saque el jwt
-
+ticketRouter.post("/", ticketController.createTicket);
 
 export default ticketRouter;
