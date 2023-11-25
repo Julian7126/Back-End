@@ -1,7 +1,7 @@
 import CustomError from '../services/error/custom_error.js';
 import EErrors from '../services/error/enums.js';
 
-export const isAdmin = async (req, res, next) => {
+export const isAdminPremium = async (req, res, next) => {
   const { role } = req.user;
   if (role !== 'admin' || role !=='premium' ) {
     next(
@@ -40,5 +40,19 @@ export const isOwner = async (req, res, next) => {
   
   
   
-  
-  
+export const isAdmin = async (req, res, next) => {
+  const { role } = req.user;
+  if (role !== 'admin') {
+    next(
+      CustomError.createError({
+        name: 'Unauthorized',
+        cause: 'No tienes permisos para realizar esta acción porque no eres admin ,no podras modificar el rol , ni tampoco eliminar usuarios',
+        message: "No puedes realizar esta acción. Unauthorized",
+        code: EErrors.UNAUTHORIZED,
+        status: 401
+      })
+    );
+    return;
+  }
+  next();
+};

@@ -16,6 +16,8 @@ export default class UserService {
   
     const access_token = generateToken(user);
 
+    await this.userDAO.updateLastConnection(user.email);
+
     return { user, access_token };
   };
 
@@ -26,6 +28,7 @@ export default class UserService {
       logger.info("services", user)
       const { password , ...userInfo } = user
       const access_token = generateToken(userInfo);
+      await this.userDAO.updateLastConnection(userInfo.email);
       return { userInfo, access_token };
     } catch (err) {
       logger.error("Fallo en el registro de nuevo usuario ", err);
@@ -119,6 +122,40 @@ export default class UserService {
       throw err;
     }
   };
+
+
+
+  getAllUser = async () => {
+    try {
+      const users = await this.userDAO.getAllUsers();
+      return users;
+    } catch (err) {
+      logger.error("Error al obtener todos los usuarios", err);
+      throw err;
+    } 
+  };
+
+   deleteInactiveUsers = async () => {
+    try {
+      const currentDate = new Date();
+      const twoWeeksAgo = new Date(currentDate.getTime() - 14 * 24 * 60 * 60 * 1000);
+
+      const usersToDelete = await this.userDAO.findInactiveUsers(twoWeeksAgo);
+      const deletedUsers = await this.userDAO.deleteInactiveUsers(twoWeeksAgo);
+
+      return deletedUsers;
+    } catch (err) {
+      logger.error("Error al eliminar usuarios inactivos", err);
+      throw err;
+    }
+    }
+  };
+
+
+
+
+
+
   
 
-}
+

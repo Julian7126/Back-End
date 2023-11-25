@@ -1,6 +1,7 @@
 import express from 'express';
 import * as viewController from "../controller/viewsController.js"
 import passport from 'passport';
+import { isAdmin } from '../middleware/validaciones.js';
 
 
 const viewsRouter = express.Router();
@@ -17,6 +18,7 @@ viewsRouter.get("/carts/:cid", viewController.getCartById);
 viewsRouter.get("/mockingproducts", viewController.getMockProductos);
 viewsRouter.get("/loggerTest" ,viewController.getLoggerTest) 
 viewsRouter.get("/crearProducto" ,viewController.getCrearProducto) 
+viewsRouter.get("/listaUsuarios" , isAdmin ,viewController.getListaUsuarios)
 
 
 

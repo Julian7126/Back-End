@@ -115,3 +115,25 @@ export const uploadDocuments = async (req, res, next) => {
     next(err);
   }
 };
+
+
+export const  getAllUser = async (req, res, next) => {
+  try {
+    const users = await sessionService.getAllUser();
+    res.status(200).json({ message: "Usuarios encontrados", users });
+  } catch (err) {
+    logger.error("Error al obtener todos los usuarios:", err);
+    next(err);
+  }
+}
+
+
+export const deleteAll = async (req, res, next) => {
+  try {
+    const deletedUsers = await sessionService.deleteInactiveUsers();
+    res.status(200).json({ message: "Usuarios eliminados", users: deletedUsers });
+  } catch (err) {
+    logger.error("Error al eliminar todos los usuarios:", err);
+    next(err);
+  }
+}

@@ -1,4 +1,4 @@
-import { viewsService } from "../services/index.js";
+import { sessionService, viewsService } from "../services/index.js";
 import  logger  from "../middleware/logger/configLogger.js"
 
 
@@ -81,6 +81,18 @@ export const getCrearProducto = (req, res) => {
   res.render('crearProducto', { user });
 }
 
+export const getListaUsuarios = async (req, res, next) => {
+  try {
+    const users = await sessionService.getAllUser();
+    console.log(users)
+  
+    const usersWithoutPrototype = users.map(user => user.toObject({ getters: true }));
+
+    res.render('listaUsuarios', { users: usersWithoutPrototype });
+  } catch (err) {
+    next(err);
+  }
+}
 
 
 

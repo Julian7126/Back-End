@@ -1,8 +1,12 @@
 
 import express from "express";
-import { login, register, logout, currentUser ,deleteUser, premiumUser, uploadDocuments } from "../controller/sessionController.js";
+import { login, register, logout, currentUser ,deleteUser, premiumUser, uploadDocuments ,getAllUser , deleteAll } from "../controller/sessionController.js";
 import passport from "passport";
 import upload  from "../services/multer/upload.js";
+
+import { isAdmin } from "../middleware/validaciones.js";
+
+
 
 const sessionRouter = express.Router();
 
@@ -12,6 +16,12 @@ sessionRouter.get("/logout", logout);
 sessionRouter.get("/current", passport.authenticate("jwt"), currentUser);
 sessionRouter.delete("/delete/:id", deleteUser)
 sessionRouter.put("/premium/:uid", premiumUser);
+
+
+sessionRouter.get("/all", passport.authenticate("jwt"), isAdmin,  getAllUser )
+sessionRouter.delete("/delete/all", passport.authenticate("jwt"),isAdmin, deleteAll)
+
+
 
 sessionRouter.post("/:uid/documents", passport.authenticate("jwt"), upload.array('files'), uploadDocuments);
 
