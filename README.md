@@ -24,22 +24,19 @@ Dentro del proyecto encontrarás un archivo .env.sample. Crea tu propio archivo 
 Instalación
 Clona el repositorio:
 
-sh
-Copy code
 git clone https://github.com/Julian7126/Back-End/tree/master/Entrega_Proyecto_Final_1
 Instala las dependencias:
-
-sh
-Copy code
 cd Entrega_Proyecto_Final_1
 npm install
+
 Crea un archivo .env en la raíz del proyecto y agrega tus variables de entorno.
 
 Ejecuta el proyecto:
-
-sh
-Copy code
 npm start
+
+
+
+
 Cómo Usar
 Realiza el login o regístrate para crear tu propio usuario.
 Explora las rutas, como /list (home) y /current (perfil).
