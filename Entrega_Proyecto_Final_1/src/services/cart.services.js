@@ -23,11 +23,17 @@ export default class CartService {
     }
     return await this.dao.updateCart(cart._id, cart);
   }
-  
+
+
   deleteProductFromExistingCart = async (cart, pid) => {
-    cart.products = cart.products.filter(item => item.products.toString() !== pid);
-    return await this.dao.updateCart(cart._id, cart);
-  }
+    if (cart.products && Array.isArray(cart.products)) {
+      cart.products = cart.products.filter(product => product._id.toString() !== pid);     
+      return await this.dao.updateCart(cart._id, cart);
+    } else {
+      throw new Error('No se pudo encontrar la propiedad "products" en el carrito o no es un array.');
+    }
+  };
+  
 
   updateExistingCart = async (cart, products) => {
     cart.products = products;

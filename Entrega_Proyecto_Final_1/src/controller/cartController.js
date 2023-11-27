@@ -41,25 +41,23 @@ export const addProductToCart = async (req, res) => {
   }
 };
 
-
 export const deleteProductFromCart = async (req, res, next) => {
-  const { cid, pid } = req.params;
+  const { pid } = req.params; 
+  const user = req.user;
 
   try {
-    const cart = await cartService.findCartById(cid);
-    if (!cart) {
-      return res.status(404).json({ error: 'Carrito no encontrado' });
-    }
+    const cart = await cartService.findCartById(user.cartId);
+    logger.info('Contenido del carrito antes de eliminar el producto:', cart);
 
     const updatedCart = await cartService.deleteProductFromExistingCart(cart, pid);
-
-    logger.info(updatedCart)
+    logger.info(updatedCart);
 
     res.status(200).json({ message: 'Producto eliminado del carrito', updatedCart });
   } catch (err) {
-    logger.error("Error al elimnar algun producto del carrito:" , err )
-    next(err)
+    logger.error("Error al eliminar algún producto del carrito:", err);
+    next(err);
   }
+
 };
 
 export const updateCart = async (req, res, next) => {
@@ -104,8 +102,6 @@ export const removeAllProductsFromCart = async (req, res, next) => {
 };
 
 
-
-
 export const getCartDetails = async (req, res, next) => {
   const { cid } = req.params;
   try {
@@ -122,8 +118,6 @@ export const getCartDetails = async (req, res, next) => {
     next(err)
   }
 };
-
-
 
 
 export const finalizePurchase = async (req, res, next) => {

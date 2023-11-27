@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Crear Producto</title>
   <style>
@@ -18,7 +19,7 @@
     h1 {
       font-size: 1.5rem;
       margin-bottom: 20px;
-      color: #ff9900; 
+      color: #ff9900;
     }
 
     form {
@@ -26,12 +27,14 @@
       width: 100%;
     }
 
-    label, input {
+    label,
+    input {
       display: block;
       margin-bottom: 10px;
     }
 
-    input[type="text"], input[type="number"] {
+    input[type="text"],
+    input[type="number"] {
       width: 100%;
       padding: 10px;
     }
@@ -46,91 +49,76 @@
     }
 
     button:hover {
-      background-color: #dd7700; 
+      background-color: #dd7700;
     }
   </style>
 </head>
+
 <body>
-<h1>Crear Producto</h1>
-<form id="productForm" action="/api/productos/" method="post" enctype="multipart/form-data">   
-    <label name="title">Título del Producto</label>
-    <input type="text" for="title" >
+  <h1>Crear Producto</h1>
+  <form id="productForm" action="/api/productos/" method="post" enctype="multipart/form-data">
+    <label for="title">Título del Producto</label>
+    <input type="text" id="title" name="title">
 
-    <label name="description">Descripción</label>
-    <input type="text" for="description" >
+    <label for="description">Descripción</label>
+    <input type="text" id="description" name="description">
 
-    <label name="price">Precio</label>
-    <input type="number" for="price" >
+    <label for="price">Precio</label>
+    <input type="number" id="price" name="price">
 
-    <label name="stock">Stock</label>
-    <input type="number" for="stock" >
+    <label for="stock">Stock</label>
+    <input type="number" id="stock" name="stock">
 
-    <input type="hidden" name="owner" value="{{user.email}}">
+    <input type="hidden" id="owner" name="owner" value="{{user.email}}">
 
-  <label for="thumbnail">Imagen</label>
-  <input type="file" name="thumbnail">
+    <label for="thumbnail">Imagen</label>
+    <input type="file" name="thumbnail">
 
-  <button type="submit">Crear Producto</button>
-</form>
+    <button type="submit">Crear Producto</button>
+  </form>
+
   <script>
-
-     function getCookie(name) {
+    function getCookie(name) {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
       if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
     const cookie = getCookie('CoderCookieJulian');
+    const form = document.getElementById('productForm'); 
 
-    const form = document.getElementById('productForm');
-    const submitButton = document.getElementById('submitForm');
-
-    submitButton.addEventListener('click', async (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
 
-      
       try {
-        const response = await fetch('/api/session/current', {
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+        const price = document.getElementById('price').value;
+        const stock = document.getElementById('stock').value;
+        const owner = document.getElementById('owner').value;
+        const thumbnail = document.querySelector('input[name="thumbnail"]').files[0];
+
+        const body = { title, description, price, stock, owner, thumbnail };
+        const productsResponse = await fetch('/api/productos', {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'CoderCookieJulian': cookie
-          }
+          },
+          body: JSON.stringify(body),
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          const userEmail = data.payload.email;
-
-          console.log(userEmail);
-
-          
-          const formData = new FormData(form);
-          formData.append('owner', userEmail);
-
-          try {
-            const response = await fetch('/api/productos', {
-              method: 'POST',
-              body: formData,
-            });
-
-            if (response.ok) {
-              alert('Producto creado con éxito');
-            } else {
-              alert('Error al crear el producto');
-            }
-          } catch (error) {
-            alert('Error al comunicarse con el servidor:', error);
-          }
-        } else {
-          alert('Error al obtener el usuario actual');
+        if (productsResponse.ok) {
+          alert('Producto creado con éxito'); 
+          window.location.href = "/list"
         }
       } catch (error) {
+        console.log(error);
         alert('Error al comunicarse con el servidor:', error);
       }
     });
 
-  
-</script>
+  </script>
 </body>
-</html>
 
+</html>

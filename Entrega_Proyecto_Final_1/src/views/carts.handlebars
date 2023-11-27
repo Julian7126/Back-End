@@ -271,43 +271,42 @@ async function finalizePurchase() {
     }
   }
   
+async function deleteProduct(event, productId) {
+  event.preventDefault();
+  console.log(`Intentando eliminar producto ${productId} del carrito ${cartId}`);
+  try {
+    const response = await fetch(`/api/carts/products/${productId}`, {
+      method: 'DELETE'
+    });
 
-
-
-  document.addEventListener('DOMContentLoaded', (event) => {
-    const checkoutButton = document.getElementById('checkout-button');
-     const deleteButtons = document.querySelectorAll('.product-delete');
-
-    if (checkoutButton) {
-      checkoutButton.addEventListener('click', finalizePurchase);
+    if (response.ok) {
+      console.log('Producto eliminado correctamente');
+      window.location.reload();
+    } else {
+      const errorMessage = await response.text();
+      console.error(`Error al eliminar el producto: ${errorMessage}`);
     }
+  } catch (error) {
+    console.error('Hubo un error al eliminar el producto:', error);
+  }
+}
 
-    deleteButtons.forEach(button => {
-    button.addEventListener('click', () => {
+document.addEventListener('DOMContentLoaded', (event) => {
+  const checkoutButton = document.getElementById('checkout-button');
+  const deleteButtons = document.querySelectorAll('.product-delete');
+
+  if (checkoutButton) {
+    checkoutButton.addEventListener('click', finalizePurchase);
+  }
+
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', (event) => {
       const productId = button.getAttribute('data-product-id');
-      deleteProduct(productId);
+      deleteProduct(event, productId);
     });
   });
+});
 
-
-  });
-
-
-
-
-
- function deleteProduct(productId) {
-  event.preventDefault()
-        console.log(`Intentando eliminar producto ${productId} del carrito ${cartId}`);
-      fetch(`/api/carts/${cartId}/products/${productId}`, {
-        method: 'DELETE'
-      }).then(() => {
-        console.log('Producto eliminado correctamente');
-        window.location.reload();
-      }).catch((error) => {
-        console.error('Error al eliminar el producto:', error);
-      });
-    }
   </script>
 </body>
 </html>

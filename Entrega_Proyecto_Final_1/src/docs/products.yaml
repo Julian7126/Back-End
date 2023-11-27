@@ -93,17 +93,11 @@ paths:
       tags:
         - Carrito
 
-  /api/carts/{cid}/products/{pid}:
+  /api/carts/products/{pid}:
     post:
       summary: Agregar producto a un carrito
       description: Permite agregar un producto a un carrito existente.
-      parameters:
-        - name: cid
-          in: path
-          required: true
-          description: ID del carrito al que se agregará el producto
-          schema:
-            type: string  
+      parameters: 
         - name: pid
           in: path
           required: true
