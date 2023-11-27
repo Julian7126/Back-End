@@ -54,23 +54,22 @@ deleteExistingProduct = async (_id) => {
     
     if (!product) {
       logger.error('Producto no encontrado');
-      return false;
+      throw new CustomError(EErrors.PRODUCT_NOT_FOUND, 'Producto no encontrado');
     }
 
     const deletedProduct = await this.dao.delete(_id);
     
     if (!deletedProduct) {
       logger.error('Error al eliminar el producto');
-      return false;
+      throw new CustomError(EErrors.INTERNAL_SERVER_ERROR, 'Error al eliminar el producto');
     }
     
     return true;
   } catch (error) {
     logger.error('Error al eliminar el producto:', error);
-    return false;
+    throw new CustomError(EErrors.INTERNAL_SERVER_ERROR, 'Error interno del servidor');
   }
-} 
-
+};
 
 
   updateProductStock = async (_id, newStock) => {

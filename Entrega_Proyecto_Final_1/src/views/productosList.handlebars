@@ -195,7 +195,19 @@
 
 }
 
+  .delete-product-button {
+    background-color: #ff9900;
+    color: white;
+    font-size: 14px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
 
+  .delete-product-button:hover {
+    background-color: #cc7700;
+  }
 
 
   </style>
@@ -242,6 +254,7 @@
         <p>Código: {{code}}</p>
         <p>Stock: {{stock}}</p>
         <a href="/productos/{{this._id}}">Ver detalles</a>
+        <button class="delete-product-button" data-product-id="{{_id}}">Eliminar producto</button>
       
   
 <form class="addToCartForm" action="/api/carts/{{cartId}}/products/{{productId}}" method="post">
@@ -349,6 +362,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const url = `/list?limit=${limit}&page=${page}`;
     window.location.href = url;
   };
+
+
+    document.querySelectorAll('.delete-product-button').forEach(button => {
+    button.addEventListener('click', async function (event) {
+      event.preventDefault();
+      const productId = this.getAttribute('data-product-id');
+      
+      try {
+        const response = await fetch(`/api/productos/${productId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+           'CoderCookieJulian': cookie
+          },
+        });
+
+        if (response.ok) {
+          console.log('Producto eliminado con éxito');
+          window.location.reload();
+        } else {
+          alert('No eres ADMIN');
+        }
+      } catch (error) {
+        console.error('Error al comunicarse con el servidor:', error);
+      }
+    });
+  });
+
+
+
+
+
+
+
+
+
+
 });
 </script>
 </body>

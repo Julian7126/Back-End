@@ -28,6 +28,7 @@ export const createProduct = async (req, res, next) => {
 export const deleteProduct = async (req, res, next) => {
   try {
     const { pid } = req.params;
+
     await productService.deleteExistingProduct(pid);
     res.status(200).json({ message: 'Producto eliminado con éxito' });
   } catch (err) {
