@@ -15,6 +15,7 @@ const config = {
  AMBIENTE: process.env.NODE_ENV_PRODUCTION,
  email: process.env.EMAIL,
 password: process.env.PASSWORD,
+keyStripePrivate: process.env.KEY_STRIPE_PRIVATE,
 }
 
 export default config;
