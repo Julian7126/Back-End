@@ -91,7 +91,7 @@ app.use("/api/session", sessionRouter);
 app.use("/chat", chatRouter);
 app.use("/api/ticket", ticketRouter);
 app.use("/", viewsRouter);
-app.use("/api/payments", paymentRouter)
+app.use("/api/payment", paymentRouter)
 
 //custom error
 app.use(errorHandle);

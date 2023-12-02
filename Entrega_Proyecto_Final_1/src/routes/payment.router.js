@@ -1,12 +1,13 @@
 import express from "express";
 import PaymentServices from "../services/payment.services.js";
-import {cartService} from "../services/index.js";
+import {cartService, productService} from "../services/index.js";
+
 
 
 const paymentRouter = express.Router();
 
 
-paymentRouter.post("/", async (req, res) => {
+paymentRouter.post("/payment-intents", async (req, res) => {
     console.log("Entró al manejador de la ruta /payment");
     const { cartId } = req.body;
 
@@ -25,14 +26,16 @@ paymentRouter.post("/", async (req, res) => {
 
 
 
-        const totalAmount = calculateTotalAmount(cart.products);
-        const productDescription = cart.products.map(product => product.products.description).join(", ");
+        const productsWithDetails = await getProductsDetails(cart.products);
 
+        console.log (productsWithDetails)
+
+
+        const totalAmount = calculateTotalAmount(productsWithDetails);
 
         const productIntentInfo = {
-            amount: totalAmount * 100,
+            amount: totalAmount,
             currency: "usd",
-            description: productDescription,
             payment_method_types: ["card"],
         };
 
@@ -51,12 +54,32 @@ paymentRouter.post("/", async (req, res) => {
 
 const calculateTotalAmount = (products) => {
     const totalAmount = products.reduce((total, product) => {
-        const productTotal = product.quantity * product.products.price;
-        console.log(`Product Total: ${productTotal}`);
+        const quantity = product.quantity || 0;
+        const price = (product.productDetails && product.productDetails.price) || 0;
+
+        const productTotal = quantity * price;
+        console.log(`Quantity: ${quantity}, Price: ${price}, Product Total: ${productTotal}`);
         return total + productTotal;
     }, 0);
+
     console.log(`Total Amount: ${totalAmount}`);
     return totalAmount;
 };
+
+
+
+
+const getProductsDetails = async (products) => {
+    try {
+        const productsWithDetails = await Promise.all(products.map(async (product) => {
+            const productDetails = await productService.findProductById(product.products);
+            return { ...product.toObject(), productDetails };
+        }));
+        return productsWithDetails;
+    } catch (error) {
+        console.error("Error al obtener detalles de productos:", error);
+        throw error;
+    }
+}
 
 export default paymentRouter;

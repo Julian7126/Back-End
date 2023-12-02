@@ -14,16 +14,9 @@ export default class PaymentServices {
         const paymentIntent = await this.stripe.paymentIntents.create({
             amount: productIntentInfo.amount,
             currency: productIntentInfo.currency,
-            description: productIntentInfo.description,
             payment_method_types: ["card"],
         });
         return paymentIntent;
     }
 
-    async confirmPaymentIntent(paymentIntentId) {
-        const paymentIntent = await this.stripe.paymentIntents.confirm(
-            paymentIntentId
-        );
-        return paymentIntent;
-    }
 }
