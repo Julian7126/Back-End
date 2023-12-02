@@ -1,99 +1,66 @@
-# API ** 
-# Entrega_Proyecto_Final_1
+## API de Comercio Electrónico con Autenticación, Chat y Carrito de Compras
+## Este proyecto es una API que implementa el patrón de arquitectura MVC (Modelo-Vista-Controlador) y utiliza los patrones de diseño DAO y DTO. Ofrece funcionalidades de comercio electrónico, incluyendo autenticación, chat en tiempo real y gestión de carrito de compras.
 
-## Descripción ** 
-# PATRON MVC arquitectura (Modelo-Vista-Controlador) es un patrón en el diseño de software comúnmente utilizado para implementar interfaces de usuario, datos y lógica de control
-# PATRON DE DISEÑO // DAO , DTO 
+ ## Tecnologías y Librerías Implementadas
+Express: Servidor web y enrutamiento.
+Mongoose: Modelado de datos con MongoDB.
+Socket.io: Funcionalidades en tiempo real, como el chat.
+Passport: Autenticación.
+JWT: Manejo de tokens de autenticación.
+Connect-Mongo: Almacenamiento de sesiones en MongoDB.
+Express-Session: Manejo de sesiones.
+Otras librerías como bcrypt, cookie-parser, dotenv, entre otras.
+Documentación
+La documentación detallada del proyecto se encuentra en el directorio /docs. Incluye información sobre las rutas de la API, modelos de datos, y cómo utilizar las diferentes funcionalidades.
 
+Para más detalles, visita el repositorio en GitHub.
 
-Este proyecto es una API de comercio electrónico con autenticación, chat y funcionalidades de carrito de compras.
+## Variables de Entorno
+Dentro del proyecto encontrarás un archivo .env.sample. Crea tu propio archivo .env con las variables detalladas para configurar correctamente el proyecto.
 
-## Tecnologías y librerías implementadas
-
-
-- [Express](https://expressjs.com/es/) para el servidor web y el routing.
-- [Mongoose](https://mongoosejs.com/) para modelado de datos con MongoDB.
-- [Socket.io](https://socket.io/) para funcionalidades en tiempo real como el chat.
-- [Passport](http://www.passportjs.org/) para autenticación.
-- [JWT](https://jwt.io/) para manejar tokens de autenticación.
-- [Connect-Mongo](https://www.npmjs.com/package/connect-mongo) para almacenar sesiones en MongoDB.
-- [Express-Session](https://www.npmjs.com/package/express-session) para manejar sesiones.
-- connect-mongo
-- express-session
-- express-handlebars
-- passport (con estrategias GitHub y JWT)
-- cookie-parser
-- dotenv
-- bcrypt
-
-## Requisitos Previos
-
-- Node.js
-- MongoDB
-
-
-## Estructura del proyecto
-
-- `src/` - Contiene el código fuente principal del proyecto.
-  - `routes/` - Rutas de la aplicación.
-  - `dao/` - Capa de acceso a la base de datos.
-  - `config/` - Configuración general y variables de entorno.
-- `public/` - Archivos estáticos como imágenes, CSS, y JS.
-
-  
-
-Para más detalles, visite el directorio del proyecto en [GitHub](https://github.com/Julian7126/Back-End/tree/master/Entrega_Proyecto_Final_1).
-
-**** variables de entorno:
-Dentro de el Proyecto encontrara un .env.sample
-debe usar sus proprias variables de entorno que dejo detalladas// 
-
-Creacion de Basa de datos en mongoAtlas
-para conectar base de datos 
 
 ## Instalación
 
-1. Clone el repositorio:
-    ```sh
-    git clone https://github.com/Julian7126/Back-End/tree/master/Entrega_Proyecto_Final_1
-    ```
+Instalación
+Clona el repositorio:
 
-2. Instale las dependencias:
-    ```sh
-    cd Entrega_Proyecto_Final_1
-    npm install
-    ```
+git clone https://github.com/Julian7126/Back-End/tree/master/Entrega_Proyecto_Final_1
+Instala las dependencias:
+cd Entrega_Proyecto_Final_1
+npm install
 
-3. Cree un archivo `.env` en la raíz del proyecto y agregue sus variables de entorno.
+Crea un archivo .env en la raíz del proyecto y agrega tus variables de entorno.
 
-4. Ejecute el proyecto:
-    ```sh
-    npm start
-    ```
-
-## Cómo usar
-
-1. LOGIN O REGISTER(CREA TU PROPIO USUARIO)
-2. home (/list)
-3. profile (/current) 
-5. Para ver todos los productos: `GET /api/productos`
-6. Para añadir un nuevo producto: `POST /api/productos`
-7. Para la autenticación: `POST /api/session`
-8. Chat en tiempo real disponible en `/chat`
-
-## Contribuciones
+Ejecuta el proyecto:
+npm start
 
 
-Haz un "Fork" del proyecto
-Crea tu Feature Branch (git checkout -b feature/NuevaFuncionalidad)
-Haz commit de tus cambios (git commit -m 'Añadiendo alguna nueva funcionalidad')
-Haz "Push" a tu Branch (git push origin feature/NuevaFuncionalidad)
-Abre un "Pull Request"
 
-## Licencia
 
+Cómo Usar
+Realiza el login o regístrate para crear tu propio usuario.
+Explora las rutas, como /list (home) y /current (perfil).
+Para ver todos los productos: GET /api/productos.
+Añadir un nuevo producto: POST /api/productos.
+Autenticación: POST /api/session.
+Accede al chat en tiempo real en /chat.
+
+
+
+
+Contribuciones
+Haz un "Fork" del proyecto.
+Crea tu "Feature Branch" (git checkout -b feature/NuevaFuncionalidad).
+Realiza commits de tus cambios (git commit -m 'Añadiendo nueva funcionalidad').
+Haz "Push" a tu Branch (git push origin feature/NuevaFuncionalidad).
+Abre un "Pull Request".
+Licencia
 ISC
 
-*Autor
-JULIAN BISCHOFF
+Autor: Julian Bischoff
 
+Documentación Disponible - Consulta el directorio /docs para acceder a la documentación detallada del proyecto.
+
+Otras Librerías Utilizadas
+
+Además de las tecnologías mencionadas, el proyecto utiliza otras librerías como @faker-js/faker, aos, bootstrap, winston, entre otras. Puedes revisar el archivo package.json para obtener una lista completa de dependencias y versiones.
