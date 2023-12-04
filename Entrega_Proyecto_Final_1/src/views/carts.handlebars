@@ -154,6 +154,18 @@
   font-size: 24px;
 }
 
+.checkout-button{
+  display: inline;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #ff9900;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
   </style>
 </head>
 <body>
@@ -179,7 +191,7 @@
         <p>Precio: ${{this.products.price}}</p>
         <p>Cantidad: {{this.quantity}}</p>
 <button class="product-delete" data-product-id="{{this._id}}" onclick="deleteProduct(event, '{{this._id}}')">Eliminar</button>    {{/each}}
-    <button id="checkout-button">Finalizar Compra</button>
+    <button  class="checkout-button" id="checkout-button">Finalizar Compra</button>
     {{!-- <div id="ticket-container" style="display:none;">
       <button class="close-ticket" onclick="closeTicket(cartId, productId)" >X</button>
       <h2>Ticket de Compra</h2>
@@ -292,37 +304,56 @@ async function deleteProduct(event, productId) {
     console.error('Hubo un error al eliminar el producto:', error);
   }
 }
+async function Payment(cartId) {
+  try {
+    const response = await fetch(`http://localhost:8080/api/payment/payment-intents`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${cookie}`
+      },
+      body: JSON.stringify({ cartId }) 
+    });
 
+    const data = await response.json();
+    console.log(data);
 
+    if (data.sessionId.url) {
+      window.location.href = data.sessionId.url;
 
-
-  async function Payment(cart) {
-    try {
-      const response = await fetch(`http://localhost:8080/api/payment/payment-intents`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${cookie}`
-        },
-        body: JSON.stringify({ cartId: cart }) 
-      });
-
-      const data = await response.json();
-      console.log(data);
-      window.location.href = data.url;
-    } catch (error) {
-      console.error('Hubo un error al realizar el pago:', error);
+      if (data.sessionId.payment_status === 'success') {
+        await finalizePurchase();
+      } else {
+        console.error('La respuesta de Stripe no contiene la propiedad payment_status con el valor "success".');
+      }
+    } else {
+      console.error('La respuesta de Stripe no contiene la propiedad url.');
     }
-  }
 
-  document.addEventListener('DOMContentLoaded', (event) => {
+  } catch (error) {
+    console.error('Hubo un error al realizar el pago:', error);
+  }
+}
+
+
+
+document.addEventListener('DOMContentLoaded', async (event) => {
     const checkoutButton = document.getElementById('checkout-button');
     const deleteButtons = document.querySelectorAll('.product-delete');
 
     if (checkoutButton) {
       checkoutButton.addEventListener('click', async () => {
-        {{!-- await finalizePurchase(); --}}
-        await Payment(cartId);
+        if (cartId) {
+          try {
+            // Realiza el pago con Stripe
+            await Payment(cartId);
+
+          } catch (error) {
+            console.error('Error al intentar finalizar la compra o realizar el pago:', error);
+          }
+        } else {
+          console.error('El cartId no está definido. No se puede realizar la compra.');
+        }
       });
     }
 
@@ -333,7 +364,6 @@ async function deleteProduct(event, productId) {
       });
     });
   });
-
   </script>
 </body>
 </html>

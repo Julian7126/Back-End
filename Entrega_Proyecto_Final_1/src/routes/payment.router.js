@@ -1,55 +1,71 @@
 import express from "express";
-import PaymentServices from "../services/payment.services.js";
-import {cartService, productService} from "../services/index.js";
+import { cartService, productService } from "../services/index.js";
+import Stripe from "stripe";
+import config from "../config/config.js";
 
-
-
+const stripe = new Stripe(config.keyStripePrivate);
 const paymentRouter = express.Router();
 
+const getProductsDetails = async (products) => {
+    try {
+        const productsWithDetails = await Promise.all(products.map(async (product) => {
+            const productDetails = await productService.findProductById(product.products);
+            return { ...product.toObject(), productDetails };
+        }));
+        return productsWithDetails;
+    } catch (error) {
+        console.error("Error al obtener detalles de productos:", error);
+        throw error;
+    }
+};
 
 paymentRouter.post("/payment-intents", async (req, res) => {
     console.log("Entró al manejador de la ruta /payment");
     const { cartId } = req.body;
 
-
     try {
         const cart = await cartService.findCartById(cartId);
 
-
-            console.log(cart);
+        console.log(cart);
 
         if (!cart) return res.status(404).json({ error: "No se encontró el carrito" });
-        
+
         if (!cart.products || cart.products.length === 0) {
             return res.status(400).json({ error: "El carrito no tiene productos" });
         }
 
-
-
         const productsWithDetails = await getProductsDetails(cart.products);
 
-        console.log (productsWithDetails)
-
+        console.log(productsWithDetails);
 
         const totalAmount = calculateTotalAmount(productsWithDetails);
 
-        const productIntentInfo = {
-            amount: totalAmount,
-            currency: "usd",
-            payment_method_types: ["card"],
-        };
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: productsWithDetails.map(product => ({
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: product.productDetails.title,
+                    },
+                    unit_amount: product.productDetails.price * 100,
+                },
+                quantity: product.quantity,
+            })),
+            mode:"payment",
+            success_url: 'http://localhost:8080/list',
+            cancel_url: 'http://localhost:8080/list',
+        });
 
-        const service = new PaymentServices(cart);
-        const result = await service.createPaymentIntent(productIntentInfo);
+        console.log(session);
 
-        console.log(result);
-        res.send({ status: "success", payload: result });
-
+        res.status(200).json({ sessionId: session });
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Error interno del servidor" });
     }
+
 });
 
 const calculateTotalAmount = (products) => {
@@ -66,20 +82,20 @@ const calculateTotalAmount = (products) => {
     return totalAmount;
 };
 
-
-
-
-const getProductsDetails = async (products) => {
-    try {
-        const productsWithDetails = await Promise.all(products.map(async (product) => {
-            const productDetails = await productService.findProductById(product.products);
-            return { ...product.toObject(), productDetails };
-        }));
-        return productsWithDetails;
-    } catch (error) {
-        console.error("Error al obtener detalles de productos:", error);
-        throw error;
-    }
-}
-
 export default paymentRouter;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
