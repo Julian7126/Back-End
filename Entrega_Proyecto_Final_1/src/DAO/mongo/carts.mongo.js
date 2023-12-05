@@ -16,7 +16,7 @@ export default class CartsMongo {
   }
 
   
-   async updateCart(cid, cart) {
-    return await cartsModel.updateOne({ _id: cid }, { $set: cart });
+  async updateCart(cid, cart) {
+    return await cartsModel.findOneAndUpdate({ _id: cid }, { $set: cart }, { new: true });
   }
 }

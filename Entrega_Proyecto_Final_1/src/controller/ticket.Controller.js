@@ -88,14 +88,15 @@ export const getTicketById = async (request, response, next) => {
 
 export const resolveTicket = async (request, response, next) => {
   try {
-    const { resolve } = request.query;
-    const { tid } = request.params;
+    const { tid } = request.params; 
+    const resolve = request.query.resolve === 'true';
     const result = await ticketService.resolveTicket(tid, resolve);
     response.send({ status: 'success', payload: result });
   } catch (err) {
     logger.error("error al resolver el ticket", err);
     next(err);
   }
+
 };
 
 

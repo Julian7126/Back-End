@@ -20,17 +20,17 @@ export default class TicketService {
     const amount = 1;
 
     const code = crypto.randomBytes(4).toString('hex');
-  
+
     const ticket = {
       code: code,
       purchase_datetime: new Date(),
       amount: amount,
-      purchaser: user ? user.email : 'email@example.com', 
+      purchaser: user ? user.email : 'email@example.com',
       products: products.map(product => product._id),
-      user: user ? user._id : null, 
+      user: user ? user._id : null,
     };
-  
-    return await this.dao.create(ticket).populate('products').exec();;  
+
+    return await this.dao.create(ticket);
   };
 
 
@@ -38,12 +38,14 @@ export default class TicketService {
     return await this.dao.updateOne({ _id: id }, { $set: ticketData });  
   };
 
-  getTicketByCartId = async (products) => {
-    return await this.dao.findOne({ products });  
+  getTicketByCartId = async (cartId) => {
+    return await this.dao.findOne({ cartId });  
+  };
 
   updateTicketStatus = async (ticketId, status) => {
     return await this.dao.updateOne({ _id: ticketId }, { $set: { status } });  
   };
-  }
+
+
 }
 
