@@ -16,5 +16,11 @@ export default class Ticket {
     async updateOne(query, ticket) {
       return await TicketModel.updateOne(query, { $set: ticket });
     }
+
+    async ticketPopulate(){
+      return await TicketModel.findById(newTicket._id).populate('products').exec();
+    }
+
+
   }
   

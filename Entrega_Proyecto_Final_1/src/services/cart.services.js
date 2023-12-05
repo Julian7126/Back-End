@@ -69,42 +69,31 @@ export default class CartService {
   
     return cartDetails;
   }
+
+
+  finalizeCartPurchase = async (user, products) => {
+    const failedProducts = [];
   
-
-finalizeCartPurchase = async (user, cartId) => {
-  const cart = await this.dao.getCartById(cartId);
-
-  if (!cart) {
-    throw new Error('Carrito no encontrado');
-  }
-
-  const failedProducts = [];
-
-  for (const item of cart.products) {
-    const product = await productService.findProductById(item.products);
-    if (product.stock < item.quantity) {
-      const errorMessage = `Quieres comprar ${item.quantity} productos y solo tenemos ${product.stock} en stock.`;
-      failedProducts.push({
-        productSearch: item.products,
-        message: errorMessage
-      });
-      continue;
-     }else {
-      await productService.updateProductStock(item.products, product.stock - item.quantity);
-      
+    for (const item of products) {
+      const product = await productService.findProductById(product);
+  
+      if (product.stock < item.quantity) {
+        const errorMessage = `Quieres comprar ${item.quantity} productos y solo tenemos ${product.stock} en stock.`;
+        failedProducts.push({
+          productSearch: item.product,
+          message: errorMessage,
+        });
+        continue;
+      } else {
+        await productService.updateProductStock(item.product, product.stock - item.quantity);
+      }
     }
-  }
-
-  let newTicket = null;
-
-  if (failedProducts.length > 0) {
-    cart.products = cart.products.filter(item => !failedProducts.map(fp => fp.productSearch).includes(item.products));
-    await this.dao.updateCart(cart._id, cart);
-  } else {
-    cart.status = 'cerrado';
-    newTicket = await ticketService.createTicket(user, cartId);
-  }
-
-  return { updatedCart: cart, failedProducts, newTicket };
- };
-}
+  
+    let newTicket = null;
+  
+      newTicket = await ticketService.createTicket(user, cartId);
+    
+  
+    return { failedProducts, newTicket };
+  };
+}  
