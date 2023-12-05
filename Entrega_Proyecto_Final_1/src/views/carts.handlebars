@@ -345,8 +345,8 @@ document.addEventListener('DOMContentLoaded', async (event) => {
       checkoutButton.addEventListener('click', async () => {
         if (cartId) {
           try {
-            // Realiza el pago con Stripe
-            await Payment(cartId);
+            // Realiza el pago con Stripe // cambiar a await Payment(cartId);
+            await finalizePurchase(cartId);
 
           } catch (error) {
             console.error('Error al intentar finalizar la compra o realizar el pago:', error);

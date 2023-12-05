@@ -13,10 +13,10 @@ const TicketSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  cartId: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'carts',
-  },
+  products: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'products',
+  } ],
   user: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'users',

@@ -125,25 +125,34 @@ export const finalizePurchase = async (req, res, next) => {
   const user = req.user;
 
   try {
-    const { updatedCart, failedProducts, newTicket } = await cartService.finalizeCartPurchase(user, cid);
-   
+    logger.info('Iniciando finalización de compra...');
     
+    const { updatedCart, failedProducts, newTicket } = await cartService.finalizeCartPurchase(user, cid);
+    
+    logger.info('Compra finalizada con éxito:', {
+      updatedCart,
+      failedProducts,
+      newTicket,
+    });
 
     res.status(200).json({
       message: 'Compra procesada',
       failedProducts,
-      cart: updatedCart.products,
+      cart: updatedCart,
       ticket: newTicket,
     });
 
-    logger.info(newTicket)
-
+    logger.info('Compra finalizada:', newTicket);
 
   } catch (err) {
+    logger.error('Error al finalizar la compra:', err);
+
     if (err instanceof CustomError && err.code === EErrors.CART_FINALIZATION_FAILED) {
       return res.status(400).json({ error: 'Error al finalizar la compra' });
     }
-    logger.error("error al finalizar la compra", err)
-    next(err)
+    
+    logger.error("Error al finalizar la compra", err);
+    next(err);
   }
 };
+;
