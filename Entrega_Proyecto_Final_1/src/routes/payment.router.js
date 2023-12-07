@@ -53,11 +53,15 @@ paymentRouter.post("/payment-intents", async (req, res) => {
                 quantity: product.quantity,
             })),
             mode:"payment",
-            success_url: 'http://localhost:8080/list',
-            cancel_url: 'http://localhost:8080/list',
+            success_url: 'http://localhost:8080/pagado',
+            cancel_url: 'http://localhost:8080/cancel',
         });
 
         console.log(session);
+
+
+        await cartService.removeAllProducts(cart);
+
 
         res.status(200).json({ sessionId: session });
 
@@ -67,6 +71,15 @@ paymentRouter.post("/payment-intents", async (req, res) => {
     }
 
 });
+
+
+
+
+
+
+
+
+
 
 const calculateTotalAmount = (products) => {
     const totalAmount = products.reduce((total, product) => {

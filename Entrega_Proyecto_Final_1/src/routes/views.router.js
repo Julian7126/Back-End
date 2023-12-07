@@ -19,6 +19,8 @@ viewsRouter.get("/mockingproducts", viewController.getMockProductos);
 viewsRouter.get("/loggerTest" ,viewController.getLoggerTest) 
 viewsRouter.get("/crearProducto" ,viewController.getCrearProducto) 
 viewsRouter.get("/listaUsuarios" , isAdmin ,viewController.getListaUsuarios)
+viewsRouter.get("/pagado"  ,viewController.getSuccess) 
+viewsRouter.get("/cancel"  ,viewController.getCancel)  
 
 
 

@@ -23,7 +23,7 @@ export default class CartService {
     } else {
       cart.products.push({ products: pid, quantity });
     }
-    return await this.dao.updateCart(cart._id, cart);
+    return await this.dao.updateCart(cart._id, cart); 
   };
 
   deleteProductFromExistingCart = async (cart, pid) => {
@@ -145,9 +145,9 @@ export default class CartService {
        logger.info("Nuevo ticket creado:", newTicket);
 
      
-       logger.info("Vaciando el carrito...");
-        await this.dao.updateCart(cartId, { user, products: [] });
-       logger.info("Carrito vaciado.");
+      //  logger.info("Vaciando el carrito...");
+      //   await this.dao.updateCart(cartId, { user, products: [] });
+      //  logger.info("Carrito vaciado.");
       }
 
       return { failedProducts, newTicket };

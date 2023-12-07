@@ -26,7 +26,7 @@ export default class TicketService {
       purchase_datetime: new Date(),
       amount: amount,
       purchaser: user ? user.email : 'email@example.com',
-      products: products.map(product => product._id),
+      products: products,
       user: user ? user._id : null,
     };
 

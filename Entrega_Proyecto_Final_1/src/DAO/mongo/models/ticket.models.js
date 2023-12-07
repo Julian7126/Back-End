@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
+const productsSchema = new mongoose.Schema({
+  products: { type: mongoose.Schema.Types.ObjectId, ref: "products", required: true },
+  quantity: { type: Number, required: true }
+});
+
 const TicketSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.SchemaTypes.ObjectId,
-    default: new mongoose.Types.ObjectId(),
-  },
   amount: {
     type: Number,
     default: "No se establecio el precio"
@@ -13,10 +14,7 @@ const TicketSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  products: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'products',
-  } ],
+  products: [productsSchema],
   user: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'users',

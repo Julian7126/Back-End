@@ -18,7 +18,7 @@ export const createCart = async (req, res, next) => {
 
 
 
-export const addProductToCart = async (req, res) => {
+export const addProductToCart = async (req, res ,next) => {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
 

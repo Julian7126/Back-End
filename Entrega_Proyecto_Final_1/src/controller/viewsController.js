@@ -96,6 +96,30 @@ export const getListaUsuarios = async (req, res, next) => {
 
 
 
+export const getSuccess = (req, res, next) => {
+try {
+  const result= req.body
+  res.render('pagado', { result });
+} catch (error) {
+  next(error)
+  
+}
+}
+
+
+export const getCancel = (req, res, next) => {
+  try {
+    const result= req.body
+    res.render('cancel', { result });
+  } catch (error) {
+    next(error)
+    
+  }
+  }
+
+
+
+
 //MOCK
 export const getMockProductos = async (req, res, next) => {
   try {

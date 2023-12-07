@@ -192,11 +192,12 @@
         <p>Cantidad: {{this.quantity}}</p>
 <button class="product-delete" data-product-id="{{this._id}}" onclick="deleteProduct(event, '{{this._id}}')">Eliminar</button>    {{/each}}
     <button  class="checkout-button" id="checkout-button">Finalizar Compra</button>
-    {{!-- <div id="ticket-container" style="display:none;">
+    <div id="ticket-container" style="display:none;">
       <button class="close-ticket" onclick="closeTicket(cartId, productId)" >X</button>
       <h2>Ticket de Compra</h2>
       <div id="ticket-details"></div>
-    </div> --}}
+       <button class="pay-button" onclick="Payment(cartId)">Pagar</button>
+    </div>
   </div>
 </div>
 
@@ -250,40 +251,43 @@ if (cookie) {
 
 
 async function finalizePurchase() {
-    try {
-      const response = await fetch(`/api/carts/${cartId}/purchase`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${cookie}`
-        }
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        const ticketContainer = document.getElementById('ticket-container');
-        const ticketDetails = document.getElementById('ticket-details');
-  
-        let ticketInfo = `
-          <p>ID de Ticket: ${data.ticket.id}</p>
-          <p>Productos: </p>
-          <ul>
-        `;
-  
-        data.cart.forEach(product => {
-          ticketInfo += `<li>${product.title} - ${product.quantity} unidades - $${product.price}</li>`;
-        });
-  
-        ticketInfo += '</ul>';
-        ticketDetails.innerHTML = ticketInfo;
-        ticketContainer.style.display = 'block';
-      } else {
-        console.error('Error al finalizar la compra');
+  try {
+    const response = await fetch(`/api/carts/${cartId}/purchase`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'CoderCookieJulian': cookie
       }
-    } catch (error) {
-      console.error('Hubo un error en la finalización de la compra:', error);
+    });
+
+    const data = await response.json();
+    console.log("Dataa", data);
+    console.log("Dataa", response.status);
+
+    if (response.status == 200) {
+      const ticketContainer = document.getElementById('ticket-container');
+      const ticketDetails = document.getElementById('ticket-details');
+
+      let ticketInfo = `
+        <p>ID de Ticket: ${data.ticket._id}</p>
+        <p>Productos: </p>
+        <ul>
+      `;
+
+      data.ticket.products.forEach(product => {
+        ticketInfo += `<li>${product.products.title} - ${product.quantity} unidades - $${product.products.price}</li>`;
+      });
+
+      ticketInfo += '</ul>';
+      ticketDetails.innerHTML = ticketInfo;
+      ticketContainer.style.display = 'block';
+    } else {
+      console.error('Error al finalizar la compra');
     }
+  } catch (error) {
+    console.error('Hubo un error en la finalización de la compra:', error);
   }
+}
   
 async function deleteProduct(event, productId) {
   event.preventDefault();
@@ -304,6 +308,7 @@ async function deleteProduct(event, productId) {
     console.error('Hubo un error al eliminar el producto:', error);
   }
 }
+
 async function Payment(cartId) {
   try {
     const response = await fetch(`http://localhost:8080/api/payment/payment-intents`, {
@@ -320,12 +325,6 @@ async function Payment(cartId) {
 
     if (data.sessionId.url) {
       window.location.href = data.sessionId.url;
-
-      if (data.sessionId.payment_status === 'success') {
-        await finalizePurchase();
-      } else {
-        console.error('La respuesta de Stripe no contiene la propiedad payment_status con el valor "success".');
-      }
     } else {
       console.error('La respuesta de Stripe no contiene la propiedad url.');
     }
@@ -340,6 +339,8 @@ async function Payment(cartId) {
 document.addEventListener('DOMContentLoaded', async (event) => {
     const checkoutButton = document.getElementById('checkout-button');
     const deleteButtons = document.querySelectorAll('.product-delete');
+    const ticketContainer = document.getElementById('ticket-container');
+
 
     if (checkoutButton) {
       checkoutButton.addEventListener('click', async () => {
@@ -363,6 +364,35 @@ document.addEventListener('DOMContentLoaded', async (event) => {
         deleteProduct(event, productId);
       });
     });
+
+      const closeTicketButton = document.querySelector('.close-ticket');
+    if (closeTicketButton) {
+        closeTicketButton.addEventListener('click', () => {
+      
+            ticketContainer.style.display = 'none';
+        });
+    }
+
+
+const payButton = document.querySelector('.pay-button');
+  if (payButton) {
+    payButton.addEventListener('click', async () => {
+      if (cartId) {
+        try {
+          await Payment(cartId);
+        } catch (error) {
+          console.error('Error al realizar el pago:', error);
+        }
+      } else {
+        console.error('El cartId no está definido. No se puede realizar el pago.');
+      }
+    });
+  }
+
+
+
+
+
   });
   </script>
 </body>

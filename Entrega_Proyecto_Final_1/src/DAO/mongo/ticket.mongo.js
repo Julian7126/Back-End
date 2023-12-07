@@ -10,19 +10,22 @@ export default class Ticket {
     }
   
     async create(ticket) {
-      return await TicketModel.create(ticket);
+      const newTicket = await TicketModel.create(ticket);
+      console.log("newTicket", newTicket);
+    
+      const ticketPopulated = await TicketModel
+        .findOne({ _id: newTicket._id })
+        .populate('products.products')
+        .exec();
+
+      return ticketPopulated;
     }
   
     async updateOne(query, ticket) {
       return await TicketModel.updateOne(query, { $set: ticket });
     }
 
-    async ticketPopulate(ticketId) {
-      return await TicketModel
-        .findById(ticketId)
-        .populate('products')
-        .exec();
-    }
+  
 
 
   }
