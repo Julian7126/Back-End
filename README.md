@@ -2,14 +2,15 @@
 ## Este proyecto es una API que implementa el patrón de arquitectura MVC (Modelo-Vista-Controlador) y utiliza los patrones de diseño DAO y DTO. Ofrece funcionalidades de comercio electrónico, incluyendo autenticación, chat en tiempo real y gestión de carrito de compras.
 
  ## Tecnologías y Librerías Implementadas
-Express: Servidor web y enrutamiento.
-Mongoose: Modelado de datos con MongoDB.
-Socket.io: Funcionalidades en tiempo real, como el chat.
-Passport: Autenticación.
-JWT: Manejo de tokens de autenticación.
-Connect-Mongo: Almacenamiento de sesiones en MongoDB.
-Express-Session: Manejo de sesiones.
-Otras librerías como bcrypt, cookie-parser, dotenv, entre otras.
+- **Express:** Servidor web y enrutamiento.
+- **Mongoose:** Modelado de datos con MongoDB.
+- **Socket.io:** Funcionalidades en tiempo real, como el chat.
+- **Passport:** Autenticación.
+- **JWT:** Manejo de tokens de autenticación.
+- **Connect-Mongo:** Almacenamiento de sesiones en MongoDB.
+- **Express-Session:** Manejo de sesiones.
+- Otras librerías como bcrypt, cookie-parser, dotenv, entre otras.
+
 Documentación
 La documentación detallada del proyecto se encuentra en el directorio /docs. Incluye información sobre las rutas de la API, modelos de datos, y cómo utilizar las diferentes funcionalidades.
 
@@ -25,11 +26,13 @@ Instalación
 Clona el repositorio:
 
 git clone https://github.com/Julian7126/Back-End/tree/master/Entrega_Proyecto_Final_1
+
 Instala las dependencias:
 cd Entrega_Proyecto_Final_1
 npm install
 
-Crea un archivo .env en la raíz del proyecto y agrega tus variables de entorno.
+
+## Crea un archivo .env en la raíz del proyecto y agrega tus variables de entorno.
 
 Ejecuta el proyecto:
 npm start
