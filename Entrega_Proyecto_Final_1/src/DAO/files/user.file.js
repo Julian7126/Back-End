@@ -15,7 +15,7 @@ export default class UserFile {
       user.role = "premium"
     }
     db.push(user);
-    return fs.promises.writeFile(this.filename, JSON.stringify(db));
+    await this.writeFile(db);
   }
 
   async getUserByEmail(email) {
@@ -31,11 +31,43 @@ export default class UserFile {
   async deleteUser(id) {
     const db = await this.get();
     const newDb = db.filter(user => user.id !== id);
-    return fs.promises.writeFile(this.filename, JSON.stringify(newDb));
+    await this.writeFile(newDb);
+  }
+
+  async getAllUsers() {
+    return await this.get();
+  }
+
+  async findInactiveUsers(twoWeeksAgo) {
+    const db = await this.get();
+    return db.filter(user => user.last_connection < twoWeeksAgo);
+  }
+
+  async deleteInactiveUsers(twoWeeksAgo) {
+    const db = await this.get();
+    const newDb = db.filter(user => user.last_connection >= twoWeeksAgo);
+    await this.writeFile(newDb);
+  }
+
+  async updateLastConnection(email) {
+    const db = await this.get();
+    const user = db.find(u => u.email === email);
+    if (user) {
+      user.last_connection = Date.now();
+      await this.writeFile(db);
+    }
   }
 
   get = async () => {
-    return fs.promises.readFile(this.filename, {encoding: 'utf-8'})
-      .then(r => JSON.parse(r));
+    return fs.promises.readFile(this.filename, { encoding: 'utf-8' })
+      .then(r => JSON.parse(r))
+      .catch(error => {
+        console.error('Error reading file:', error);
+        return [];
+      });
+  }
+
+  writeFile = async (data) => {
+    await fs.promises.writeFile(this.filename, JSON.stringify(data, null, 2));
   }
 }

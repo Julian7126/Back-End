@@ -20,7 +20,7 @@ export default class TicketsFile {
   async create(ticket) {
     const db = await this.get();
     db.push(ticket);
-    await fs.promises.writeFile(this.filename, JSON.stringify(db));
+    await this.writeFile(db);
     return ticket;
   }
 
@@ -29,7 +29,7 @@ export default class TicketsFile {
     const ticketIndex = db.findIndex(ticket => ticket._id === query._id);
     if (ticketIndex !== -1) {
       db[ticketIndex] = { ...db[ticketIndex], ...updatedTicket };
-      await fs.promises.writeFile(this.filename, JSON.stringify(db));
+      await this.writeFile(db);
       return db[ticketIndex];
     }
     return null;
@@ -38,5 +38,9 @@ export default class TicketsFile {
   async get() {
     const content = await fs.promises.readFile(this.filename, { encoding: 'utf-8' });
     return JSON.parse(content);
+  }
+
+  async writeFile(data) {
+    await fs.promises.writeFile(this.filename, JSON.stringify(data, null, 2));
   }
 }
