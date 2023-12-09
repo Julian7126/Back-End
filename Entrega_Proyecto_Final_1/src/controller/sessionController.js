@@ -75,10 +75,12 @@ export const deleteUser= async(request,  response, next)=>{
     const result = await sessionService.deleteUser(userId);
 
     if (result) {
-      return response.status(200).json({ message: "Usuario eliminado con éxito" });
+      response.redirect('/list'); 
+      
     } else {
-      return response.status(404).json({ error: "Usuario no encontrado" });
+      response.redirect('/list');
     }
+
 
   } catch (err) {
     logger.error("Error al Elminar un Usuario",err);

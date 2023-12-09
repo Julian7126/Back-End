@@ -14,7 +14,7 @@ sessionRouter.post("/login", passport.authenticate("login"), login);
 sessionRouter.post("/register", passport.authenticate("register"), register);
 sessionRouter.get("/logout", logout);
 sessionRouter.get("/current", passport.authenticate("jwt"), currentUser);
-sessionRouter.delete("/delete/:id", deleteUser)
+sessionRouter.post("/delete/:id", deleteUser)
 sessionRouter.put("/premium/:uid", premiumUser);
 
 
