@@ -311,7 +311,7 @@ async function deleteProduct(event, productId) {
 
 async function Payment(cartId) {
   try {
-    const response = await fetch(`http://localhost:8080/api/payment/payment-intents`, {
+    const response = await fetch(`/api/payment/payment-intents`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
