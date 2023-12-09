@@ -1,5 +1,16 @@
 import { productService, ticketService } from "../services/index.js";
 import logger from "../middleware/logger/configLogger.js";
+import config from "../config/config.js";
+import nodemailer from "nodemailer";
+
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  port: 587,
+  auth: {
+    user: config.email,
+    pass: config.password
+  }
+});
 
 export default class CartService {
   constructor(dao) {
@@ -144,10 +155,31 @@ export default class CartService {
         );
        logger.info("Nuevo ticket creado:", newTicket);
 
-     
-      //  logger.info("Vaciando el carrito...");
-      //   await this.dao.updateCart(cartId, { user, products: [] });
-      //  logger.info("Carrito vaciado.");
+
+
+       const resultEmail = await transporter.sendMail({
+        from: config.email,
+        to: newTicket.purchaser,
+        subject: "Compra  a  Realizar - ¡Gracias por confiar en nosotros!",
+        html: `
+        <h1>¡Gracias por confiar en nosotros!</h1>
+        <h2>Detalles de tu compra:</h2>
+        <p>ID del Ticket: ${newTicket._id}</p>
+        <h3>Productos:</h3>
+        <ul>
+          ${newTicket.products.map(
+            (product) => `
+              <li>
+                ${product.products.title} - ${product.products.price} USD (Cantidad: ${product.quantity})
+              </li>`
+          )}
+        </ul>
+      `,
+        attachments: []
+      });
+      
+      console.log(resultEmail);
+    
       }
 
       return { failedProducts, newTicket };

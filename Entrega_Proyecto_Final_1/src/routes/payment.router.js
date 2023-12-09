@@ -54,6 +54,7 @@ paymentRouter.post("/payment-intents", async (req, res) => {
             })),
             mode:"payment",
             success_url: 'http://localhost:8080/pagado',
+            
             cancel_url: 'http://localhost:8080/cancel',
         });
 
