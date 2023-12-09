@@ -53,9 +53,9 @@ paymentRouter.post("/payment-intents", async (req, res) => {
                 quantity: product.quantity,
             })),
             mode:"payment",
-            success_url: '/pagado',
+            success_url: 'https://back-end-production-4e54.up.railway.app/pagado',
             
-            cancel_url: '/cancel',
+            cancel_url: 'https://back-end-production-4e54.up.railway.app/cancel',
         });
 
         console.log(session);
